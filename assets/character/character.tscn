@@ -1,8 +1,12 @@
-[gd_scene load_steps=13 format=3 uid="uid://c7gnt27t08y2"]
+[gd_scene load_steps=12 format=3 uid="uid://c7gnt27t08y2"]
 
 [ext_resource type="Script" path="res://assets/character/character.gd" id="1_0aq8s"]
 [ext_resource type="Script" path="res://assets/character/fsm_character.gd" id="1_6iqdg"]
 [ext_resource type="Script" path="res://assets/character/follow_path.gd" id="3_5x72b"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_0rs1c"]
+radius = 0.35
+height = 1.6
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_ksksb"]
 radius = 0.35
@@ -27,61 +31,49 @@ albedo_color = Color(0, 0.733244, 0.759666, 1)
 material = SubResource("ORMMaterial3D_5nbx1")
 top_radius = 0.18
 
-[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_0rs1c"]
-radius = 0.35
-height = 1.6
-
-[sub_resource type="Curve3D" id="Curve3D_x8lwg"]
-_data = {
-"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1.5, 0, 0, 0, 0, 0, 0, 0, 0, -3, 0, 0, 0, 0, 0, 0, 0, 0, -4.5),
-"tilts": PackedFloat32Array(0, 0, 0, 0)
-}
-point_count = 4
-
 [node name="TestCharacter" type="CharacterBody3D"]
 script = ExtResource("1_0aq8s")
-
-[node name="FSM" type="Node" parent="."]
-script = ExtResource("1_6iqdg")
-
-[node name="Model" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0)
-mesh = SubResource("CapsuleMesh_ksksb")
-surface_material_override/0 = SubResource("ORMMaterial3D_ymso4")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Model"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.203249, 0.375327, 0.217034)
-mesh = SubResource("SphereMesh_olubg")
-surface_material_override/0 = SubResource("ORMMaterial3D_h8qfn")
-
-[node name="MeshInstance3D4" type="MeshInstance3D" parent="Model/MeshInstance3D"]
-transform = Transform3D(0.311695, 0, 0, 0, 0.311695, 0, 0, 0, 0.311695, -0.055, 0, 0.161)
-mesh = SubResource("SphereMesh_olubg")
-skeleton = NodePath("../..")
-surface_material_override/0 = SubResource("ORMMaterial3D_0sptl")
-
-[node name="MeshInstance3D2" type="MeshInstance3D" parent="Model"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.181473, 0.375327, 0.217034)
-mesh = SubResource("SphereMesh_olubg")
-surface_material_override/0 = SubResource("ORMMaterial3D_h8qfn")
-
-[node name="MeshInstance3D3" type="MeshInstance3D" parent="Model/MeshInstance3D2"]
-transform = Transform3D(0.311695, 0, 0, 0, 0.311695, 0, 0, 0, 0.311695, 0.0546556, 0, 0.160902)
-mesh = SubResource("SphereMesh_olubg")
-skeleton = NodePath("../..")
-surface_material_override/0 = SubResource("ORMMaterial3D_0sptl")
-
-[node name="MeshInstance3D3" type="MeshInstance3D" parent="Model"]
-transform = Transform3D(0.436528, 0, 0, 0, -1.27471e-08, -0.436528, 0, 0.29162, -1.90812e-08, 0, 0.123446, 0.405885)
-mesh = SubResource("CylinderMesh_dlgu4")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0)
 shape = SubResource("CapsuleShape3D_0rs1c")
 
-[node name="FollowPath" type="Path3D" parent="."]
-top_level = true
-curve = SubResource("Curve3D_x8lwg")
+[node name="Following" type="Node3D" parent="."]
 script = ExtResource("3_5x72b")
+max_distance = null
+min_distance = null
 
-[node name="PathFollow3D" type="PathFollow3D" parent="FollowPath"]
+[node name="Model" type="MeshInstance3D" parent="Following"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0)
+mesh = SubResource("CapsuleMesh_ksksb")
+skeleton = NodePath("../..")
+surface_material_override/0 = SubResource("ORMMaterial3D_ymso4")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Following/Model"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.203249, 0.375327, 0.217034)
+mesh = SubResource("SphereMesh_olubg")
+surface_material_override/0 = SubResource("ORMMaterial3D_h8qfn")
+
+[node name="MeshInstance3D4" type="MeshInstance3D" parent="Following/Model/MeshInstance3D"]
+transform = Transform3D(0.311695, 0, 0, 0, 0.311695, 0, 0, 0, 0.311695, -0.055, 0, 0.161)
+mesh = SubResource("SphereMesh_olubg")
+skeleton = NodePath("../..")
+surface_material_override/0 = SubResource("ORMMaterial3D_0sptl")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="Following/Model"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.181473, 0.375327, 0.217034)
+mesh = SubResource("SphereMesh_olubg")
+surface_material_override/0 = SubResource("ORMMaterial3D_h8qfn")
+
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="Following/Model/MeshInstance3D2"]
+transform = Transform3D(0.311695, 0, 0, 0, 0.311695, 0, 0, 0, 0.311695, 0.0546556, 0, 0.160902)
+mesh = SubResource("SphereMesh_olubg")
+skeleton = NodePath("../..")
+surface_material_override/0 = SubResource("ORMMaterial3D_0sptl")
+
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="Following/Model"]
+transform = Transform3D(0.436528, 0, 0, 0, -1.27471e-08, -0.436528, 0, 0.29162, -1.90812e-08, 0, 0.123446, 0.405885)
+mesh = SubResource("CylinderMesh_dlgu4")
+
+[node name="FSM" type="Node" parent="."]
+script = ExtResource("1_6iqdg")
