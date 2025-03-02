@@ -20,9 +20,10 @@ sky_rotation = Vector3(0, 3.19919, 0)
 environment = SubResource("Environment_rcq3h")
 
 [node name="TestCharacter" parent="." instance=ExtResource("1_uoyaq")]
+speed = 4.0
 
 [node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(0.879666, -0.228011, 0.417371, 0, 0.877583, 0.479426, -0.475592, -0.421734, 0.77198, 5.76567, 6.56994, 10.554)
+transform = Transform3D(1, 0, 0, 0, 0.840567, 0.541708, 0, -0.541708, 0.840567, 0.046, 4.584, 4.802)
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(0.898771, 0.341801, -0.274559, -1.62565e-10, 0.62625, 0.779622, 0.438418, -0.700702, 0.562856, -11.7002, 0, 4.75375)

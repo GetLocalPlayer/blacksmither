@@ -1,7 +1,8 @@
-[gd_scene load_steps=11 format=3 uid="uid://c7gnt27t08y2"]
+[gd_scene load_steps=13 format=3 uid="uid://c7gnt27t08y2"]
 
 [ext_resource type="Script" path="res://assets/character/character.gd" id="1_0aq8s"]
 [ext_resource type="Script" path="res://assets/character/fsm_character.gd" id="1_6iqdg"]
+[ext_resource type="Script" path="res://assets/character/follow_path.gd" id="3_5x72b"]
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_ksksb"]
 radius = 0.35
@@ -29,6 +30,13 @@ top_radius = 0.18
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_0rs1c"]
 radius = 0.35
 height = 1.6
+
+[sub_resource type="Curve3D" id="Curve3D_x8lwg"]
+_data = {
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1.5, 0, 0, 0, 0, 0, 0, 0, 0, -3, 0, 0, 0, 0, 0, 0, 0, 0, -4.5),
+"tilts": PackedFloat32Array(0, 0, 0, 0)
+}
+point_count = 4
 
 [node name="TestCharacter" type="CharacterBody3D"]
 script = ExtResource("1_0aq8s")
@@ -70,3 +78,10 @@ mesh = SubResource("CylinderMesh_dlgu4")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0)
 shape = SubResource("CapsuleShape3D_0rs1c")
+
+[node name="FollowPath" type="Path3D" parent="."]
+top_level = true
+curve = SubResource("Curve3D_x8lwg")
+script = ExtResource("3_5x72b")
+
+[node name="PathFollow3D" type="PathFollow3D" parent="FollowPath"]

@@ -4,9 +4,9 @@ class_name FSMTestCharacter
 
 const STATES_PATH = "states\\%s.gd"
 
-var _states = {
+@onready var _states = {
 	idle = preload(STATES_PATH % "idle").new(),
-	run = preload(STATES_PATH % "run").new(),
+	run = preload(STATES_PATH % "run").new(_get_context()),
 }
 
 var _actions = {
@@ -18,11 +18,17 @@ func _get_initial_state() -> FSMState:
 	return _states.idle
 
 
-func _input(event: InputEvent) -> void:
-	if event.is_action_pressed(_actions.move, true):
-		_set_state(_states.run)
-	else:
+func _ready() -> void:
+	super._ready()
+	_states.run.finished.connect(func(_context: Node):
 		_set_state(_states.idle)
+	)
+
+
+func _input(event: InputEvent) -> void:
+	if event.is_action_pressed(_actions.move):
+		if _current_state != _states.run:
+			_set_state(_states.run)
 	super._input(event)
 
 
