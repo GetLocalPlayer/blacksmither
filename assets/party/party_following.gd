@@ -8,7 +8,7 @@ extends Path3D
 ## The distance at which following starts
 @export var _start_distance: float = 2.
 ## The distance at which following stops
-@export var _stop_distance: float = 1.5
+@export var _stop_distance: float = 1.
 
 @onready var _body: CharacterBody3D = owner
 @onready var _move_speed: float = (owner as Party).speed
@@ -38,19 +38,20 @@ func _physics_process(_delta: float) -> void:
 			curve.add_point(new_pos, Vector3.ZERO, Vector3.ZERO, 0)
 		offset = new_pos.distance_to(head)
 
+
 	if get_child_count() > 0:
 		(get_child(0) as PathFollow3D).progress_ratio = 0.
 		for i: int in range(1, get_child_count()):
 			var slot: PathFollow3D = get_child(i)
+			var prev_slot: PathFollow3D = get_child(i - 1)
 			slot.progress += offset
-			if slot.name == "Slot2": print(slot.progress)
 			if not _moving_slots.has(slot):
-				if slot.progress > _start_distance * i :
+				if slot.progress - prev_slot.progress > _start_distance:
 					_moving_slots.append(slot)
 			if _moving_slots.has(slot):
 				slot.progress -= _delta * _move_speed
-				if slot.progress <= _stop_distance * i:
-					slot.progress = _stop_distance * i
+				if slot.progress - prev_slot.progress <= _stop_distance:
+					slot.progress = _stop_distance + prev_slot.progress
 					_moving_slots.erase(slot)
 			
 	
