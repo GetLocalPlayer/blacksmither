@@ -10,10 +10,10 @@ height = 1.6
 
 [sub_resource type="Curve3D" id="Curve3D_tlqpw"]
 _data = {
-"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -10),
-"tilts": PackedFloat32Array(0, 0)
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1.29921, 0, 0, 0, 0, 0, 0, 0, 0, -5.15931, 0, 0, 0, 0, 0, 0, 0, 0, -10),
+"tilts": PackedFloat32Array(0, 0, 0, 0)
 }
-point_count = 2
+point_count = 4
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_ksksb"]
 radius = 0.35
@@ -51,11 +51,10 @@ shape = SubResource("CapsuleShape3D_0rs1c")
 [node name="FollowingPath" type="Path3D" parent="."]
 curve = SubResource("Curve3D_tlqpw")
 script = ExtResource("3_5x72b")
-_start_distance = null
-_stop_distance = null
 
 [node name="Slot1" type="PathFollow3D" parent="FollowingPath"]
-transform = Transform3D(0.999998, 0, 0, 0, 1, 0, 0, 0, 0.999998, 0, 0, 0)
+transform = Transform3D(0.999998, 0, 0, 0, 1, 0, 0, 0, 0.999998, 0, 0, -1.895)
+progress = 1.895
 cubic_interp = false
 loop = false
 tilt_enabled = false
@@ -100,7 +99,7 @@ loop = false
 tilt_enabled = false
 
 [node name="Model" type="MeshInstance3D" parent="FollowingPath/Slot2"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0)
+transform = Transform3D(0.78, 0, 0, 0, 0.78, 0, 0, 0, 0.78, 0, 0.8, 0)
 mesh = SubResource("CapsuleMesh_ksksb")
 skeleton = NodePath("../../..")
 surface_material_override/0 = SubResource("ORMMaterial3D_vxdct")
