@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=3 uid="uid://cia61q6hmlwle"]
 
-[ext_resource type="PackedScene" uid="uid://c7gnt27t08y2" path="res://assets/character/character.tscn" id="1_uoyaq"]
+[ext_resource type="PackedScene" uid="uid://c7gnt27t08y2" path="res://assets/party/party.tscn" id="1_uoyaq"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_b8ga5"]
 ground_curve = 0.00554787
@@ -19,7 +19,7 @@ sky_rotation = Vector3(0, 3.19919, 0)
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_rcq3h")
 
-[node name="TestCharacter" parent="." instance=ExtResource("1_uoyaq")]
+[node name="Party" parent="." instance=ExtResource("1_uoyaq")]
 speed = 4.0
 
 [node name="Camera3D" type="Camera3D" parent="."]

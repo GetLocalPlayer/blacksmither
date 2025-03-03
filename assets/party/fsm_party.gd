@@ -1,5 +1,5 @@
 extends FSM
-class_name FSMTestCharacter
+class_name FSMParty
 
 
 signal position_changed(old_position: Vector3, new_position: Vector3)

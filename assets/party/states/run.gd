@@ -15,12 +15,15 @@ var _actions = {
 var _speed: float
 var _rotation_speed: float
 var _body: CharacterBody3D
+#var _model: Node3D
+#var _rotation_tween: Tween
 
 
 func _init(context: Node) -> void:
 	_body = context as CharacterBody3D
 	_speed = _body.speed
 	_rotation_speed = _body.rotation_speed
+	#_model = context.get_node("Model")
 
 
 func _update(context: Node, _delta: float):
