@@ -2,18 +2,13 @@
 
 [ext_resource type="Script" path="res://assets/party/party.gd" id="1_0aq8s"]
 [ext_resource type="Script" path="res://assets/party/fsm_party.gd" id="1_6iqdg"]
-[ext_resource type="Script" path="res://assets/party/party_following.gd" id="3_5x72b"]
+[ext_resource type="Script" path="res://assets/party/following.gd" id="2_itsy3"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_0rs1c"]
 radius = 0.35
 height = 1.6
 
 [sub_resource type="Curve3D" id="Curve3D_tlqpw"]
-_data = {
-"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1.29921, 0, 0, 0, 0, 0, 0, 0, 0, -5.15931, 0, 0, 0, 0, 0, 0, 0, 0, -10),
-"tilts": PackedFloat32Array(0, 0, 0, 0)
-}
-point_count = 4
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_ksksb"]
 radius = 0.35
@@ -54,162 +49,163 @@ script = ExtResource("1_0aq8s")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0)
 shape = SubResource("CapsuleShape3D_0rs1c")
 
-[node name="FollowingPath" type="Path3D" parent="."]
+[node name="Following" type="Path3D" parent="."]
 curve = SubResource("Curve3D_tlqpw")
-script = ExtResource("3_5x72b")
+script = ExtResource("2_itsy3")
+_start_distance = null
+_stop_distance = null
 
-[node name="Slot1" type="PathFollow3D" parent="FollowingPath"]
-transform = Transform3D(0.999998, 0, 0, 0, 1, 0, 0, 0, 0.999998, 0, 0, -1.895)
-progress = 1.895
+[node name="Slot1" type="PathFollow3D" parent="Following"]
+transform = Transform3D(0.999998, 0, 0, 0, 1, 0, 0, 0, 0.999998, 0, 0, 0)
 cubic_interp = false
 loop = false
 tilt_enabled = false
 
-[node name="Model" type="MeshInstance3D" parent="FollowingPath/Slot1"]
+[node name="Model" type="MeshInstance3D" parent="Following/Slot1"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0)
 mesh = SubResource("CapsuleMesh_ksksb")
 skeleton = NodePath("../../..")
 surface_material_override/0 = SubResource("ORMMaterial3D_ymso4")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="FollowingPath/Slot1/Model"]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Following/Slot1/Model"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.203249, 0.375327, 0.217034)
 mesh = SubResource("SphereMesh_olubg")
 surface_material_override/0 = SubResource("ORMMaterial3D_h8qfn")
 
-[node name="MeshInstance3D4" type="MeshInstance3D" parent="FollowingPath/Slot1/Model/MeshInstance3D"]
+[node name="MeshInstance3D4" type="MeshInstance3D" parent="Following/Slot1/Model/MeshInstance3D"]
 transform = Transform3D(0.311695, 0, 0, 0, 0.311695, 0, 0, 0, 0.311695, -0.055, 0, 0.161)
 mesh = SubResource("SphereMesh_olubg")
 skeleton = NodePath("../..")
 surface_material_override/0 = SubResource("ORMMaterial3D_0sptl")
 
-[node name="MeshInstance3D2" type="MeshInstance3D" parent="FollowingPath/Slot1/Model"]
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="Following/Slot1/Model"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.181473, 0.375327, 0.217034)
 mesh = SubResource("SphereMesh_olubg")
 surface_material_override/0 = SubResource("ORMMaterial3D_h8qfn")
 
-[node name="MeshInstance3D3" type="MeshInstance3D" parent="FollowingPath/Slot1/Model/MeshInstance3D2"]
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="Following/Slot1/Model/MeshInstance3D2"]
 transform = Transform3D(0.311695, 0, 0, 0, 0.311695, 0, 0, 0, 0.311695, 0.0546556, 0, 0.160902)
 mesh = SubResource("SphereMesh_olubg")
 skeleton = NodePath("../..")
 surface_material_override/0 = SubResource("ORMMaterial3D_0sptl")
 
-[node name="MeshInstance3D3" type="MeshInstance3D" parent="FollowingPath/Slot1/Model"]
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="Following/Slot1/Model"]
 transform = Transform3D(0.436528, 0, 0, 0, -1.27471e-08, -0.436528, 0, 0.29162, -1.90812e-08, 0, 0.123446, 0.405885)
 mesh = SubResource("CylinderMesh_dlgu4")
 surface_material_override/0 = SubResource("ORMMaterial3D_ymso4")
 
-[node name="Slot2" type="PathFollow3D" parent="FollowingPath"]
+[node name="Slot2" type="PathFollow3D" parent="Following"]
 transform = Transform3D(0.999998, 0, 0, 0, 1, 0, 0, 0, 0.999998, 0, 0, 0)
 cubic_interp = false
 loop = false
 tilt_enabled = false
 
-[node name="Model" type="MeshInstance3D" parent="FollowingPath/Slot2"]
-transform = Transform3D(0.78, 0, 0, 0, 0.78, 0, 0, 0, 0.78, 0, 0.8, 0)
+[node name="Model" type="MeshInstance3D" parent="Following/Slot2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0)
 mesh = SubResource("CapsuleMesh_ksksb")
 skeleton = NodePath("../../..")
 surface_material_override/0 = SubResource("ORMMaterial3D_rgoap")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="FollowingPath/Slot2/Model"]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Following/Slot2/Model"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.203249, 0.375327, 0.217034)
 mesh = SubResource("SphereMesh_olubg")
 surface_material_override/0 = SubResource("ORMMaterial3D_h8qfn")
 
-[node name="MeshInstance3D4" type="MeshInstance3D" parent="FollowingPath/Slot2/Model/MeshInstance3D"]
+[node name="MeshInstance3D4" type="MeshInstance3D" parent="Following/Slot2/Model/MeshInstance3D"]
 transform = Transform3D(0.311695, 0, 0, 0, 0.311695, 0, 0, 0, 0.311695, -0.055, 0, 0.161)
 mesh = SubResource("SphereMesh_olubg")
 skeleton = NodePath("../..")
 surface_material_override/0 = SubResource("ORMMaterial3D_0sptl")
 
-[node name="MeshInstance3D2" type="MeshInstance3D" parent="FollowingPath/Slot2/Model"]
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="Following/Slot2/Model"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.181473, 0.375327, 0.217034)
 mesh = SubResource("SphereMesh_olubg")
 surface_material_override/0 = SubResource("ORMMaterial3D_h8qfn")
 
-[node name="MeshInstance3D3" type="MeshInstance3D" parent="FollowingPath/Slot2/Model/MeshInstance3D2"]
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="Following/Slot2/Model/MeshInstance3D2"]
 transform = Transform3D(0.311695, 0, 0, 0, 0.311695, 0, 0, 0, 0.311695, 0.0546556, 0, 0.160902)
 mesh = SubResource("SphereMesh_olubg")
 skeleton = NodePath("../..")
 surface_material_override/0 = SubResource("ORMMaterial3D_0sptl")
 
-[node name="MeshInstance3D3" type="MeshInstance3D" parent="FollowingPath/Slot2/Model"]
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="Following/Slot2/Model"]
 transform = Transform3D(0.436528, 0, 0, 0, -1.27471e-08, -0.436528, 0, 0.29162, -1.90812e-08, 0, 0.123446, 0.405885)
 mesh = SubResource("CylinderMesh_dlgu4")
 
-[node name="Slot3" type="PathFollow3D" parent="FollowingPath"]
+[node name="Slot3" type="PathFollow3D" parent="Following"]
 transform = Transform3D(0.999998, 0, 0, 0, 1, 0, 0, 0, 0.999998, 0, 0, 0)
 cubic_interp = false
 loop = false
 tilt_enabled = false
 
-[node name="Model" type="MeshInstance3D" parent="FollowingPath/Slot3"]
-transform = Transform3D(0.78, 0, 0, 0, 0.78, 0, 0, 0, 0.78, 0, 0.8, 0)
+[node name="Model" type="MeshInstance3D" parent="Following/Slot3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0)
 mesh = SubResource("CapsuleMesh_ksksb")
 skeleton = NodePath("../../..")
 surface_material_override/0 = SubResource("ORMMaterial3D_vxdct")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="FollowingPath/Slot3/Model"]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Following/Slot3/Model"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.203249, 0.375327, 0.217034)
 mesh = SubResource("SphereMesh_olubg")
 surface_material_override/0 = SubResource("ORMMaterial3D_h8qfn")
 
-[node name="MeshInstance3D4" type="MeshInstance3D" parent="FollowingPath/Slot3/Model/MeshInstance3D"]
+[node name="MeshInstance3D4" type="MeshInstance3D" parent="Following/Slot3/Model/MeshInstance3D"]
 transform = Transform3D(0.311695, 0, 0, 0, 0.311695, 0, 0, 0, 0.311695, -0.055, 0, 0.161)
 mesh = SubResource("SphereMesh_olubg")
 skeleton = NodePath("../..")
 surface_material_override/0 = SubResource("ORMMaterial3D_0sptl")
 
-[node name="MeshInstance3D2" type="MeshInstance3D" parent="FollowingPath/Slot3/Model"]
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="Following/Slot3/Model"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.181473, 0.375327, 0.217034)
 mesh = SubResource("SphereMesh_olubg")
 surface_material_override/0 = SubResource("ORMMaterial3D_h8qfn")
 
-[node name="MeshInstance3D3" type="MeshInstance3D" parent="FollowingPath/Slot3/Model/MeshInstance3D2"]
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="Following/Slot3/Model/MeshInstance3D2"]
 transform = Transform3D(0.311695, 0, 0, 0, 0.311695, 0, 0, 0, 0.311695, 0.0546556, 0, 0.160902)
 mesh = SubResource("SphereMesh_olubg")
 skeleton = NodePath("../..")
 surface_material_override/0 = SubResource("ORMMaterial3D_0sptl")
 
-[node name="MeshInstance3D3" type="MeshInstance3D" parent="FollowingPath/Slot3/Model"]
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="Following/Slot3/Model"]
 transform = Transform3D(0.436528, 0, 0, 0, -1.27471e-08, -0.436528, 0, 0.29162, -1.90812e-08, 0, 0.123446, 0.405885)
 mesh = SubResource("CylinderMesh_dlgu4")
 surface_material_override/0 = SubResource("ORMMaterial3D_vxdct")
 
-[node name="Slot4" type="PathFollow3D" parent="FollowingPath"]
+[node name="Slot4" type="PathFollow3D" parent="Following"]
 transform = Transform3D(0.999998, 0, 0, 0, 1, 0, 0, 0, 0.999998, 0, 0, 0)
 cubic_interp = false
 loop = false
 tilt_enabled = false
 
-[node name="Model" type="MeshInstance3D" parent="FollowingPath/Slot4"]
-transform = Transform3D(0.78, 0, 0, 0, 0.78, 0, 0, 0, 0.78, 0, 0.8, 0)
+[node name="Model" type="MeshInstance3D" parent="Following/Slot4"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0)
 mesh = SubResource("CapsuleMesh_ksksb")
 skeleton = NodePath("../../..")
 surface_material_override/0 = SubResource("ORMMaterial3D_3fvnp")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="FollowingPath/Slot4/Model"]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Following/Slot4/Model"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.203249, 0.375327, 0.217034)
 mesh = SubResource("SphereMesh_olubg")
 surface_material_override/0 = SubResource("ORMMaterial3D_h8qfn")
 
-[node name="MeshInstance3D4" type="MeshInstance3D" parent="FollowingPath/Slot4/Model/MeshInstance3D"]
+[node name="MeshInstance3D4" type="MeshInstance3D" parent="Following/Slot4/Model/MeshInstance3D"]
 transform = Transform3D(0.311695, 0, 0, 0, 0.311695, 0, 0, 0, 0.311695, -0.055, 0, 0.161)
 mesh = SubResource("SphereMesh_olubg")
 skeleton = NodePath("../..")
 surface_material_override/0 = SubResource("ORMMaterial3D_0sptl")
 
-[node name="MeshInstance3D2" type="MeshInstance3D" parent="FollowingPath/Slot4/Model"]
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="Following/Slot4/Model"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.181473, 0.375327, 0.217034)
 mesh = SubResource("SphereMesh_olubg")
 surface_material_override/0 = SubResource("ORMMaterial3D_h8qfn")
 
-[node name="MeshInstance3D3" type="MeshInstance3D" parent="FollowingPath/Slot4/Model/MeshInstance3D2"]
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="Following/Slot4/Model/MeshInstance3D2"]
 transform = Transform3D(0.311695, 0, 0, 0, 0.311695, 0, 0, 0, 0.311695, 0.0546556, 0, 0.160902)
 mesh = SubResource("SphereMesh_olubg")
 skeleton = NodePath("../..")
 surface_material_override/0 = SubResource("ORMMaterial3D_0sptl")
 
-[node name="MeshInstance3D3" type="MeshInstance3D" parent="FollowingPath/Slot4/Model"]
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="Following/Slot4/Model"]
 transform = Transform3D(0.436528, 0, 0, 0, -1.27471e-08, -0.436528, 0, 0.29162, -1.90812e-08, 0, 0.123446, 0.405885)
 mesh = SubResource("CylinderMesh_dlgu4")
 surface_material_override/0 = SubResource("ORMMaterial3D_74i00")
