@@ -16,3 +16,7 @@ mono_crash.*.json
 
 
 .vscode/
+*.blend
+*.blend.import
+*.blend1
+*.blend1.import
