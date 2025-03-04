@@ -1,0 +1,10 @@
+[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://dxy65dk6mcfpa"]
+
+[ext_resource type="Texture2D" uid="uid://cy52wsmb65km4" path="res://models/characters/emma/hair.png" id="1_rvv14"]
+
+[resource]
+resource_name = "emma_hair"
+cull_mode = 2
+albedo_color = Color(0, 0.753506, 0.57245, 1)
+albedo_texture = ExtResource("1_rvv14")
+roughness = 0.5

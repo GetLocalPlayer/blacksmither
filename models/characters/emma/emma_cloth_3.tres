@@ -1,0 +1,9 @@
+[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://ceya5b582h20o"]
+
+[ext_resource type="Texture2D" uid="uid://cte11ld6s4yga" path="res://models/characters/emma/cloth_3.png" id="1_66vmj"]
+
+[resource]
+resource_name = "emma_cloth_3"
+cull_mode = 2
+albedo_texture = ExtResource("1_66vmj")
+roughness = 0.822727

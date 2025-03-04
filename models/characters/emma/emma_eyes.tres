@@ -1,0 +1,11 @@
+[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://b6xvd474mmw4"]
+
+[ext_resource type="Texture2D" uid="uid://cgks3ukwbdegx" path="res://models/characters/emma/eye.png" id="1_d5hh8"]
+
+[resource]
+resource_name = "emma_eyes"
+transparency = 1
+cull_mode = 2
+albedo_color = Color(0.735357, 0.735357, 0.735357, 1)
+albedo_texture = ExtResource("1_d5hh8")
+roughness = 0.5

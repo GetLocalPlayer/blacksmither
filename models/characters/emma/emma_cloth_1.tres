@@ -1,0 +1,11 @@
+[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://f7u8p8xg4d70"]
+
+[ext_resource type="Texture2D" uid="uid://dcm6a66i0lq83" path="res://models/characters/emma/cloth_1.png" id="1_td7sv"]
+
+[resource]
+resource_name = "emma_cloth_1"
+transparency = 1
+cull_mode = 2
+albedo_texture = ExtResource("1_td7sv")
+metallic = 0.286364
+roughness = 0.359091

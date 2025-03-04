@@ -1,6 +1,7 @@
-[gd_scene load_steps=5 format=3 uid="uid://cia61q6hmlwle"]
+[gd_scene load_steps=8 format=3 uid="uid://cia61q6hmlwle"]
 
 [ext_resource type="PackedScene" uid="uid://c7gnt27t08y2" path="res://assets/party/party.tscn" id="1_uoyaq"]
+[ext_resource type="Texture2D" uid="uid://d02y8tvpouwyy" path="res://levels/uvgrid.png" id="2_vr72n"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_b8ga5"]
 ground_curve = 0.00554787
@@ -13,6 +14,12 @@ sky_material = SubResource("ProceduralSkyMaterial_b8ga5")
 background_mode = 2
 sky = SubResource("Sky_6xmiw")
 sky_rotation = Vector3(0, 3.19919, 0)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_e8sij"]
+size = Vector2(50, 50)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_x5ayk"]
+albedo_texture = ExtResource("2_vr72n")
 
 [node name="TestScene" type="Node3D"]
 
@@ -28,3 +35,7 @@ transform = Transform3D(1, 0, 0, 0, 0.840567, 0.541708, 0, -0.541708, 0.840567, 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(0.898771, 0.341801, -0.274559, -1.62565e-10, 0.62625, 0.779622, 0.438418, -0.700702, 0.562856, -11.7002, 0, 4.75375)
 light_energy = 2.131
+
+[node name="Floor" type="MeshInstance3D" parent="."]
+mesh = SubResource("PlaneMesh_e8sij")
+surface_material_override/0 = SubResource("StandardMaterial3D_x5ayk")

@@ -1,0 +1,6 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://ctwjo5a3prk7i"]
+
+[resource]
+resource_name = "emma_meat"
+cull_mode = 2
+roughness = 0.5

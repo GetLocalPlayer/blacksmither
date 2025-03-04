@@ -1,0 +1,9 @@
+[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://ctpa85uqxsya4"]
+
+[ext_resource type="Texture2D" uid="uid://5g4ts685lyci" path="res://models/characters/emma/ear.png" id="1_c7iu0"]
+
+[resource]
+resource_name = "emma_ears"
+cull_mode = 2
+albedo_texture = ExtResource("1_c7iu0")
+roughness = 0.77
