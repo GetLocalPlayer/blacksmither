@@ -1,8 +1,10 @@
-[gd_scene load_steps=16 format=3 uid="uid://c7gnt27t08y2"]
+[gd_scene load_steps=17 format=3 uid="uid://c7gnt27t08y2"]
 
 [ext_resource type="Script" path="res://assets/party/party.gd" id="1_0aq8s"]
 [ext_resource type="Script" path="res://assets/party/fsm_party.gd" id="1_6iqdg"]
 [ext_resource type="Script" path="res://assets/party/following.gd" id="2_itsy3"]
+[ext_resource type="PackedScene" uid="uid://b6f7wde0eg2p3" path="res://models/characters/emma/emma.tscn" id="4_gryrc"]
+[ext_resource type="Script" path="res://assets/party/party_slot.gd" id="4_kai0v"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_0rs1c"]
 radius = 0.35
@@ -14,8 +16,8 @@ height = 1.6
 radius = 0.35
 height = 1.6
 
-[sub_resource type="ORMMaterial3D" id="ORMMaterial3D_ymso4"]
-albedo_color = Color(0, 0.733244, 0.759666, 1)
+[sub_resource type="ORMMaterial3D" id="ORMMaterial3D_rgoap"]
+albedo_color = Color(0.946497, 0.441054, 0.711352, 1)
 
 [sub_resource type="SphereMesh" id="SphereMesh_olubg"]
 radius = 0.2
@@ -25,9 +27,6 @@ height = 0.4
 
 [sub_resource type="ORMMaterial3D" id="ORMMaterial3D_0sptl"]
 albedo_color = Color(0, 0, 0, 1)
-
-[sub_resource type="ORMMaterial3D" id="ORMMaterial3D_rgoap"]
-albedo_color = Color(0.946497, 0.441054, 0.711352, 1)
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_dlgu4"]
 material = SubResource("ORMMaterial3D_rgoap")
@@ -49,50 +48,26 @@ script = ExtResource("1_0aq8s")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0)
 shape = SubResource("CapsuleShape3D_0rs1c")
 
+[node name="FSM" type="Node" parent="."]
+script = ExtResource("1_6iqdg")
+
 [node name="Following" type="Path3D" parent="."]
 curve = SubResource("Curve3D_tlqpw")
 script = ExtResource("2_itsy3")
-_start_distance = null
-_stop_distance = null
 
 [node name="Slot1" type="PathFollow3D" parent="Following"]
 transform = Transform3D(0.999998, 0, 0, 0, 1, 0, 0, 0, 0.999998, 0, 0, 0)
 cubic_interp = false
 loop = false
 tilt_enabled = false
+script = ExtResource("4_kai0v")
 
-[node name="Model" type="MeshInstance3D" parent="Following/Slot1"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0)
-mesh = SubResource("CapsuleMesh_ksksb")
-skeleton = NodePath("../../..")
-surface_material_override/0 = SubResource("ORMMaterial3D_ymso4")
+[node name="Emma" parent="Following/Slot1" instance=ExtResource("4_gryrc")]
+transform = Transform3D(0.999996, 0, 0, 0, 1, 0, 0, 0, 0.999996, 0, 0, 0)
+top_level = true
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Following/Slot1/Model"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.203249, 0.375327, 0.217034)
-mesh = SubResource("SphereMesh_olubg")
-surface_material_override/0 = SubResource("ORMMaterial3D_h8qfn")
-
-[node name="MeshInstance3D4" type="MeshInstance3D" parent="Following/Slot1/Model/MeshInstance3D"]
-transform = Transform3D(0.311695, 0, 0, 0, 0.311695, 0, 0, 0, 0.311695, -0.055, 0, 0.161)
-mesh = SubResource("SphereMesh_olubg")
-skeleton = NodePath("../..")
-surface_material_override/0 = SubResource("ORMMaterial3D_0sptl")
-
-[node name="MeshInstance3D2" type="MeshInstance3D" parent="Following/Slot1/Model"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.181473, 0.375327, 0.217034)
-mesh = SubResource("SphereMesh_olubg")
-surface_material_override/0 = SubResource("ORMMaterial3D_h8qfn")
-
-[node name="MeshInstance3D3" type="MeshInstance3D" parent="Following/Slot1/Model/MeshInstance3D2"]
-transform = Transform3D(0.311695, 0, 0, 0, 0.311695, 0, 0, 0, 0.311695, 0.0546556, 0, 0.160902)
-mesh = SubResource("SphereMesh_olubg")
-skeleton = NodePath("../..")
-surface_material_override/0 = SubResource("ORMMaterial3D_0sptl")
-
-[node name="MeshInstance3D3" type="MeshInstance3D" parent="Following/Slot1/Model"]
-transform = Transform3D(0.436528, 0, 0, 0, -1.27471e-08, -0.436528, 0, 0.29162, -1.90812e-08, 0, 0.123446, 0.405885)
-mesh = SubResource("CylinderMesh_dlgu4")
-surface_material_override/0 = SubResource("ORMMaterial3D_ymso4")
+[node name="RemoteTransform3D" type="RemoteTransform3D" parent="Following/Slot1"]
+update_rotation = false
 
 [node name="Slot2" type="PathFollow3D" parent="Following"]
 transform = Transform3D(0.999998, 0, 0, 0, 1, 0, 0, 0, 0.999998, 0, 0, 0)
@@ -209,6 +184,3 @@ surface_material_override/0 = SubResource("ORMMaterial3D_0sptl")
 transform = Transform3D(0.436528, 0, 0, 0, -1.27471e-08, -0.436528, 0, 0.29162, -1.90812e-08, 0, 0.123446, 0.405885)
 mesh = SubResource("CylinderMesh_dlgu4")
 surface_material_override/0 = SubResource("ORMMaterial3D_74i00")
-
-[node name="FSM" type="Node" parent="."]
-script = ExtResource("1_6iqdg")

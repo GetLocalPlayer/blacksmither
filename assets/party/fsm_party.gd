@@ -2,8 +2,6 @@ extends FSM
 class_name FSMParty
 
 
-signal position_changed(old_position: Vector3, new_position: Vector3)
-
 const STATES_PATH = "states\\%s.gd"
 
 @onready var _states = {
@@ -14,8 +12,6 @@ const STATES_PATH = "states\\%s.gd"
 var _actions = {
 	move = "Move"
 }
-
-@onready var _body = owner
 
 
 func _get_initial_state() -> FSMState:
