@@ -8,45 +8,64 @@ extends PathFollow3D
 # Children are rotated along the path
 # over time.
 
-@export_range(0, 10000, 1, "radians_as_degrees") var _rotation_speed: float = 15.
+@export_range(0, 10000, 1, "radians_as_degrees") var _rotation_speed: float = 15:
+	get:
+		return _rotation_speed
+	set(value):
+		_rotation_speed = value
+		if is_node_ready():
+			for child in get_children():
+				if _remotes.has(child):
+					pass
+					_remotes[child].update_rotation = value <= 0
+
 
 @onready var _prev_pos: Vector3 = global_position
-
+var _remotes = {}
 
 func _ready() -> void:
-	var on_child_entered_tree = func(child: Node):
-		if child is Node3D:
-			_update_child_transform(child, 0)
-			child.top_level = true
-
-	get_parent().child_entered_tree.connect(on_child_entered_tree)
-
+	rotation_mode = RotationMode.ROTATION_Y
+	tilt_enabled = false
+	cubic_interp = false
+	loop = false
+	use_model_front = false
 	for child in get_children():
-		on_child_entered_tree.call(child)
+		_on_child_entered_tree(child)
+	child_entered_tree.connect(_on_child_entered_tree)
+	child_exiting_tree.connect(_on_child_exiting_tree)
 
 
-func _update_child_transform(child: Node3D, delta: float) -> void:
-	var s: Basis = Basis.from_scale(global_basis.get_scale())
-	var r: Basis
-	var o: Vector3 = global_position
-	var pos_delta = global_position - _prev_pos
-	_prev_pos = global_position
-	pos_delta.y = 0.
-	var delta_dir = pos_delta.normalized()
-	if _rotation_speed > 0:
-		var a = delta_dir.angle_to(child.global_basis.z)
-		var delta_a = _rotation_speed * delta
-		r = child.global_basis * Quaternion(Vector3.UP, a if delta_a >= a else delta_a)
-	else:
-		r = Basis.looking_at(delta_dir, Vector3.UP, true)
-	#child.global_transform = Transform3D(r * s, o)
-	child.global_transform = Transform3D(r, o)
+func _on_child_entered_tree(child: Node) -> void:
+	if child is Node3D:
+		child.top_level = true
+		var r: RemoteTransform3D = RemoteTransform3D.new()
+		add_child(r, false, INTERNAL_MODE_BACK)
+		_remotes[child] = r
+		r.update_position = true
+		r.update_rotation = _rotation_speed <= 0
+		r.update_scale = true
+		r.use_global_coordinates = true
+		r.remote_path = r.get_path_to(child)
+		
+		
+func _on_child_exiting_tree(child: Node) -> void:
+	if child is Node3D:
+		if _remotes.has(child):
+			_remotes[child].queue_free()
+			_remotes.erase(child)
 
+
+func _update_child_facing(child: Node3D, delta: float) -> void:
+	var r: RemoteTransform3D = _remotes[child]
+	var a: float = child.global_basis.z.signed_angle_to(-r.global_basis.z, Vector3.UP)
+	var delta_a: float = _rotation_speed * delta
+	var q: Quaternion = Quaternion(Vector3.UP, a if delta_a >= a else delta_a)
+	child.global_basis = q * child.global_basis.get_rotation_quaternion()
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _physics_process(delta: float) -> void:
-	if is_zero_approx(_prev_pos.distance_squared_to(global_position)):
+	if _prev_pos.is_equal_approx(global_position):
 		return
 	for child in get_children():
-		if child is Node3D:
-			_update_child_transform(child, delta)
+		if _remotes.has(child) and not _remotes[child].update_rotation:
+			_update_child_facing(child, delta)

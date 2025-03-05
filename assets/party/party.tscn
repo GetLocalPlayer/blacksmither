@@ -61,11 +61,9 @@ cubic_interp = false
 loop = false
 tilt_enabled = false
 script = ExtResource("4_kai0v")
-_rotation_speed = 0.0
 
 [node name="Emma" parent="Following/Slot1" instance=ExtResource("4_gryrc")]
-transform = Transform3D(0.999996, 0, 0, 0, 1, 0, 0, 0, 0.999996, 0, 0, 0)
-top_level = true
+transform = Transform3D(0.999998, 0, 0, 0, 1, 0, 0, 0, 0.999998, 0, 0, 0)
 
 [node name="Slot2" type="PathFollow3D" parent="Following"]
 transform = Transform3D(0.9, 0, 0, 0, 0.9, 0, 0, 0, 0.9, 0, 0, 0)
@@ -79,7 +77,7 @@ transform = Transform3D(0.9, 0, 0, 0, 0.9, 0, 0, 0, 0.9, 0, 0, 0)
 top_level = true
 
 [node name="Model" type="MeshInstance3D" parent="Following/Slot2/SomeCharacter"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0)
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0.8, 0)
 mesh = SubResource("CapsuleMesh_ksksb")
 skeleton = NodePath("../../../..")
 surface_material_override/0 = SubResource("ORMMaterial3D_rgoap")
@@ -120,7 +118,7 @@ script = ExtResource("4_kai0v")
 [node name="SomeCharacter" type="Node3D" parent="Following/Slot3"]
 
 [node name="Model" type="MeshInstance3D" parent="Following/Slot3/SomeCharacter"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0)
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0.8, 0)
 mesh = SubResource("CapsuleMesh_ksksb")
 skeleton = NodePath("../../../..")
 surface_material_override/0 = SubResource("ORMMaterial3D_vxdct")
@@ -162,7 +160,7 @@ script = ExtResource("4_kai0v")
 [node name="SomeCharacter" type="Node3D" parent="Following/Slot4"]
 
 [node name="Model" type="MeshInstance3D" parent="Following/Slot4/SomeCharacter"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0)
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0.8, 0)
 mesh = SubResource("CapsuleMesh_ksksb")
 skeleton = NodePath("../../../..")
 surface_material_override/0 = SubResource("ORMMaterial3D_3fvnp")
