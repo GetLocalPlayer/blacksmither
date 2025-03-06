@@ -57,11 +57,13 @@ func _on_child_exiting_tree(child: Node) -> void:
 
 func _update_child_facing(child: Node3D, delta: float) -> void:
 	var r: RemoteTransform3D = _remotes[child]
+	if is_equal_approx(child.global_basis.z.dot(-r.global_basis.z), 1.):
+		return
 	var a: float = child.global_basis.z.signed_angle_to(-r.global_basis.z, Vector3.UP)
-	var delta_a: float = _rotation_speed * delta
-	var q: Quaternion = Quaternion(Vector3.UP, a if delta_a >= a else delta_a)
+	var delta_a: float = _rotation_speed * delta * sign(a)
+	var q: Quaternion = Quaternion(Vector3.UP, a if abs(delta_a) >= abs(a) else delta_a)
 	child.global_basis = q * child.global_basis.get_rotation_quaternion()
-
+	
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _physics_process(delta: float) -> void:
 	if _prev_pos.is_equal_approx(global_position):

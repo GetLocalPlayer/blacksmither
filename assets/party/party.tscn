@@ -61,6 +61,7 @@ cubic_interp = false
 loop = false
 tilt_enabled = false
 script = ExtResource("4_kai0v")
+_rotation_speed = 6.28319
 
 [node name="Emma" parent="Following/Slot1" instance=ExtResource("4_gryrc")]
 transform = Transform3D(0.999998, 0, 0, 0, 1, 0, 0, 0, 0.999998, 0, 0, 0)
@@ -71,6 +72,7 @@ cubic_interp = false
 loop = false
 tilt_enabled = false
 script = ExtResource("4_kai0v")
+_rotation_speed = 6.28319
 
 [node name="SomeCharacter" type="Node3D" parent="Following/Slot2"]
 transform = Transform3D(0.9, 0, 0, 0, 0.9, 0, 0, 0, 0.9, 0, 0, 0)
@@ -114,6 +116,7 @@ cubic_interp = false
 loop = false
 tilt_enabled = false
 script = ExtResource("4_kai0v")
+_rotation_speed = 6.28319
 
 [node name="SomeCharacter" type="Node3D" parent="Following/Slot3"]
 
@@ -156,6 +159,7 @@ cubic_interp = false
 loop = false
 tilt_enabled = false
 script = ExtResource("4_kai0v")
+_rotation_speed = 6.28319
 
 [node name="SomeCharacter" type="Node3D" parent="Following/Slot4"]
 
