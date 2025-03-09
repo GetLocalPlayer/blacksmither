@@ -2,22 +2,42 @@ extends Node3D
 class_name Character
 
 
+signal clicked()
+signal mouse_entered()
+signal mouse_exited()
+
+
+
+@export var max_health: float = 100:
+	get:
+		return max_health
+	set(value):
+		health = value if value >= 0. else 0.
+		if is_node_ready():
+			pass
+
+
+@export var health: float = 100:
+	get:
+		return health
+	set(value):
+		health = value if value >= 0. else 0.
+		if is_node_ready():
+			pass
+
+
 @onready var _clicker: StaticBody3D = $Clicker
-@onready var _target: Panel = $HealthBar/Target
+
 
 
 func _ready() -> void:
-    _clicker.input_event.connect(_on_click)
-    _target.hide()
+	_clicker.input_event.connect(_on_click)
+	_clicker.mouse_entered.connect(func()-> void: mouse_entered.emit())
+	_clicker.mouse_exited.connect(func()-> void: mouse_exited.emit())
 
 
-func _on_click(camera: Node, event: InputEvent, event_position: Vector3, normal: Vector3, shape_idx: int) -> void:
-    pass
 
-
-func _on_mouse_entered() -> void:
-    _target.show()
-
-
-func _on_mouse_exited() -> void:
-    _target.hide()
+func _on_click(_camera: Node, event: InputEvent, _event_position: Vector3, _normal: Vector3, _shape_idx: int) -> void:
+	var mouse_click: InputEventMouseButton = event as InputEventMouseButton
+	if mouse_click and mouse_click.button_index == MOUSE_BUTTON_LEFT and mouse_click.pressed:
+		clicked.emit()
