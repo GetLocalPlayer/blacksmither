@@ -6,7 +6,7 @@ signal clicked()
 signal mouse_entered()
 signal mouse_exited()
 
-@onready var _abilities: Array[CombatAbility] = $Abilities.get_children() as Array[CombatAbility]
+@onready var _abilities: Array[CombatAbility] = Array($Abilities.get_children(), TYPE_OBJECT, "TextureButton", CombatAbility)
 
 
 @export var max_health: float = 100:

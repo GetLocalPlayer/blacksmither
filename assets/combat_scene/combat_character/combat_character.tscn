@@ -25,7 +25,7 @@ shape = SubResource("CylinderShape3D_byb5w")
 
 [node name="Abilities" type="Node" parent="."]
 
-[node name="1" type="TextureButton" parent="Abilities"]
+[node name="Attack" type="TextureButton" parent="Abilities"]
 visible = false
 custom_minimum_size = Vector2(64, 64)
 size_flags_horizontal = 4
@@ -38,5 +38,5 @@ texture_disabled = ExtResource("6_liefb")
 ignore_texture_size = true
 stretch_mode = 0
 script = ExtResource("7_lr64r")
-effect_type = 1
+damage = 20.0
 heal = 100.955

@@ -10,7 +10,19 @@ class_name CombatAbility
 enum CastType {TARGET, INSTANT}
 enum EffectType {DAMAGE, HEAL}
 
-@export var cast_type: CastType = CastType.TARGET
+@export var cast_type: CastType = CastType.TARGET:
+	get:
+		return cast_type
+	set(value):
+		cast_type = value
+		if is_node_ready():
+			match value:
+				CastType.TARGET:
+					toggle_mode = true
+				CastType.INSTANT:
+					toggle_mode = false
+					
+
 @export var effect_type: EffectType = EffectType.DAMAGE:
 	get:
 		return effect_type
