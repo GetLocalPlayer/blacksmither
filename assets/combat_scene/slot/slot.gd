@@ -2,14 +2,39 @@ extends Marker3D
 
 
 @onready var _health_bar: ProgressBar = $HealthBar
-@onready var _target_mark: Panel = $HealthBar/TargetMark
+@onready var _current_character_mark: Panel = $HealthBar/HealthBar/CurrentCharacterMark
+@onready var _primary_target_mark: Panel = $HealthBar/PrimaryTargetMark
+@onready var _secondary_target_mark: Panel = $HealthBar/SecondaryTargetMark
 var _character: Character
 
 
+func show_target_mark(show_scondary: bool) -> void:
+	if show_scondary:
+		_secondary_target_mark.show()
+	else:
+		_primary_target_mark.show()
+
+
+func hide_target_mark(hide_secondary: bool) -> void:
+	if hide_secondary:
+		_secondary_target_mark.hide()
+	else:
+		_primary_target_mark.hide()
+
+
+func show_current_character_mark() -> void:
+	_current_character_mark.show()
+
+
+func hide_current_character_mark() -> void:
+	_current_character_mark.hide()
+
+		
 func _ready() -> void:
 	child_entered_tree.connect(_on_child_entered_tree)
 	child_exiting_tree.connect(_on_child_exited_tree)
-	_target_mark.hide()
+	_current_character_mark.hide()
+	_secondary_target_mark.hide()
 	if get_child_count() > 0:
 		_on_child_entered_tree(get_child(0))
 	_health_bar.visible = get_child_count() > 0
@@ -46,11 +71,11 @@ func _on_child_exited_tree(child: Node) -> void:
 
 
 func _on_character_mouse_entered() -> void:
-	_target_mark.show()
+	_current_character_mark.show()
 
 
 func _on_character_mouse_exited() -> void:
-	_target_mark.hide()
+	_current_character_mark.hide()
 
 
 func _on_character_clicked() -> void:

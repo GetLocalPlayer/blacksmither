@@ -33,13 +33,24 @@ enum EffectType {DAMAGE, HEAL}
 	set(value):
 		heal = value if value >= 0. else 0.
 
+@export_subgroup("Available Targets")
+enum TargetType {
+	ENEMY = 1,
+	ALLY = 1 << 1,
+	SELF = 1 << 2,
+}
+@export var target_type: TargetType = TargetType.ENEMY
+
 
 func _validate_property(property: Dictionary) -> void:
 	var validate_effect_type = func(et: EffectType) -> int:
-		return PROPERTY_USAGE_STORAGE | (PROPERTY_USAGE_EDITOR if effect_type == et else PROPERTY_USAGE_NO_EDITOR)
+		return PROPERTY_USAGE_DEFAULT if effect_type == et else PROPERTY_USAGE_DEFAULT ^ PROPERTY_USAGE_EDITOR
 
 	if property.name == "damage":
 		property.usage = validate_effect_type.call(EffectType.DAMAGE)
 	if property.name == "heal":
 		property.usage = validate_effect_type.call(EffectType.HEAL)
+	if property.name == "target_type":
+		property.usage = PROPERTY_USAGE_DEFAULT | PROPERTY_USAGE_CLASS_IS_BITFIELD
+		property.hint = PROPERTY_HINT_FLAGS
 

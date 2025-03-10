@@ -1,6 +1,6 @@
 [gd_scene load_steps=7 format=3 uid="uid://bh72l5fvxqql5"]
 
-[ext_resource type="Script" path="res://assets/combat_scene/slot.gd" id="1_6y5ca"]
+[ext_resource type="Script" path="res://assets/combat_scene/slot/slot.gd" id="1_6y5ca"]
 [ext_resource type="PackedScene" uid="uid://0aiqln2jekco" path="res://assets/combat_scene/character/character.tscn" id="2_r4swt"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wwfpi"]
@@ -32,12 +32,14 @@ border_color = Color(0, 0.356863, 0.8, 1)
 corner_radius_top_left = 13
 corner_radius_top_right = 13
 corner_radius_bottom_right = 425
-corner_radius_bottom_left = 1024
+corner_radius_bottom_left = 425
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_333eo"]
 bg_color = Color(1, 0.6, 0.6, 1)
 corner_radius_top_left = 8
 corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
 
 [node name="Slot1" type="Marker3D"]
 transform = Transform3D(-0.34202, 0, -0.939693, 0, 1, 0, 0.939693, 0, -0.34202, 0, 0, 0)
@@ -65,7 +67,7 @@ allow_greater = true
 allow_lesser = true
 show_percentage = false
 
-[node name="TargetMark" type="Panel" parent="HealthBar"]
+[node name="CurrentCharacterMark" type="Panel" parent="HealthBar"]
 z_index = -1
 layout_mode = 1
 anchors_preset = 15
@@ -79,10 +81,18 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_lt7ot")
 
-[node name="CurrentMark" type="Panel" parent="HealthBar"]
+[node name="PrimaryTargetMark" type="Panel" parent="HealthBar"]
 layout_mode = 0
 offset_left = 33.0
 offset_top = 26.0
 offset_right = 47.0
 offset_bottom = 55.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_333eo")
+
+[node name="SecondaryTargetMark" type="Panel" parent="HealthBar"]
+layout_mode = 0
+offset_left = 33.0
+offset_top = 26.0
+offset_right = 47.0
+offset_bottom = 39.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_333eo")
