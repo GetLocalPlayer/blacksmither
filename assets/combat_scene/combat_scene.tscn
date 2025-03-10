@@ -60,7 +60,8 @@ grow_vertical = 0
 theme_override_constants/separation = 8
 alignment = 1
 
-[node name="TestPlaceholder" type="TextureButton" parent="AbilityBar"]
+[node name="BaseButton" type="TextureButton" parent="AbilityBar"]
+editor_description = "This buttons is duplicated and the duplicates are accepting abilities' icons."
 visible = false
 custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
