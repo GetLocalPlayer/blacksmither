@@ -54,3 +54,6 @@ func _validate_property(property: Dictionary) -> void:
 		property.usage = PROPERTY_USAGE_DEFAULT | PROPERTY_USAGE_CLASS_IS_BITFIELD
 		property.hint = PROPERTY_HINT_FLAGS
 
+
+func _ready() -> void:
+	hide()

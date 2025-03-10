@@ -26,6 +26,7 @@ shape = SubResource("CylinderShape3D_byb5w")
 [node name="Abilities" type="Node" parent="."]
 
 [node name="1" type="TextureButton" parent="Abilities"]
+visible = false
 custom_minimum_size = Vector2(64, 64)
 size_flags_horizontal = 4
 size_flags_vertical = 4

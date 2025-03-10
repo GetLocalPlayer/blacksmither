@@ -5,7 +5,6 @@
 [ext_resource type="Texture2D" uid="uid://lk25wlfgu6y2" path="res://icon.svg" id="3_7ucak"]
 [ext_resource type="Texture2D" uid="uid://b3l3ct6cbhn88" path="res://icon_pressed.png" id="3_cnprh"]
 [ext_resource type="Texture2D" uid="uid://bgqmqtevmvxp1" path="res://icon_disabled.png" id="4_14a6m"]
-[ext_resource type="Script" path="res://assets/combat_scene/character/ability.gd" id="5_no1mx"]
 [ext_resource type="PackedScene" uid="uid://bh72l5fvxqql5" path="res://assets/combat_scene/slot/slot.tscn" id="7_8p5k5"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_i62ak"]
@@ -19,6 +18,20 @@ sky_material = SubResource("ProceduralSkyMaterial_i62ak")
 background_mode = 2
 sky = SubResource("Sky_58j6e")
 tonemap_mode = 2
+
+[sub_resource type="GDScript" id="GDScript_mwjt4"]
+script/source = "extends Node3D
+
+
+# Called when the node enters the scene tree for the first time.
+func _ready() -> void:
+	pass # Replace with function body.
+
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(delta: float) -> void:
+	pass
+"
 
 [node name="CombatScene" type="Node3D"]
 script = ExtResource("1_owgya")
@@ -47,7 +60,8 @@ grow_vertical = 0
 theme_override_constants/separation = 8
 alignment = 1
 
-[node name="Ability1" type="TextureButton" parent="AbilityBar"]
+[node name="TestPlaceholder" type="TextureButton" parent="AbilityBar"]
+visible = false
 custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
 size_flags_horizontal = 4
@@ -59,10 +73,10 @@ texture_pressed = ExtResource("3_cnprh")
 texture_disabled = ExtResource("4_14a6m")
 ignore_texture_size = true
 stretch_mode = 0
-script = ExtResource("5_no1mx")
 
 [node name="Player" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.25, 0, 0)
+script = SubResource("GDScript_mwjt4")
 
 [node name="Slot1" parent="Player" instance=ExtResource("7_8p5k5")]
 
@@ -76,7 +90,7 @@ transform = Transform3D(-0.34202, 0, -0.939693, 0, 1, 0, 0.939693, 0, -0.34202, 
 transform = Transform3D(-0.34202, 0, -0.939693, 0, 1, 0, 0.939693, 0, -0.34202, -3.3, 0, 0)
 
 [node name="Enemy" type="Node3D" parent="."]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 1, 0, 0)
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 1.25, 0, 0)
 
 [node name="Slot1" parent="Enemy" instance=ExtResource("7_8p5k5")]
 transform = Transform3D(0.34202, 0, -0.939693, 0, 1, 0, 0.939693, 0, 0.34202, 0, 0, 0)

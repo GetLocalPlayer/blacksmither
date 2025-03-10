@@ -2,9 +2,10 @@ extends Marker3D
 
 
 @onready var _health_bar: ProgressBar = $HealthBar
-@onready var _current_character_mark: Panel = $HealthBar/HealthBar/CurrentCharacterMark
-@onready var _primary_target_mark: Panel = $HealthBar/PrimaryTargetMark
-@onready var _secondary_target_mark: Panel = $HealthBar/SecondaryTargetMark
+@onready var _current_character_mark: Panel = $HealthBar/Marks/CurrentCharacter
+@onready var _primary_target_mark: Panel = $HealthBar/Marks/PrimaryTarget
+@onready var _secondary_target_mark: Panel = $HealthBar/Marks/SecondaryTarget
+
 var _character: Character
 
 
@@ -35,14 +36,17 @@ func _ready() -> void:
 	child_exiting_tree.connect(_on_child_exited_tree)
 	_current_character_mark.hide()
 	_secondary_target_mark.hide()
+	_primary_target_mark.hide()	
 	if get_child_count() > 0:
 		_on_child_entered_tree(get_child(0))
 	_health_bar.visible = get_child_count() > 0
 
 
 func _process(_delta: float) -> void:
-	var screen_pos: Vector2 = get_viewport().get_camera_3d().unproject_position(global_position)
-	_health_bar.position = screen_pos - _health_bar.pivot_offset
+	var camera = get_viewport().get_camera_3d()
+	if camera:
+		var screen_pos: Vector2 = get_viewport().get_camera_3d().unproject_position(global_position)
+		_health_bar.position = screen_pos - _health_bar.pivot_offset
 	if _character:
 		_health_bar.value = _character.health
 
