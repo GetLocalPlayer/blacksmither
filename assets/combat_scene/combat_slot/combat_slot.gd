@@ -1,4 +1,5 @@
 extends Marker3D
+class_name CombatSlot
 
 
 @onready var _health_bar: ProgressBar = $HealthBar
@@ -7,6 +8,14 @@ extends Marker3D
 @onready var _secondary_target_mark: Panel = $HealthBar/Marks/SecondaryTarget
 
 var _character: Character
+
+
+func get_character() -> Character:
+	return _character
+
+
+func get_character_abilities() -> Array[CombatAbility]:
+	return _character.get_abilities()
 
 
 func show_target_mark(show_scondary: bool) -> void:

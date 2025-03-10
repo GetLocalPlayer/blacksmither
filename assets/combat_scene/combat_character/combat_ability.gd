@@ -1,6 +1,6 @@
 @tool
 extends TextureButton
-class_name Ability
+class_name CombatAbility
 
 
 @export var title: String = "Empty Name"

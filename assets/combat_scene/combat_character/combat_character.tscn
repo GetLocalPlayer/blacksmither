@@ -1,0 +1,42 @@
+[gd_scene load_steps=9 format=3 uid="uid://0aiqln2jekco"]
+
+[ext_resource type="Script" path="res://assets/combat_scene/combat_character/combat_character.gd" id="1_uyb1w"]
+[ext_resource type="PackedScene" uid="uid://b6f7wde0eg2p3" path="res://models/characters/emma/emma.tscn" id="2_n31pi"]
+[ext_resource type="ButtonGroup" uid="uid://ckimwvbxif6nn" path="res://assets/combat_scene/ability_button_group.tres" id="3_7kebv"]
+[ext_resource type="Texture2D" uid="uid://lk25wlfgu6y2" path="res://icon.svg" id="4_dhug6"]
+[ext_resource type="Texture2D" uid="uid://b3l3ct6cbhn88" path="res://icon_pressed.png" id="5_kgee6"]
+[ext_resource type="Texture2D" uid="uid://bgqmqtevmvxp1" path="res://icon_disabled.png" id="6_liefb"]
+[ext_resource type="Script" path="res://assets/combat_scene/combat_character/combat_ability.gd" id="7_lr64r"]
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_byb5w"]
+height = 1.89118
+radius = 0.345411
+
+[node name="CombatCharacter" type="Node3D"]
+script = ExtResource("1_uyb1w")
+
+[node name="Model" parent="." instance=ExtResource("2_n31pi")]
+
+[node name="Clicker" type="StaticBody3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Clicker"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0510902, 0.961214, -0.140369)
+shape = SubResource("CylinderShape3D_byb5w")
+
+[node name="Abilities" type="Node" parent="."]
+
+[node name="1" type="TextureButton" parent="Abilities"]
+visible = false
+custom_minimum_size = Vector2(64, 64)
+size_flags_horizontal = 4
+size_flags_vertical = 4
+toggle_mode = true
+button_group = ExtResource("3_7kebv")
+texture_normal = ExtResource("4_dhug6")
+texture_pressed = ExtResource("5_kgee6")
+texture_disabled = ExtResource("6_liefb")
+ignore_texture_size = true
+stretch_mode = 0
+script = ExtResource("7_lr64r")
+effect_type = 1
+heal = 100.955

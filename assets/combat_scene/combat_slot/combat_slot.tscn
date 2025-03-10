@@ -1,7 +1,7 @@
 [gd_scene load_steps=7 format=3 uid="uid://bh72l5fvxqql5"]
 
-[ext_resource type="Script" path="res://assets/combat_scene/slot/slot.gd" id="1_6y5ca"]
-[ext_resource type="PackedScene" uid="uid://0aiqln2jekco" path="res://assets/combat_scene/character/character.tscn" id="2_r4swt"]
+[ext_resource type="Script" path="res://assets/combat_scene/combat_slot/combat_slot.gd" id="1_6y5ca"]
+[ext_resource type="PackedScene" uid="uid://0aiqln2jekco" path="res://assets/combat_scene/combat_character/combat_character.tscn" id="2_r4swt"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wwfpi"]
 bg_color = Color(0, 0, 0, 1)
@@ -41,7 +41,7 @@ corner_radius_top_right = 8
 corner_radius_bottom_right = 8
 corner_radius_bottom_left = 8
 
-[node name="Slot" type="Marker3D"]
+[node name="CombatSlot" type="Marker3D"]
 transform = Transform3D(-0.34202, 0, -0.939693, 0, 1, 0, 0.939693, 0, -0.34202, 0, 0, 0)
 script = ExtResource("1_6y5ca")
 

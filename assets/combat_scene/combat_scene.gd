@@ -12,6 +12,9 @@ func _ready() -> void:
 	for slot in _player.get_children():
 		if slot.get_child_count() > 0:
 			action_queue.append(slot)
+			for a in slot.get_character_abilities():
+				a.reparent(_ability_bar)
+				a.hide()
 	
 	for slot in _enemy.get_children():
 		if slot.get_child_count() > 0:
@@ -19,5 +22,13 @@ func _ready() -> void:
 	_run_next_turn()
 
 
+
 func _run_next_turn() -> void:
-	 var c = action_queue.pop_front()
+	var slot = action_queue.pop_front()
+	if slot.get_parent() == _player:
+		_set_ability_bar(slot)
+
+
+func _set_ability_bar(slot: CombatSlot) -> void:
+	for a in slot.get_character().get_abilities():
+		a.show()

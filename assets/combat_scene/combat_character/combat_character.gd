@@ -6,6 +6,7 @@ signal clicked()
 signal mouse_entered()
 signal mouse_exited()
 
+@onready var _abilities: Array[CombatAbility] = $Abilities.get_children() as Array[CombatAbility]
 
 
 @export var max_health: float = 100:
@@ -26,8 +27,20 @@ signal mouse_exited()
 			pass
 
 
+@export var clickable: bool = true:
+	get:
+		return clickable
+	set(value):
+		clickable = value
+		if is_node_ready():
+			_clicker.input_ray_pickable = clickable
+			
+
 @onready var _clicker: StaticBody3D = $Clicker
 
+
+func get_abilities() -> Array[CombatAbility]:
+	return _abilities
 
 
 func _ready() -> void:
