@@ -1,10 +1,7 @@
-[gd_scene load_steps=11 format=3 uid="uid://bmqgmxpe262tv"]
+[gd_scene load_steps=9 format=3 uid="uid://bmqgmxpe262tv"]
 
 [ext_resource type="Script" path="res://assets/combat_scene/combat_scene.gd" id="1_owgya"]
-[ext_resource type="ButtonGroup" uid="uid://ckimwvbxif6nn" path="res://assets/combat_scene/ability_button_group.tres" id="2_nx3da"]
 [ext_resource type="Texture2D" uid="uid://lk25wlfgu6y2" path="res://icon.svg" id="3_7ucak"]
-[ext_resource type="Texture2D" uid="uid://b3l3ct6cbhn88" path="res://icon_pressed.png" id="3_cnprh"]
-[ext_resource type="Texture2D" uid="uid://bgqmqtevmvxp1" path="res://icon_disabled.png" id="4_14a6m"]
 [ext_resource type="PackedScene" uid="uid://bh72l5fvxqql5" path="res://assets/combat_scene/combat_slot/combat_slot.tscn" id="7_8p5k5"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_i62ak"]
@@ -18,6 +15,21 @@ sky_material = SubResource("ProceduralSkyMaterial_i62ak")
 background_mode = 2
 sky = SubResource("Sky_58j6e")
 tonemap_mode = 2
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_v0dyx"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+draw_center = false
+border_width_left = 8
+border_width_top = 8
+border_width_right = 8
+border_width_bottom = 8
+border_color = Color(2.11775e-06, 0.923739, 0.832879, 1)
+border_blend = true
+expand_margin_left = 6.0
+expand_margin_top = 6.0
+expand_margin_right = 6.0
+expand_margin_bottom = 6.0
+anti_aliasing = false
 
 [sub_resource type="GDScript" id="GDScript_mwjt4"]
 script/source = "extends Node3D
@@ -35,6 +47,7 @@ func _process(delta: float) -> void:
 
 [node name="CombatScene" type="Node3D"]
 script = ExtResource("1_owgya")
+_raycast_length = null
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(-0.866023, -0.433016, 0.250001, 0, 0.499998, 0.866027, -0.500003, 0.749999, -0.43301, 0, 0, 0)
@@ -48,6 +61,23 @@ transform = Transform3D(1, 0, 0, 0, 0.991965, 0.126511, 0, -0.126511, 0.991965, 
 current = true
 fov = 38.0
 
+[node name="RayCast3D" type="RayCast3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.991965, 0.126511, 0, -0.126511, 0.991965, 0, 1.81842, 9.27444)
+top_level = true
+enabled = false
+target_position = Vector3(0, 1, 0)
+hit_back_faces = false
+debug_shape_thickness = 5
+
+[node name="SpellSelection" type="Panel" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_v0dyx")
+
 [node name="AbilityBar" type="HBoxContainer" parent="."]
 anchors_preset = 12
 anchor_top = 1.0
@@ -57,21 +87,17 @@ offset_top = -128.0
 offset_bottom = -54.0
 grow_horizontal = 2
 grow_vertical = 0
-theme_override_constants/separation = 8
+theme_override_constants/separation = 12
 alignment = 1
 
 [node name="BaseButton" type="TextureButton" parent="AbilityBar"]
 editor_description = "This buttons is duplicated and the duplicates are accepting abilities' icons."
-visible = false
 custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
-toggle_mode = true
-button_group = ExtResource("2_nx3da")
+action_mode = 0
 texture_normal = ExtResource("3_7ucak")
-texture_pressed = ExtResource("3_cnprh")
-texture_disabled = ExtResource("4_14a6m")
 ignore_texture_size = true
 stretch_mode = 0
 
