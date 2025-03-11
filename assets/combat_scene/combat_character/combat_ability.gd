@@ -1,8 +1,9 @@
 @tool
-extends TextureButton
+extends Node
 class_name CombatAbility
 
 
+@export var icon: CompressedTexture2D = null
 @export var title: String = "Empty Name"
 @export var description: String = "Empty Description"
 
@@ -15,12 +16,6 @@ enum EffectType {DAMAGE, HEAL}
 		return cast_type
 	set(value):
 		cast_type = value
-		if is_node_ready():
-			match value:
-				CastType.TARGET:
-					toggle_mode = true
-				CastType.INSTANT:
-					toggle_mode = false
 					
 
 @export var effect_type: EffectType = EffectType.DAMAGE:
@@ -45,6 +40,20 @@ enum EffectType {DAMAGE, HEAL}
 	set(value):
 		heal = value if value >= 0. else 0.
 
+## The looped animation is used when corresponding
+## ability is pressed and awaits a target to be clicked
+## on. For instance, an animation that is played 
+## before the player chooses the target for an attack.
+## The animation is played via traveling through
+## AnimationTree's state machine.
+@export var idle_animation: String = ""
+## The one-shot animation that is used after idle_animation
+## when the target of corresponding ability is choosen
+## and impact happens.
+## The animation is played via traveling through AnimationTree's
+## state machine.
+@export var impact_animation: String = ""
+
 @export_subgroup("Available Targets")
 enum TargetType {
 	ENEMY = 1,
@@ -65,7 +74,3 @@ func _validate_property(property: Dictionary) -> void:
 	if property.name == "target_type":
 		property.usage = PROPERTY_USAGE_DEFAULT | PROPERTY_USAGE_CLASS_IS_BITFIELD
 		property.hint = PROPERTY_HINT_FLAGS
-
-
-func _ready() -> void:
-	hide()
