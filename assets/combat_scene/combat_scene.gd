@@ -7,19 +7,20 @@ var action_queue: Array[CombatSlot] = []
 @onready var _enemy: Node = $Enemy
 @onready var _ability_bar: HBoxContainer = $AbilityBar
 @onready var _base_ability_button: TextureButton= $AbilityBar/BaseButton
-@onready var _spell_selection: Panel = $SpellSelection
+@onready var _ability_selection: Panel = $SpellSelection
 @onready var _raycast: RayCast3D = $RayCast3D
 @onready var _camera: Camera3D = $Camera3D
 
 @export var _raycast_length: float = 100.
 
 var _button_callables: Dictionary = {}
+var _selected_ability: CombatAbility = null
 
 
 func _ready() -> void:
 	_ability_bar.remove_child(_base_ability_button)
 	_base_ability_button.hide()
-	_spell_selection.hide()
+	_ability_selection.hide()
 	for slot in _player.get_children():
 		if slot.get_child_count() > 0:
 			action_queue.append(slot)
@@ -72,26 +73,33 @@ func _set_ability_bar(slot: CombatSlot) -> void:
 func _on_ability_button_pressed(button: TextureButton, ability: CombatAbility) -> void:
 	match ability:
 		CombatAbility.CastType.TARGET:
-			pass
+			_ability_selection.reparent(button, false)
+			_ability_selection.show()
+			_selected_ability = ability
 		CombatAbility.CastType.INSTANT:
 			pass
-	if not _spell_selection.visible:
-		_spell_selection.reparent(button, false)
-		_spell_selection.show()
+		
 
 
 # Hide SpellSelection node on any click.
 func _input(event: InputEvent) -> void:
 	var mouse_click: InputEventMouseButton = event as InputEventMouseButton
 	if mouse_click and mouse_click.pressed and (mouse_click.button_index == MOUSE_BUTTON_LEFT or mouse_click.button_index == MOUSE_BUTTON_MASK_RIGHT):
-		if _spell_selection.visible:
-			_spell_selection.hide()
+		if _ability_selection.visible:
+			_ability_selection.hide()
 
 
-func _physics_process(delta: float) -> void:
-	_raycast.global_position = _camera.global_position
-	_raycast.target_position = _camera.project_ray_normal(get_viewport().get_mouse_position()) * _raycast_length
+func _physics_process(_delta: float) -> void:
+	if _ability_selection.visible:
+		_check_ray_targets(_selected_ability)
+
+
+func _check_ray_targets(ability: CombatAbility) -> void:
+	var mouse_pos: Vector2 = get_viewport().get_mouse_position()
+	_raycast.global_position = _camera.project_ray_origin(mouse_pos)
+	_raycast.target_position = _camera.project_ray_normal(mouse_pos) * _raycast_length
 	_raycast.force_raycast_update()
-	var collider: Object = _raycast.get_collider()
-	if collider:
-		print(_raycast.get_collider().owner)
+	var collider: Node = _raycast.get_collider() as Node
+	var character: Character = collider.owner as Character if collider else null
+	if not character:
+		return
