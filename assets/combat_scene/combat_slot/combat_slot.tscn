@@ -65,15 +65,7 @@ allow_greater = true
 allow_lesser = true
 show_percentage = false
 
-[node name="Marks" type="Control" parent="HealthBar"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="CurrentCharacter" type="Panel" parent="HealthBar/Marks"]
+[node name="Selected" type="Panel" parent="HealthBar"]
 z_index = -1
 layout_mode = 1
 anchors_preset = 15
@@ -87,7 +79,15 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_lt7ot")
 
-[node name="PrimaryTarget" type="Panel" parent="HealthBar/Marks"]
+[node name="TargetMarks" type="Control" parent="HealthBar"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Primary" type="Panel" parent="HealthBar/TargetMarks"]
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
@@ -100,7 +100,7 @@ grow_horizontal = 2
 pivot_offset = Vector2(0, 13.5)
 theme_override_styles/panel = SubResource("StyleBoxFlat_333eo")
 
-[node name="SecondaryTarget" type="Panel" parent="HealthBar/Marks"]
+[node name="Secondary" type="Panel" parent="HealthBar/TargetMarks"]
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5

@@ -5,6 +5,10 @@
 [ext_resource type="Texture2D" uid="uid://lk25wlfgu6y2" path="res://icon.svg" id="4_dhug6"]
 [ext_resource type="Script" path="res://assets/combat_scene/combat_character/combat_ability.gd" id="7_lr64r"]
 
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_byb5w"]
+height = 1.748
+radius = 0.345411
+
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_bwewy"]
 animation = &"kick_impact"
 
@@ -144,12 +148,12 @@ states/run/position = Vector2(500, 230)
 transitions = ["Start", "idle", SubResource("AnimationNodeStateMachineTransition_2pu3j"), "attack_impact", "idle", SubResource("AnimationNodeStateMachineTransition_dt4mf"), "hit", "idle", SubResource("AnimationNodeStateMachineTransition_xcchn"), "idle", "hit", SubResource("AnimationNodeStateMachineTransition_y17gq"), "idle", "run", SubResource("AnimationNodeStateMachineTransition_tafif"), "run", "idle", SubResource("AnimationNodeStateMachineTransition_chp1g"), "idle", "prep_attack", SubResource("AnimationNodeStateMachineTransition_7pnh5"), "prep_attack", "idle", SubResource("AnimationNodeStateMachineTransition_waxeq"), "prep_attack", "attack_impact", SubResource("AnimationNodeStateMachineTransition_1px07")]
 graph_offset = Vector2(-39, -155)
 
-[sub_resource type="CylinderShape3D" id="CylinderShape3D_byb5w"]
-height = 1.89118
-radius = 0.345411
-
-[node name="CombatCharacter" type="Node3D"]
+[node name="CombatCharacter" type="Area3D"]
 script = ExtResource("1_uyb1w")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0510902, 0.889888, -0.140369)
+shape = SubResource("CylinderShape3D_byb5w")
 
 [node name="AnimationTree" type="AnimationTree" parent="."]
 root_node = NodePath("../Model")
@@ -158,12 +162,6 @@ advance_expression_base_node = NodePath("..")
 anim_player = NodePath("../Model/AnimationPlayer")
 
 [node name="Model" parent="." instance=ExtResource("2_n31pi")]
-
-[node name="Clicker" type="StaticBody3D" parent="."]
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Clicker"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0510902, 0.961214, -0.140369)
-shape = SubResource("CylinderShape3D_byb5w")
 
 [node name="Abilities" type="Node" parent="."]
 

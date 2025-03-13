@@ -1,9 +1,9 @@
-extends Node3D
-class_name Character
+extends Area3D
+class_name CombatCharacter
 
 
 @onready var _abilities: Array[CombatAbility] = Array($Abilities.get_children(), TYPE_OBJECT, "Node", CombatAbility)
-@onready var _playback: AnimationNodeStateMachinePlayback = $AnimationPlayer.get("parameters/playback")
+@onready var _playback: AnimationNodeStateMachinePlayback = $AnimationTree.get("parameters/playback")
 
 
 @export var max_health: float = 100:

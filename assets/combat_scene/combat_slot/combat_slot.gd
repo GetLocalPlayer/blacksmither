@@ -2,50 +2,22 @@ extends Marker3D
 class_name CombatSlot
 
 
+@onready var target_marks: Dictionary = {
+	primary = $HealthBar/TargetMarks/Primary,
+	secondary = $HealthBar/TargetMarks/Secondary,
+}
+
 @onready var _health_bar: ProgressBar = $HealthBar
-@onready var _current_character_mark: Panel = $HealthBar/Marks/CurrentCharacter
-@onready var _primary_target_mark: Panel = $HealthBar/Marks/PrimaryTarget
-@onready var _secondary_target_mark: Panel = $HealthBar/Marks/SecondaryTarget
-
-var _character: Character
+@onready var _character: CombatCharacter = $Character
 
 
-func get_character() -> Character:
+func get_character() -> CombatCharacter:
 	return _character
-
-
-func get_character_abilities() -> Array[CombatAbility]:
-	return _character.get_abilities()
-
-
-func show_target_mark(show_scondary: bool) -> void:
-	if show_scondary:
-		_secondary_target_mark.show()
-	else:
-		_primary_target_mark.show()
-
-
-func hide_target_mark(hide_secondary: bool) -> void:
-	if hide_secondary:
-		_secondary_target_mark.hide()
-	else:
-		_primary_target_mark.hide()
-
-
-func show_current_character_mark() -> void:
-	_current_character_mark.show()
-
-
-func hide_current_character_mark() -> void:
-	_current_character_mark.hide()
 
 		
 func _ready() -> void:
 	child_entered_tree.connect(_on_child_entered_tree)
 	child_exiting_tree.connect(_on_child_exited_tree)
-	_current_character_mark.hide()
-	_secondary_target_mark.hide()
-	_primary_target_mark.hide()	
 	if get_child_count() > 0:
 		_on_child_entered_tree(get_child(0))
 	_health_bar.visible = get_child_count() > 0
@@ -61,7 +33,7 @@ func _process(_delta: float) -> void:
 
 
 func _on_child_entered_tree(child: Node) -> void:
-	var c: Character = child as Character
+	var c: CombatCharacter = child as CombatCharacter
 	if c:
 		_character = c	
 		_health_bar.show()
@@ -70,7 +42,7 @@ func _on_child_entered_tree(child: Node) -> void:
 
 
 func _on_child_exited_tree(child: Node) -> void:
-	var c: Character = child as Character
+	var c: CombatCharacter = child as CombatCharacter
 	if c and _character == c:
 		_character = null
 		_health_bar.hide()
