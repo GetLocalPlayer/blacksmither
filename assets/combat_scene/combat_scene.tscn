@@ -1,6 +1,7 @@
-[gd_scene load_steps=9 format=3 uid="uid://bmqgmxpe262tv"]
+[gd_scene load_steps=10 format=3 uid="uid://bmqgmxpe262tv"]
 
 [ext_resource type="Script" path="res://assets/combat_scene/combat_scene.gd" id="1_owgya"]
+[ext_resource type="Script" path="res://assets/combat_scene/combat_ability_bar.gd" id="2_6bf75"]
 [ext_resource type="Texture2D" uid="uid://lk25wlfgu6y2" path="res://icon.svg" id="3_7ucak"]
 [ext_resource type="PackedScene" uid="uid://bh72l5fvxqql5" path="res://assets/combat_scene/combat_slot/combat_slot.tscn" id="7_8p5k5"]
 
@@ -68,15 +69,6 @@ target_position = Vector3(0, 1, 0)
 hit_back_faces = false
 debug_shape_thickness = 5
 
-[node name="SpellSelection" type="Panel" parent="."]
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_v0dyx")
-
 [node name="AbilityBar" type="HBoxContainer" parent="."]
 anchors_preset = 12
 anchor_top = 1.0
@@ -88,6 +80,7 @@ grow_horizontal = 2
 grow_vertical = 0
 theme_override_constants/separation = 12
 alignment = 1
+script = ExtResource("2_6bf75")
 
 [node name="BaseButton" type="TextureButton" parent="AbilityBar"]
 editor_description = "This buttons is duplicated and the duplicates are accepting abilities' icons."
@@ -99,6 +92,16 @@ action_mode = 0
 texture_normal = ExtResource("3_7ucak")
 ignore_texture_size = true
 stretch_mode = 0
+
+[node name="AbilitySelector" type="Panel" parent="AbilityBar/BaseButton"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_v0dyx")
 
 [node name="Player" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.25, 0, 0)
