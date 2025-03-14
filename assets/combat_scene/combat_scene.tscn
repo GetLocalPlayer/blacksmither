@@ -3,6 +3,7 @@
 [ext_resource type="Script" path="res://assets/combat_scene/combat_scene.gd" id="1_owgya"]
 [ext_resource type="Script" path="res://assets/combat_scene/combat_ability_bar.gd" id="2_6bf75"]
 [ext_resource type="Texture2D" uid="uid://lk25wlfgu6y2" path="res://icon.svg" id="3_7ucak"]
+[ext_resource type="Script" path="res://assets/combat_scene/combat_slot_group.gd" id="4_bcncc"]
 [ext_resource type="PackedScene" uid="uid://bh72l5fvxqql5" path="res://assets/combat_scene/combat_slot/combat_slot.tscn" id="7_8p5k5"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_i62ak"]
@@ -31,20 +32,6 @@ expand_margin_top = 6.0
 expand_margin_right = 6.0
 expand_margin_bottom = 6.0
 anti_aliasing = false
-
-[sub_resource type="GDScript" id="GDScript_mwjt4"]
-script/source = "extends Node3D
-
-
-# Called when the node enters the scene tree for the first time.
-func _ready() -> void:
-	pass # Replace with function body.
-
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	pass
-"
 
 [node name="CombatScene" type="Node3D"]
 script = ExtResource("1_owgya")
@@ -103,32 +90,29 @@ grow_vertical = 2
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_v0dyx")
 
-[node name="Player" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.25, 0, 0)
-script = SubResource("GDScript_mwjt4")
+[node name="Slots" type="Node3D" parent="."]
+script = ExtResource("4_bcncc")
 
-[node name="Slot1" parent="Player" instance=ExtResource("7_8p5k5")]
+[node name="Slot1" parent="Slots" groups=["player_slots"] instance=ExtResource("7_8p5k5")]
+transform = Transform3D(-0.34202, 0, -0.939693, 0, 1, 0, 0.939693, 0, -0.34202, -1.25, 0, 0)
 
-[node name="Slot2" parent="Player" instance=ExtResource("7_8p5k5")]
-transform = Transform3D(-0.34202, 0, -0.939693, 0, 1, 0, 0.939693, 0, -0.34202, -1.1, 0, 0)
+[node name="Slot2" parent="Slots" groups=["player_slots"] instance=ExtResource("7_8p5k5")]
+transform = Transform3D(-0.34202, 0, -0.939693, 0, 1, 0, 0.939693, 0, -0.34202, -2.35, 0, 0)
 
-[node name="Slot3" parent="Player" instance=ExtResource("7_8p5k5")]
-transform = Transform3D(-0.34202, 0, -0.939693, 0, 1, 0, 0.939693, 0, -0.34202, -2.2, 0, 0)
+[node name="Slot3" parent="Slots" groups=["player_slots"] instance=ExtResource("7_8p5k5")]
+transform = Transform3D(-0.34202, 0, -0.939693, 0, 1, 0, 0.939693, 0, -0.34202, -3.45, 0, 0)
 
-[node name="Slot4" parent="Player" instance=ExtResource("7_8p5k5")]
-transform = Transform3D(-0.34202, 0, -0.939693, 0, 1, 0, 0.939693, 0, -0.34202, -3.3, 0, 0)
+[node name="Slot4" parent="Slots" groups=["player_slots"] instance=ExtResource("7_8p5k5")]
+transform = Transform3D(-0.34202, 0, -0.939693, 0, 1, 0, 0.939693, 0, -0.34202, -4.55, 0, 0)
 
-[node name="Enemy" type="Node3D" parent="."]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 1.25, 0, 0)
+[node name="Slot5" parent="Slots" groups=["bot_slots"] instance=ExtResource("7_8p5k5")]
+transform = Transform3D(-0.34202, 0, 0.939693, 0, 1, 0, -0.939693, 0, -0.34202, 1.25, 0, 0)
 
-[node name="Slot1" parent="Enemy" instance=ExtResource("7_8p5k5")]
-transform = Transform3D(0.34202, 0, -0.939693, 0, 1, 0, 0.939693, 0, 0.34202, 0, 0, 0)
+[node name="Slot6" parent="Slots" groups=["bot_slots"] instance=ExtResource("7_8p5k5")]
+transform = Transform3D(-0.34202, 0, 0.939693, 0, 1, 0, -0.939693, 0, -0.34202, 2.35, 0, -9.61651e-08)
 
-[node name="Slot2" parent="Enemy" instance=ExtResource("7_8p5k5")]
-transform = Transform3D(0.34202, 0, -0.939693, 0, 1, 0, 0.939693, 0, 0.34202, -1.1, 0, 0)
+[node name="Slot7" parent="Slots" groups=["bot_slots"] instance=ExtResource("7_8p5k5")]
+transform = Transform3D(-0.34202, 0, 0.939693, 0, 1, 0, -0.939693, 0, -0.34202, 3.45, 0, -1.9233e-07)
 
-[node name="Slot3" parent="Enemy" instance=ExtResource("7_8p5k5")]
-transform = Transform3D(0.34202, 0, -0.939693, 0, 1, 0, 0.939693, 0, 0.34202, -2.2, 0, 0)
-
-[node name="Slot4" parent="Enemy" instance=ExtResource("7_8p5k5")]
-transform = Transform3D(0.34202, 0, -0.939693, 0, 1, 0, 0.939693, 0, 0.34202, -3.3, 0, 0)
+[node name="Slot8" parent="Slots" groups=["bot_slots"] instance=ExtResource("7_8p5k5")]
+transform = Transform3D(-0.34202, 0, 0.939693, 0, 1, 0, -0.939693, 0, -0.34202, 4.55, 0, -2.88495e-07)

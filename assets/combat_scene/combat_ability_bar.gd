@@ -2,19 +2,36 @@ extends HBoxContainer
 class_name CombatAbilityBar
 
 
-signal ability_pressed(ability: CombatAbility)
+signal ability_selected()
 
 
 # This node is the basic setup to create buttons
 # for abilities duplicating it.
 @onready var _base_button: TextureButton = $BaseButton
-@onready var _ability_selector: Panel = $BaseButton/AbilitySelector
+@onready var _selector: Panel = $BaseButton/AbilitySelector
+var _selected_ability: CombatAbility = null:
+	get:
+		return _selected_ability
+	set(value):
+		if is_node_ready() and not value and _selector.get_parent():
+			_selector.hide()
+			_selector.get_parent().remove_child(_selector)
+		_selected_ability = value
+
+
+func clear_selection() -> void:
+	_selected_ability = null
+
+
+func get_selected_ability() -> CombatAbility:
+	return _selected_ability
+
 
 func _ready() -> void:
 	remove_child(_base_button)
 	_base_button.hide()
-	_base_button.remove_child(_ability_selector)
-	_ability_selector.hide()
+	_base_button.remove_child(_selector)
+	_selector.hide()
 
 
 # Recycling of button abilities not to create new
@@ -30,9 +47,9 @@ func _recycle_button(button: TextureButton) -> void:
 	button.hide()
 	if button.parent:
 		button.parent.remove_child(button)
-	if _ability_selector.get_parent():
-		_ability_selector.get_parent().remove_child(_ability_selector)
-		_ability_selector.hide()
+	if _selector.get_parent():
+		_selector.get_parent().remove_child(_selector)
+		_selector.hide()
 	for signal_dict: Dictionary in button.get_signal_list():
 		for connection: Dictionary in button.get_signal_connection_list(signal_dict.name):
 			connection.signal.disconnect(connection.callable)
@@ -65,16 +82,17 @@ func set_abilities(abilities: Array[CombatAbility]) -> void:
 
 
 func _on_button_pressed(button: TextureButton, ability: CombatAbility) -> void:
-	if _ability_selector.get_parent():
-		_ability_selector.get_parent().remove_child(_ability_selector)
-		_ability_selector.hide()
+	if _selector.get_parent():
+		_selector.get_parent().remove_child(_selector)
+		_selector.hide()
 	if ability.cast_type == CombatAbility.CastType.TARGET:
-		button.add_child(_ability_selector)
-		_ability_selector.show()
-	elif _ability_selector.get_parent():
-		_ability_selector.get_parent().remove_child(_ability_selector)
-		_ability_selector.hide()
-	ability_pressed.emit(ability)
+		button.add_child(_selector)
+		_selector.show()
+	elif _selector.get_parent():
+		_selector.get_parent().remove_child(_selector)
+		_selector.hide()
+	_selected_ability = ability
+	ability_selected.emit()
 
 
 # Hide SpellSelection node on any click.
@@ -86,8 +104,8 @@ func _on_button_pressed(button: TextureButton, ability: CombatAbility) -> void:
 # If the click was on the same spell, it
 # will just make SpellSeleciton back visible
 # right away.
-func _input(event: InputEvent) -> void:
-	var mouse_click: InputEventMouseButton = event as InputEventMouseButton
-	if mouse_click and mouse_click.pressed and (mouse_click.button_index == MOUSE_BUTTON_LEFT or mouse_click.button_index == MOUSE_BUTTON_MASK_RIGHT):
-		if _ability_selector.visible:
-			_ability_selector.hide()
+# func _input(event: InputEvent) -> void:
+# 	var mouse_click: InputEventMouseButton = event as InputEventMouseButton
+# 	if mouse_click and mouse_click.pressed and (mouse_click.button_index == MOUSE_BUTTON_LEFT or mouse_click.button_index == MOUSE_BUTTON_MASK_RIGHT):
+# 		if _selector.visible:
+# 			_selector.hide()

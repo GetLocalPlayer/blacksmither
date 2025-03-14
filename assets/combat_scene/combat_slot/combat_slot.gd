@@ -60,11 +60,11 @@ func _on_child_entered_tree(child: Node) -> void:
 func _on_child_exited_tree(child: Node) -> void:
 	var c: CombatCharacter = child as CombatCharacter
 	if c and _character == c:
-		_character = null
 		_health_bar.hide()
 		_character.mouse_entered.disconnect(_on_mouse_entered_character)
 		_character.mouse_exited.disconnect(_on_mouse_exited_character)
 		_character.input_event.disconnect(_on_character_input_event)
+		_character = null
 
 
 func _on_mouse_entered_character() -> void:
