@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://bmqgmxpe262tv"]
+[gd_scene load_steps=21 format=3 uid="uid://bmqgmxpe262tv"]
 
 [ext_resource type="Script" path="res://assets/combat_scene/combat_scene.gd" id="1_owgya"]
 [ext_resource type="Script" path="res://assets/combat_scene/combat_ability_bar.gd" id="2_6bf75"]
@@ -7,7 +7,9 @@
 [ext_resource type="Texture2D" uid="uid://lk25wlfgu6y2" path="res://icon.svg" id="3_7ucak"]
 [ext_resource type="Texture2D" uid="uid://b5fld1moc8ny6" path="res://textures/spell_frame.png" id="4_xdvca"]
 [ext_resource type="Texture2D" uid="uid://dmhygh0tquv3x" path="res://textures/spell_frame_selected.png" id="5_0m8kr"]
+[ext_resource type="Script" path="res://assets/combat_scene/ability_button.gd" id="6_41vqm"]
 [ext_resource type="PackedScene" uid="uid://0aiqln2jekco" path="res://assets/combat_scene/combat_character/combat_character.tscn" id="7_y4oos"]
+[ext_resource type="Texture2D" uid="uid://b1vo7l5w6p05i" path="res://textures/spell_frame_selected_pendant.png" id="8_qldo4"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_82ahl"]
 size = Vector3(10, 1, 2)
@@ -184,28 +186,56 @@ action_mode = 0
 button_mask = 7
 keep_pressed_outside = true
 button_group = ExtResource("3_5uq1d")
-texture_normal = ExtResource("4_xdvca")
-texture_pressed = ExtResource("5_0m8kr")
-texture_hover = ExtResource("5_0m8kr")
+texture_normal = ExtResource("3_7ucak")
 ignore_texture_size = true
 stretch_mode = 0
+script = ExtResource("6_41vqm")
 
-[node name="Icon" type="TextureRect" parent="UIBase/AbilityBar/BaseButton"]
-show_behind_parent = true
+[node name="BorderSelected" type="NinePatchRect" parent="UIBase/AbilityBar/BaseButton"]
 layout_mode = 1
-anchors_preset = -1
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 11.0
-offset_top = 11.0
-offset_right = -11.0
-offset_bottom = -11.0
 grow_horizontal = 2
 grow_vertical = 2
-mouse_filter = 2
-texture = ExtResource("3_7ucak")
+texture = ExtResource("5_0m8kr")
+region_rect = Rect2(16, 16, 78, 78)
+patch_margin_left = 7
+patch_margin_top = 6
+patch_margin_right = 6
+patch_margin_bottom = 6
+
+[node name="Pendant" type="TextureRect" parent="UIBase/AbilityBar/BaseButton/BorderSelected"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -45.5
+offset_top = -13.0
+offset_right = 47.5
+offset_bottom = 91.0
+grow_horizontal = 2
+texture = ExtResource("8_qldo4")
 expand_mode = 1
-metadata/_edit_lock_ = true
+stretch_mode = 4
+
+[node name="BorderNormal" type="NinePatchRect" parent="UIBase/AbilityBar/BaseButton"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -53.0
+offset_right = 61.0
+offset_bottom = 12.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("4_xdvca")
+region_rect = Rect2(16, 16, 78, 78)
+patch_margin_left = 7
+patch_margin_top = 6
+patch_margin_right = 6
+patch_margin_bottom = 6
 
 [node name="Clicker" type="Area3D" parent="."]
 editor_description = "A shape to detect non-character clicks
