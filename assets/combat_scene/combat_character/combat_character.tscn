@@ -1,4 +1,4 @@
-[gd_scene load_steps=34 format=3 uid="uid://0aiqln2jekco"]
+[gd_scene load_steps=38 format=3 uid="uid://0aiqln2jekco"]
 
 [ext_resource type="Script" path="res://assets/combat_scene/combat_character/combat_character.gd" id="1_uyb1w"]
 [ext_resource type="PackedScene" uid="uid://b6f7wde0eg2p3" path="res://models/characters/emma/emma.tscn" id="2_n31pi"]
@@ -148,6 +148,44 @@ states/run/position = Vector2(500, 230)
 transitions = ["Start", "idle", SubResource("AnimationNodeStateMachineTransition_2pu3j"), "attack_impact", "idle", SubResource("AnimationNodeStateMachineTransition_dt4mf"), "hit", "idle", SubResource("AnimationNodeStateMachineTransition_xcchn"), "idle", "hit", SubResource("AnimationNodeStateMachineTransition_y17gq"), "idle", "run", SubResource("AnimationNodeStateMachineTransition_tafif"), "run", "idle", SubResource("AnimationNodeStateMachineTransition_chp1g"), "idle", "prep_attack", SubResource("AnimationNodeStateMachineTransition_7pnh5"), "prep_attack", "idle", SubResource("AnimationNodeStateMachineTransition_waxeq"), "prep_attack", "attack_impact", SubResource("AnimationNodeStateMachineTransition_1px07")]
 graph_offset = Vector2(-39, -155)
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5jnvj"]
+bg_color = Color(0, 0, 0, 1)
+skew = Vector2(0.22, 0)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.8, 0, 0, 1)
+border_blend = true
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_h4mbc"]
+bg_color = Color(0, 0.654902, 0, 1)
+skew = Vector2(0.22, 0)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.8, 0, 0, 1)
+border_blend = true
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_78gh5"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+border_width_left = 5
+border_width_top = 8
+border_width_right = 5
+border_color = Color(0, 0.356863, 0.8, 1)
+corner_radius_top_left = 13
+corner_radius_top_right = 13
+corner_radius_bottom_right = 425
+corner_radius_bottom_left = 425
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0arcv"]
+bg_color = Color(1, 0.6, 0.6, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
 [node name="CombatCharacter" type="Area3D"]
 script = ExtResource("1_uyb1w")
 
@@ -172,3 +210,69 @@ damage = 20.0
 heal = 100.955
 idle_animation = "idle_kick"
 impact_animation = "kick_impact"
+
+[node name="HealthBar" type="ProgressBar" parent="."]
+offset_left = -50.0
+offset_top = -12.0
+offset_right = 30.0
+offset_bottom = 3.0
+pivot_offset = Vector2(40, -12)
+size_flags_horizontal = 0
+theme_override_constants/outline_size = 2
+theme_override_font_sizes/font_size = 9
+theme_override_styles/background = SubResource("StyleBoxFlat_5jnvj")
+theme_override_styles/fill = SubResource("StyleBoxFlat_h4mbc")
+max_value = 1.0
+step = 0.001
+value = 0.41
+allow_greater = true
+allow_lesser = true
+show_percentage = false
+
+[node name="Selected" type="Panel" parent="HealthBar"]
+z_index = -1
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -11.0
+offset_top = -11.0
+offset_right = 12.0
+offset_bottom = -5.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_78gh5")
+
+[node name="TargetMarks" type="Control" parent="HealthBar"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Primary" type="Panel" parent="HealthBar/TargetMarks"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -7.0
+offset_top = 22.24
+offset_right = 7.0
+offset_bottom = 51.24
+grow_horizontal = 2
+pivot_offset = Vector2(0, 13.5)
+theme_override_styles/panel = SubResource("StyleBoxFlat_0arcv")
+
+[node name="Secondary" type="Panel" parent="HealthBar/TargetMarks"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -7.0
+offset_top = 22.0
+offset_right = 7.0
+offset_bottom = 35.0
+grow_horizontal = 2
+pivot_offset = Vector2(0, 13.5)
+theme_override_styles/panel = SubResource("StyleBoxFlat_0arcv")

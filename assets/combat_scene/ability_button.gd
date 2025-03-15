@@ -10,13 +10,13 @@ var ability: CombatAbility
 }
 
 
-func _ready() -> void:
-	_borders.selected.visibility_changed.connect(_on_border_visibility_changed)
-	_borders.normal.visibility_changed.connect(_on_border_visibility_changed)
-	_borders.normal.show()
+func _ready() -> void:	
+	toggled.connect(_on_toggled)
+	_on_toggled(button_pressed)
 
 
-func _on_border_visibility_changed() -> void:
-	_borders.selected.visible = not _borders.normal.visible
-	_borders.normal.visible = not _borders.selected.visible
+func _on_toggled(toggled_on: bool) -> void:
+	_borders.selected.visible = toggled_on
+	_borders.normal.visible = not toggled_on
+
 	

@@ -2,21 +2,28 @@ extends HBoxContainer
 class_name CombatAbilityBar
 
 
-# for abilities duplicating it.
+signal button_pressed(button: AbilityButton)
+
 @onready var _base_button: TextureButton = $BaseButton
-@onready var button_group = _base_button.button_group
+@onready var _button_group: ButtonGroup = _base_button.button_group
+
+var pressed_button: AbilityButton: 
+	get:
+		return _button_group.get_pressed_button() as AbilityButton
 
 
 func _ready() -> void:
 	remove_child(_base_button)
 	_base_button.hide()
+	_button_group.pressed.connect(button_pressed.emit)
+
 
 # Recycling of button abilities not to create new
 # ones for each unique ability. Probably an overkill
 # optimization but meh.
-var _recycled_buttons: Array[TextureButton] = []
+var _recycled_buttons: Array[AbilityButton] = []
 
-func _recycle_button(button: TextureButton) -> void:
+func _recycle_button(button: AbilityButton) -> void:
 	if _recycled_buttons.has(button):
 		return
 	button.get_parent().remove_child(button)
@@ -29,17 +36,24 @@ func _recycle_button(button: TextureButton) -> void:
 			connection.signal.disconnect(connection.callable)
 
 
+func _get_button() -> AbilityButton:
+	return _base_button.duplicate() if _recycled_buttons.is_empty() else _recycled_buttons.pop_back()
+
+
 func set_abilities(abilities: Array[CombatAbility]) -> void:
 	# Making enough buttons for abilities.
 	while get_child_count() < abilities.size():
 		add_child(_get_button())
 	while get_child_count() > abilities.size():
-		_recycle_button(get_child(-1) as TextureButton)
+		_recycle_button(get_child(-1) as AbilityButton)
+	if pressed_button:
+		pressed_button.button_pressed = false
 	# Set a button for each ability.
 	for i: int in range(abilities.size()):
-		var btn: TextureButton = get_child(i)
+		var btn: AbilityButton = get_child(i)
 		var abi: CombatAbility = abilities[i]
-		btn.toggle_mode = false
+		btn.ability = abi
+		btn.toggle_mode = true
 		btn.texture_disabled = abi.icon
 		btn.texture_focused = abi.icon
 		btn.texture_hover = abi.icon
