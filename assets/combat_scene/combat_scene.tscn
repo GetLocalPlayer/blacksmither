@@ -1,10 +1,22 @@
-[gd_scene load_steps=10 format=3 uid="uid://bmqgmxpe262tv"]
+[gd_scene load_steps=19 format=3 uid="uid://bmqgmxpe262tv"]
 
 [ext_resource type="Script" path="res://assets/combat_scene/combat_scene.gd" id="1_owgya"]
 [ext_resource type="Script" path="res://assets/combat_scene/combat_ability_bar.gd" id="2_6bf75"]
+[ext_resource type="Texture2D" uid="uid://6q2vbj0tgeey" path="res://textures/uvgrid.png" id="2_ed0o1"]
+[ext_resource type="ButtonGroup" uid="uid://iisami01t8uo" path="res://assets/combat_scene/ability_bar_button_group.tres" id="3_5uq1d"]
 [ext_resource type="Texture2D" uid="uid://lk25wlfgu6y2" path="res://icon.svg" id="3_7ucak"]
-[ext_resource type="Script" path="res://assets/combat_scene/combat_slot_group.gd" id="4_bcncc"]
-[ext_resource type="PackedScene" uid="uid://bh72l5fvxqql5" path="res://assets/combat_scene/combat_slot/combat_slot.tscn" id="7_8p5k5"]
+[ext_resource type="Texture2D" uid="uid://b5fld1moc8ny6" path="res://textures/spell_frame.png" id="4_xdvca"]
+[ext_resource type="Texture2D" uid="uid://dmhygh0tquv3x" path="res://textures/spell_frame_selected.png" id="5_0m8kr"]
+[ext_resource type="PackedScene" uid="uid://0aiqln2jekco" path="res://assets/combat_scene/combat_character/combat_character.tscn" id="7_y4oos"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_82ahl"]
+size = Vector3(10, 1, 2)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_jfdhn"]
+albedo_texture = ExtResource("2_ed0o1")
+uv1_scale = Vector3(0.06, 0.06, 0.06)
+uv1_triplanar = true
+uv1_world_triplanar = true
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_i62ak"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -18,26 +30,58 @@ background_mode = 2
 sky = SubResource("Sky_58j6e")
 tonemap_mode = 2
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_v0dyx"]
-bg_color = Color(0.6, 0.6, 0.6, 0)
-draw_center = false
-border_width_left = 8
-border_width_top = 8
-border_width_right = 8
-border_width_bottom = 8
-border_color = Color(2.11775e-06, 0.923739, 0.832879, 1)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8gtga"]
+bg_color = Color(0, 0, 0, 1)
+skew = Vector2(0.22, 0)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.8, 0, 0, 1)
 border_blend = true
-expand_margin_left = 6.0
-expand_margin_top = 6.0
-expand_margin_right = 6.0
-expand_margin_bottom = 6.0
-anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mkkjb"]
+bg_color = Color(0, 0.654902, 0, 1)
+skew = Vector2(0.22, 0)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.8, 0, 0, 1)
+border_blend = true
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_friaq"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+border_width_left = 5
+border_width_top = 8
+border_width_right = 5
+border_color = Color(0, 0.356863, 0.8, 1)
+corner_radius_top_left = 13
+corner_radius_top_right = 13
+corner_radius_bottom_right = 425
+corner_radius_bottom_left = 425
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0fp2m"]
+bg_color = Color(1, 0.6, 0.6, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_t77pn"]
+size = Vector3(47.6211, 24.5176, 1)
 
 [node name="CombatScene" type="Node3D"]
 script = ExtResource("1_owgya")
 
+[node name="Floor" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+mesh = SubResource("BoxMesh_82ahl")
+surface_material_override/0 = SubResource("StandardMaterial3D_jfdhn")
+
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
-transform = Transform3D(-0.866023, -0.433016, 0.250001, 0, 0.499998, 0.866027, -0.500003, 0.749999, -0.43301, 0, 0, 0)
+transform = Transform3D(0.866025, 0.433013, -0.25, 0, 0.5, 0.866026, 0.5, -0.75, 0.433013, 0, 0, 0)
+light_color = Color(0.585062, 0.585062, 0.585062, 1)
 shadow_enabled = true
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
@@ -48,20 +92,80 @@ transform = Transform3D(1, 0, 0, 0, 0.991965, 0.126511, 0, -0.126511, 0.991965, 
 current = true
 fov = 38.0
 
-[node name="RayCast3D" type="RayCast3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.991965, 0.126511, 0, -0.126511, 0.991965, 0, 1.81842, 9.27444)
-top_level = true
-enabled = false
-target_position = Vector3(0, 1, 0)
-hit_back_faces = false
-debug_shape_thickness = 5
+[node name="UIBase" type="Node" parent="."]
 
-[node name="AbilityBar" type="HBoxContainer" parent="."]
+[node name="HealthBar" type="ProgressBar" parent="UIBase"]
+offset_left = -50.0
+offset_top = -12.0
+offset_right = 30.0
+offset_bottom = 3.0
+pivot_offset = Vector2(40, -12)
+size_flags_horizontal = 0
+theme_override_constants/outline_size = 2
+theme_override_font_sizes/font_size = 9
+theme_override_styles/background = SubResource("StyleBoxFlat_8gtga")
+theme_override_styles/fill = SubResource("StyleBoxFlat_mkkjb")
+max_value = 1.0
+step = 0.001
+value = 0.41
+allow_greater = true
+allow_lesser = true
+show_percentage = false
+
+[node name="Selected" type="Panel" parent="UIBase/HealthBar"]
+z_index = -1
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -11.0
+offset_top = -11.0
+offset_right = 12.0
+offset_bottom = -5.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_friaq")
+
+[node name="TargetMarks" type="Control" parent="UIBase/HealthBar"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Primary" type="Panel" parent="UIBase/HealthBar/TargetMarks"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -7.0
+offset_top = 22.24
+offset_right = 7.0
+offset_bottom = 51.24
+grow_horizontal = 2
+pivot_offset = Vector2(0, 13.5)
+theme_override_styles/panel = SubResource("StyleBoxFlat_0fp2m")
+
+[node name="Secondary" type="Panel" parent="UIBase/HealthBar/TargetMarks"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -7.0
+offset_top = 22.0
+offset_right = 7.0
+offset_bottom = 35.0
+grow_horizontal = 2
+pivot_offset = Vector2(0, 13.5)
+theme_override_styles/panel = SubResource("StyleBoxFlat_0fp2m")
+
+[node name="AbilityBar" type="HBoxContainer" parent="UIBase"]
 anchors_preset = 12
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = -128.0
+offset_top = -118.0
 offset_bottom = -54.0
 grow_horizontal = 2
 grow_vertical = 0
@@ -69,50 +173,70 @@ theme_override_constants/separation = 12
 alignment = 1
 script = ExtResource("2_6bf75")
 
-[node name="BaseButton" type="TextureButton" parent="AbilityBar"]
+[node name="BaseButton" type="TextureButton" parent="UIBase/AbilityBar"]
 editor_description = "This buttons is duplicated and the duplicates are accepting abilities' icons."
 custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
+toggle_mode = true
 action_mode = 0
-texture_normal = ExtResource("3_7ucak")
+button_mask = 7
+keep_pressed_outside = true
+button_group = ExtResource("3_5uq1d")
+texture_normal = ExtResource("4_xdvca")
+texture_pressed = ExtResource("5_0m8kr")
+texture_hover = ExtResource("5_0m8kr")
 ignore_texture_size = true
 stretch_mode = 0
 
-[node name="AbilitySelector" type="Panel" parent="AbilityBar/BaseButton"]
+[node name="Icon" type="TextureRect" parent="UIBase/AbilityBar/BaseButton"]
+show_behind_parent = true
 layout_mode = 1
-anchors_preset = 15
+anchors_preset = -1
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_left = 11.0
+offset_top = 11.0
+offset_right = -11.0
+offset_bottom = -11.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_v0dyx")
+texture = ExtResource("3_7ucak")
+expand_mode = 1
+metadata/_edit_lock_ = true
 
-[node name="Slots" type="Node3D" parent="."]
-script = ExtResource("4_bcncc")
+[node name="Clicker" type="Area3D" parent="."]
+editor_description = "A shape to detect non-character clicks
+"
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -11.3853)
 
-[node name="Slot1" parent="Slots" groups=["player_slots"] instance=ExtResource("7_8p5k5")]
-transform = Transform3D(-0.34202, 0, -0.939693, 0, 1, 0, 0.939693, 0, -0.34202, -1.25, 0, 0)
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Clicker"]
+shape = SubResource("BoxShape3D_t77pn")
 
-[node name="Slot2" parent="Slots" groups=["player_slots"] instance=ExtResource("7_8p5k5")]
-transform = Transform3D(-0.34202, 0, -0.939693, 0, 1, 0, 0.939693, 0, -0.34202, -2.35, 0, 0)
+[node name="Characters" type="Node3D" parent="."]
 
-[node name="Slot3" parent="Slots" groups=["player_slots"] instance=ExtResource("7_8p5k5")]
-transform = Transform3D(-0.34202, 0, -0.939693, 0, 1, 0, 0.939693, 0, -0.34202, -3.45, 0, 0)
+[node name="Emma1" parent="Characters" groups=["player"] instance=ExtResource("7_y4oos")]
+transform = Transform3D(-0.34202, 0, -0.939693, 0, 1, 0, 0.939693, 0, -0.34202, -1, 0, 0)
 
-[node name="Slot4" parent="Slots" groups=["player_slots"] instance=ExtResource("7_8p5k5")]
-transform = Transform3D(-0.34202, 0, -0.939693, 0, 1, 0, 0.939693, 0, -0.34202, -4.55, 0, 0)
+[node name="Emma2" parent="Characters" groups=["player"] instance=ExtResource("7_y4oos")]
+transform = Transform3D(-0.34202, 0, -0.939693, 0, 1, 0, 0.939693, 0, -0.34202, -2.1, 0, 0)
 
-[node name="Slot5" parent="Slots" groups=["bot_slots"] instance=ExtResource("7_8p5k5")]
-transform = Transform3D(-0.34202, 0, 0.939693, 0, 1, 0, -0.939693, 0, -0.34202, 1.25, 0, 0)
+[node name="Emma3" parent="Characters" groups=["player"] instance=ExtResource("7_y4oos")]
+transform = Transform3D(-0.34202, 0, -0.939693, 0, 1, 0, 0.939693, 0, -0.34202, -3.2, 0, 0)
 
-[node name="Slot6" parent="Slots" groups=["bot_slots"] instance=ExtResource("7_8p5k5")]
-transform = Transform3D(-0.34202, 0, 0.939693, 0, 1, 0, -0.939693, 0, -0.34202, 2.35, 0, -9.61651e-08)
+[node name="Emma4" parent="Characters" groups=["player"] instance=ExtResource("7_y4oos")]
+transform = Transform3D(-0.34202, 0, -0.939693, 0, 1, 0, 0.939693, 0, -0.34202, -4.3, 0, 0)
 
-[node name="Slot7" parent="Slots" groups=["bot_slots"] instance=ExtResource("7_8p5k5")]
-transform = Transform3D(-0.34202, 0, 0.939693, 0, 1, 0, -0.939693, 0, -0.34202, 3.45, 0, -1.9233e-07)
+[node name="Emma5" parent="Characters" groups=["bot", "enemies"] instance=ExtResource("7_y4oos")]
+transform = Transform3D(-0.34202, 0, 0.939692, 0, 1, 0, -0.939692, 0, -0.34202, 1, 0, -8.74228e-08)
 
-[node name="Slot8" parent="Slots" groups=["bot_slots"] instance=ExtResource("7_8p5k5")]
-transform = Transform3D(-0.34202, 0, 0.939693, 0, 1, 0, -0.939693, 0, -0.34202, 4.55, 0, -2.88495e-07)
+[node name="Emma6" parent="Characters" groups=["bot", "enemies"] instance=ExtResource("7_y4oos")]
+transform = Transform3D(-0.34202, 0, 0.939692, 0, 1, 0, -0.939692, 0, -0.34202, 2.1, 0, -1.83588e-07)
+
+[node name="Emma7" parent="Characters" groups=["bot", "enemies"] instance=ExtResource("7_y4oos")]
+transform = Transform3D(-0.34202, 0, 0.939692, 0, 1, 0, -0.939692, 0, -0.34202, 3.2, 0, -2.79753e-07)
+
+[node name="Emma8" parent="Characters" groups=["bot", "enemies"] instance=ExtResource("7_y4oos")]
+transform = Transform3D(-0.34202, 0, 0.939692, 0, 1, 0, -0.939692, 0, -0.34202, 4.3, 0, -3.75918e-07)
