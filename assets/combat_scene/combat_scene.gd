@@ -7,7 +7,7 @@ const ENEMY_GROUP = "enemies"
 @onready var _characters: Array[CombatCharacter] = Array($Characters.get_children(), TYPE_OBJECT, "Area3D", CombatCharacter)
 @onready var _ability_bar: CombatAbilityBar = $AbilityBar
 @onready var _void_clicker: Area3D = $VoidClicker
-
+var _allowed_targets: Array[CombatCharacter] = []
 
 
 
@@ -32,7 +32,7 @@ func _ready() -> void:
 
 
 func _run_next_turn() -> void:
-	var c: CombatCharacter = _character_queue.pop_front()
+	var c: CombatCharacter = _character_queue[0]
 	c.selected = true
 	if c.is_in_group(PLAYER_GROUP):
 		_ability_bar.set_abilities(c.get_abilities())
@@ -42,24 +42,21 @@ func _run_next_turn() -> void:
 
 
 func _on_ability_button_pressed(button: AbilityButton) -> void:
-	print(button.ability)
+	_allowed_targets.clear()
+	for c in _characters:
+		var filter: int = 0
+		if c.is_in_group(ENEMY_GROUP):
+			filter |= CombatAbility.AllowedTargets.ENEMY
+		else:
+			filter |= CombatAbility.AllowedTargets.ALLY
+		if c.selected:
+			filter |= CombatAbility.AllowedTargets.SELF
+		if filter & button.ability.allowed_targets:
+			_allowed_targets.append(c)
 
 
 func _on_character_hovered(c: CombatCharacter) -> void:
-	prints("hovered:", c)
-	if not _ability_bar.pressed_button:
-		return
-	var abi: CombatAbility = _ability_bar.pressed_button.ability
-	var filter: int = 0
-	if c.is_in_group(ENEMY_GROUP):
-		filter |= CombatAbility.TargetType.ENEMY
-	else:
-		filter |= CombatAbility.TargetType.ALLY
-	if c.selected:
-		filter |= CombatAbility.TargetType.SELF
-	if filter & abi.target_type:
-		c.target_marks.primary.show()
-	prints(filter, abi.target_type,  filter & abi.target_type)
+	c.target_marks.primary.visible = c in _allowed_targets
 	
 
 func _on_character_unhovered(c: CombatCharacter) -> void:
@@ -70,6 +67,8 @@ func _on_character_unhovered(c: CombatCharacter) -> void:
 func _on_character_clicked(character: CombatCharacter) -> void:
 	if not _ability_bar.pressed_button:
 		return
+	var abi: CombatAbility = _ability_bar.pressed_button.ability
+	abi.apply(_character_queue[0], character)
 	prints("Cast spell", _ability_bar.pressed_button.ability, "on", character)
 
 

@@ -12,6 +12,7 @@ signal unhovered(character: CombatCharacter)
 @onready var _health_bar: ProgressBar = $HealthBar
 @onready var _selected_mark: Control = $HealthBar/Selected
 
+@export var _move_speed: float = 2.
 
 @export var max_health: float = 100:
 	get:
@@ -52,6 +53,13 @@ var selected: bool = false:
 @export var _attack_impact_animation: String = "attack_impact"
 
 
+# Must be Vector3 but Vector3 cannot be null.
+var to_target = null:
+	set(value):
+		assert(value == null or value is Vector3, "`to_target` must be a Vector3 or null")
+		to_target = value
+
+
 func get_abilities() -> Array[CombatAbility]:
 	return _abilities
 
@@ -73,6 +81,14 @@ func _on_input_event(_c: Node, e: InputEvent, _ep: Vector3, _n: Vector3, _si: in
 		clicked.emit(self)
 
 
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	if _health_bar.visible:
 		_health_bar.position = get_viewport().get_camera_3d().unproject_position(global_position) - _health_bar.pivot_offset
+
+
+func _physics_process(delta: float) -> void:
+	if to_target:
+		global_position = global_position.move_toward(to_target, delta * _move_speed)
+		if global_position.is_equal_approx(to_target):
+			to_target = null
+		
