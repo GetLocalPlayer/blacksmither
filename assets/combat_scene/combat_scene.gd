@@ -42,6 +42,9 @@ func _run_next_turn() -> void:
 
 
 func _on_ability_button_pressed(button: AbilityButton) -> void:
+	if not button.button_pressed:
+		_character_queue[0].selected_ability = null
+		return
 	_allowed_targets.clear()
 	for c in _characters:
 		var filter: int = 0
@@ -53,6 +56,7 @@ func _on_ability_button_pressed(button: AbilityButton) -> void:
 			filter |= CombatAbility.AllowedTargets.SELF
 		if filter & button.ability.allowed_targets:
 			_allowed_targets.append(c)
+	_character_queue[0].selected_ability = button.ability
 
 
 func _on_character_hovered(c: CombatCharacter) -> void:
@@ -67,9 +71,11 @@ func _on_character_unhovered(c: CombatCharacter) -> void:
 func _on_character_clicked(character: CombatCharacter) -> void:
 	if not _ability_bar.pressed_button:
 		return
-	var abi: CombatAbility = _ability_bar.pressed_button.ability
-	abi.apply(_character_queue[0], character)
+	#var abi: CombatAbility = _ability_bar.pressed_button.ability
+	#abi.apply(_character_queue[0], character)
+	_character_queue[0].selected_ability = null
 	prints("Cast spell", _ability_bar.pressed_button.ability, "on", character)
+
 
 
 func _on_void_clicker_input_event(_c: Node, e: InputEvent, _ep: Vector3, _n: Vector3, _si: int) -> void:
@@ -78,3 +84,4 @@ func _on_void_clicker_input_event(_c: Node, e: InputEvent, _ep: Vector3, _n: Vec
 	var me: InputEventMouseButton = e as InputEventMouseButton
 	if me and me.pressed and (me.button_index == MOUSE_BUTTON_LEFT or me.button_index == MOUSE_BUTTON_MASK_RIGHT):
 		_ability_bar.pressed_button.button_pressed = false
+		_character_queue[0].selected_ability = null

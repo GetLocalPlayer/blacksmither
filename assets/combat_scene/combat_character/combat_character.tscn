@@ -1,4 +1,4 @@
-[gd_scene load_steps=43 format=3 uid="uid://0aiqln2jekco"]
+[gd_scene load_steps=51 format=3 uid="uid://0aiqln2jekco"]
 
 [ext_resource type="Script" path="res://assets/combat_scene/combat_character/combat_character.gd" id="1_uyb1w"]
 [ext_resource type="PackedScene" uid="uid://b6f7wde0eg2p3" path="res://models/characters/emma/emma.tscn" id="2_n31pi"]
@@ -23,8 +23,14 @@ stretch_time_scale = true
 start_offset = 0.0
 loop_mode = 0
 
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_dert3"]
+animation = &"idle"
+
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_dlnud"]
 animation = &"idle"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_wyfb4"]
+animation = &"idle_injured"
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_ttqj4"]
 animation = &"idle_injured"
@@ -47,14 +53,54 @@ advance_expression = "health/max_health >= 0.5"
 advance_mode = 2
 advance_expression = "health/max_health < 0.5"
 
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_ne7xm"]
+xfade_time = 0.25
+break_loop_at_end = true
+switch_mode = 2
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_f26e5"]
+xfade_time = 0.25
+break_loop_at_end = true
+switch_mode = 2
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_oet6m"]
+xfade_time = 0.2
+advance_mode = 2
+advance_expression = "health/max_health < 0.5"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_7i5px"]
+xfade_time = 0.2
+advance_mode = 2
+advance_expression = "health/max_health >= 0.5"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_nhi6j"]
+xfade_time = 0.5
+break_loop_at_end = true
+switch_mode = 2
+advance_mode = 2
+advance_expression = "health/max_health < 0.5"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_7yk2k"]
+xfade_time = 0.5
+break_loop_at_end = true
+switch_mode = 2
+advance_mode = 2
+advance_expression = "health/max_health < 0.5"
+
 [sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_fcgxo"]
 states/Start/position = Vector2(204, 106)
 states/idle/node = SubResource("AnimationNodeAnimation_dlnud")
-states/idle/position = Vector2(463, 24)
+states/idle/position = Vector2(514, -57)
+"states/idle 2/node" = SubResource("AnimationNodeAnimation_dert3")
+"states/idle 2/position" = Vector2(745, -57)
 states/idle_injured/node = SubResource("AnimationNodeAnimation_ttqj4")
-states/idle_injured/position = Vector2(463, 138)
-transitions = ["idle", "idle_injured", SubResource("AnimationNodeStateMachineTransition_b3jlg"), "idle_injured", "idle", SubResource("AnimationNodeStateMachineTransition_byocn"), "Start", "idle", SubResource("AnimationNodeStateMachineTransition_idkm1"), "Start", "idle_injured", SubResource("AnimationNodeStateMachineTransition_5u6rk")]
-graph_offset = Vector2(-108, 5)
+states/idle_injured/position = Vector2(503, 138)
+"states/idle_injured 2/node" = SubResource("AnimationNodeAnimation_wyfb4")
+"states/idle_injured 2/position" = Vector2(736, 133)
+transitions = ["idle", "idle_injured", SubResource("AnimationNodeStateMachineTransition_b3jlg"), "idle_injured", "idle", SubResource("AnimationNodeStateMachineTransition_byocn"), "Start", "idle", SubResource("AnimationNodeStateMachineTransition_idkm1"), "Start", "idle_injured", SubResource("AnimationNodeStateMachineTransition_5u6rk"), "idle", "idle 2", SubResource("AnimationNodeStateMachineTransition_ne7xm"), "idle 2", "idle", SubResource("AnimationNodeStateMachineTransition_f26e5"), "idle 2", "idle_injured 2", SubResource("AnimationNodeStateMachineTransition_oet6m"), "idle_injured 2", "idle 2", SubResource("AnimationNodeStateMachineTransition_7i5px"), "idle_injured", "idle_injured 2", SubResource("AnimationNodeStateMachineTransition_nhi6j"), "idle_injured 2", "idle_injured", SubResource("AnimationNodeStateMachineTransition_7yk2k")]
+graph_offset = Vector2(122, -197)
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_0wbf6"]
 animation = &"idle_kick"
@@ -161,9 +207,13 @@ xfade_time = 0.1
 
 [sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_7pnh5"]
 xfade_time = 0.2
+advance_mode = 2
+advance_expression = "selected_ability and selected_ability.name == \"Attack\""
 
 [sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_waxeq"]
-xfade_time = 0.2
+xfade_time = 0.3
+advance_mode = 2
+advance_expression = "not selected_ability"
 
 [sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_lwrot"]
 xfade_time = 0.3
@@ -188,7 +238,7 @@ states/prepare_attack/position = Vector2(461, -158)
 states/roll/node = SubResource("AnimationNodeStateMachine_re3ep")
 states/roll/position = Vector2(811, 79)
 transitions = ["Start", "idle", SubResource("AnimationNodeStateMachineTransition_2pu3j"), "attack_impact", "idle", SubResource("AnimationNodeStateMachineTransition_dt4mf"), "hit", "idle", SubResource("AnimationNodeStateMachineTransition_xcchn"), "idle", "hit", SubResource("AnimationNodeStateMachineTransition_y17gq"), "idle", "prepare_attack", SubResource("AnimationNodeStateMachineTransition_7pnh5"), "prepare_attack", "idle", SubResource("AnimationNodeStateMachineTransition_waxeq"), "prepare_attack", "cast", SubResource("AnimationNodeStateMachineTransition_lwrot"), "cast", "attack_impact", SubResource("AnimationNodeStateMachineTransition_acs08")]
-graph_offset = Vector2(193, -227)
+graph_offset = Vector2(77, -254)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5jnvj"]
 bg_color = Color(0, 0, 0, 1)
@@ -230,6 +280,7 @@ corner_radius_bottom_left = 8
 
 [node name="CombatCharacter" type="Area3D"]
 script = ExtResource("1_uyb1w")
+health = 50.0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0510902, 0.889888, -0.140369)

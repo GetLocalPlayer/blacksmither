@@ -6,9 +6,9 @@ signal clicked(character: CombatCharacter)
 signal hovered(character: CombatCharacter)
 signal unhovered(character: CombatCharacter)
 
+@onready var playback: AnimationNodeStateMachinePlayback = $AnimationTree.get("parameters/playback")
 
 @onready var _abilities: Array[CombatAbility] = Array($Abilities.get_children(), TYPE_OBJECT, "Node", CombatAbility)
-@onready var _playback: AnimationNodeStateMachinePlayback = $AnimationTree.get("parameters/playback")
 @onready var _health_bar: ProgressBar = $HealthBar
 @onready var _selected_mark: Control = $HealthBar/Selected
 
@@ -29,7 +29,7 @@ signal unhovered(character: CombatCharacter)
 		health = value if value >= 0. else 0.
 		if is_node_ready():
 			_health_bar.value = health
-			_playback.travel(_death_animation)
+			playback.travel(_death_animation)
 
 
 @onready var target_marks: Dictionary = {
@@ -45,24 +45,23 @@ var selected: bool = false:
 			_selected_mark.visible = value
 
 
+var selected_ability: CombatAbility = null
+
+
 
 @export_group("Animations")
 @export var _death_animation: String = "death"
-@export var _hit_animation: String = "hit"
-@export var _prep_attack_animation: String = "prep_attack"
-@export var _attack_impact_animation: String = "attack_impact"
-
-
-# Must be Vector3 but Vector3 cannot be null.
-var to_target = null:
-	set(value):
-		assert(value == null or value is Vector3, "`to_target` must be a Vector3 or null")
-		to_target = value
 
 
 func get_abilities() -> Array[CombatAbility]:
 	return _abilities
 
+
+# Casts selected ability on the target
+func cast_ability(target: CombatCharacter) -> void:
+	if not selected_ability:
+		return
+	
 
 func _ready() -> void:
 	_health_bar.max_value = max_health
@@ -82,7 +81,8 @@ func _on_input_event(_c: Node, e: InputEvent, _ep: Vector3, _n: Vector3, _si: in
 
 
 func _process(_delta: float) -> void:
-	if _health_bar.visible:
+	var camera: Camera3D = get_viewport().get_camera_3d()
+	if camera and _health_bar.visible:
 		_health_bar.position = get_viewport().get_camera_3d().unproject_position(global_position) - _health_bar.pivot_offset
 
 
