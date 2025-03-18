@@ -1,6 +1,7 @@
-[gd_scene load_steps=51 format=3 uid="uid://0aiqln2jekco"]
+[gd_scene load_steps=58 format=3 uid="uid://0aiqln2jekco"]
 
 [ext_resource type="Script" path="res://assets/combat_scene/combat_character/combat_character.gd" id="1_uyb1w"]
+[ext_resource type="Script" path="res://assets/combat_scene/combat_character/fsm.gd" id="2_26k2l"]
 [ext_resource type="PackedScene" uid="uid://b6f7wde0eg2p3" path="res://models/characters/emma/emma.tscn" id="2_n31pi"]
 [ext_resource type="Texture2D" uid="uid://d1aiyafo1810t" path="res://textures/icon_attack.png" id="4_j3ua5"]
 [ext_resource type="Script" path="res://assets/combat_scene/combat_character/combat_ability.gd" id="7_lr64r"]
@@ -11,9 +12,6 @@ radius = 0.345411
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_bwewy"]
 animation = &"kick_impact"
-
-[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_5fb7x"]
-animation = &"run"
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_7eraw"]
 animation = &"damaged_impact"
@@ -154,6 +152,9 @@ states/prep_kick/node = SubResource("AnimationNodeAnimation_07ayi")
 states/prep_kick/position = Vector2(373, 94)
 transitions = ["prep_kick", "idle_kick", SubResource("AnimationNodeStateMachineTransition_bubyg"), "Start", "prep_kick", SubResource("AnimationNodeStateMachineTransition_vbtdt"), "idle_kick", "idle_kick 2", SubResource("AnimationNodeStateMachineTransition_x3gsb"), "idle_kick 2", "idle_kick", SubResource("AnimationNodeStateMachineTransition_e02iu")]
 
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_6ff48"]
+animation = &"fall"
+
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_ce5f6"]
 animation = &"roll"
 play_mode = 1
@@ -192,6 +193,9 @@ states/roll/position = Vector2(494, 65)
 "states/roll 2/position" = Vector2(494, 162)
 transitions = ["Start", "roll", SubResource("AnimationNodeStateMachineTransition_g4gc2"), "roll", "roll 2", SubResource("AnimationNodeStateMachineTransition_olfq1"), "roll 2", "roll", SubResource("AnimationNodeStateMachineTransition_u5wi0")]
 
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_5fb7x"]
+animation = &"run"
+
 [sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_2pu3j"]
 advance_mode = 2
 
@@ -222,23 +226,40 @@ advance_expression = "$Abilities/Attack/"
 [sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_acs08"]
 xfade_time = 0.1
 
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_vbkv5"]
+xfade_time = 0.3
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_wejc2"]
+xfade_time = 0.4
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_sdqat"]
+xfade_time = 0.1
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_gb1r3"]
+xfade_time = 0.1
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_kcwxh"]
+xfade_time = 0.1
+
 [sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_b075f"]
 states/End/position = Vector2(969, 102)
 states/Start/position = Vector2(177, 88)
 states/attack_impact/node = SubResource("AnimationNodeAnimation_bwewy")
-states/attack_impact/position = Vector2(832, -158)
-states/cast/node = SubResource("AnimationNodeAnimation_5fb7x")
-states/cast/position = Vector2(649, -158)
+states/attack_impact/position = Vector2(776, -177)
 states/hit/node = SubResource("AnimationNodeAnimation_7eraw")
-states/hit/position = Vector2(841, 229)
+states/hit/position = Vector2(484, 191)
 states/idle/node = SubResource("AnimationNodeStateMachine_fcgxo")
 states/idle/position = Vector2(376, 88)
 states/prepare_attack/node = SubResource("AnimationNodeStateMachine_bdtj5")
-states/prepare_attack/position = Vector2(461, -158)
+states/prepare_attack/position = Vector2(437, -230)
+states/retreat/node = SubResource("AnimationNodeAnimation_6ff48")
+states/retreat/position = Vector2(621, 53)
 states/roll/node = SubResource("AnimationNodeStateMachine_re3ep")
 states/roll/position = Vector2(811, 79)
-transitions = ["Start", "idle", SubResource("AnimationNodeStateMachineTransition_2pu3j"), "attack_impact", "idle", SubResource("AnimationNodeStateMachineTransition_dt4mf"), "hit", "idle", SubResource("AnimationNodeStateMachineTransition_xcchn"), "idle", "hit", SubResource("AnimationNodeStateMachineTransition_y17gq"), "idle", "prepare_attack", SubResource("AnimationNodeStateMachineTransition_7pnh5"), "prepare_attack", "idle", SubResource("AnimationNodeStateMachineTransition_waxeq"), "prepare_attack", "cast", SubResource("AnimationNodeStateMachineTransition_lwrot"), "cast", "attack_impact", SubResource("AnimationNodeStateMachineTransition_acs08")]
-graph_offset = Vector2(77, -254)
+states/run/node = SubResource("AnimationNodeAnimation_5fb7x")
+states/run/position = Vector2(652, -246)
+transitions = ["Start", "idle", SubResource("AnimationNodeStateMachineTransition_2pu3j"), "attack_impact", "idle", SubResource("AnimationNodeStateMachineTransition_dt4mf"), "hit", "idle", SubResource("AnimationNodeStateMachineTransition_xcchn"), "idle", "hit", SubResource("AnimationNodeStateMachineTransition_y17gq"), "idle", "prepare_attack", SubResource("AnimationNodeStateMachineTransition_7pnh5"), "prepare_attack", "idle", SubResource("AnimationNodeStateMachineTransition_waxeq"), "prepare_attack", "run", SubResource("AnimationNodeStateMachineTransition_lwrot"), "run", "attack_impact", SubResource("AnimationNodeStateMachineTransition_acs08"), "idle", "run", SubResource("AnimationNodeStateMachineTransition_vbkv5"), "attack_impact", "retreat", SubResource("AnimationNodeStateMachineTransition_wejc2"), "retreat", "attack_impact", SubResource("AnimationNodeStateMachineTransition_sdqat"), "retreat", "idle", SubResource("AnimationNodeStateMachineTransition_gb1r3"), "idle", "retreat", SubResource("AnimationNodeStateMachineTransition_kcwxh")]
+graph_offset = Vector2(248, -200)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5jnvj"]
 bg_color = Color(0, 0, 0, 1)
@@ -285,6 +306,9 @@ health = 50.0
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0510902, 0.889888, -0.140369)
 shape = SubResource("CylinderShape3D_byb5w")
+
+[node name="FSM" type="Node" parent="."]
+script = ExtResource("2_26k2l")
 
 [node name="AnimationTree" type="AnimationTree" parent="."]
 root_node = NodePath("../Model")

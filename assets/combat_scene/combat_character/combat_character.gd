@@ -57,12 +57,6 @@ func get_abilities() -> Array[CombatAbility]:
 	return _abilities
 
 
-# Casts selected ability on the target
-func cast_ability(target: CombatCharacter) -> void:
-	if not selected_ability:
-		return
-	
-
 func _ready() -> void:
 	_health_bar.max_value = max_health
 	_health_bar.value = health
@@ -84,11 +78,3 @@ func _process(_delta: float) -> void:
 	var camera: Camera3D = get_viewport().get_camera_3d()
 	if camera and _health_bar.visible:
 		_health_bar.position = get_viewport().get_camera_3d().unproject_position(global_position) - _health_bar.pivot_offset
-
-
-func _physics_process(delta: float) -> void:
-	if to_target:
-		global_position = global_position.move_toward(to_target, delta * _move_speed)
-		if global_position.is_equal_approx(to_target):
-			to_target = null
-		
