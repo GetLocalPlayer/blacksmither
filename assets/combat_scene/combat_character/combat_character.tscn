@@ -244,8 +244,8 @@ xfade_time = 0.1
 [sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_b075f"]
 states/End/position = Vector2(969, 102)
 states/Start/position = Vector2(177, 88)
-states/attack_impact/node = SubResource("AnimationNodeAnimation_bwewy")
-states/attack_impact/position = Vector2(776, -177)
+states/attack/node = SubResource("AnimationNodeAnimation_bwewy")
+states/attack/position = Vector2(776, -177)
 states/hit/node = SubResource("AnimationNodeAnimation_7eraw")
 states/hit/position = Vector2(484, 191)
 states/idle/node = SubResource("AnimationNodeStateMachine_fcgxo")
@@ -253,13 +253,13 @@ states/idle/position = Vector2(376, 88)
 states/prepare_attack/node = SubResource("AnimationNodeStateMachine_bdtj5")
 states/prepare_attack/position = Vector2(437, -230)
 states/retreat/node = SubResource("AnimationNodeAnimation_6ff48")
-states/retreat/position = Vector2(621, 53)
+states/retreat/position = Vector2(621, 54)
 states/roll/node = SubResource("AnimationNodeStateMachine_re3ep")
 states/roll/position = Vector2(811, 79)
 states/run/node = SubResource("AnimationNodeAnimation_5fb7x")
 states/run/position = Vector2(652, -246)
-transitions = ["Start", "idle", SubResource("AnimationNodeStateMachineTransition_2pu3j"), "attack_impact", "idle", SubResource("AnimationNodeStateMachineTransition_dt4mf"), "hit", "idle", SubResource("AnimationNodeStateMachineTransition_xcchn"), "idle", "hit", SubResource("AnimationNodeStateMachineTransition_y17gq"), "idle", "prepare_attack", SubResource("AnimationNodeStateMachineTransition_7pnh5"), "prepare_attack", "idle", SubResource("AnimationNodeStateMachineTransition_waxeq"), "prepare_attack", "run", SubResource("AnimationNodeStateMachineTransition_lwrot"), "run", "attack_impact", SubResource("AnimationNodeStateMachineTransition_acs08"), "idle", "run", SubResource("AnimationNodeStateMachineTransition_vbkv5"), "attack_impact", "retreat", SubResource("AnimationNodeStateMachineTransition_wejc2"), "retreat", "attack_impact", SubResource("AnimationNodeStateMachineTransition_sdqat"), "retreat", "idle", SubResource("AnimationNodeStateMachineTransition_gb1r3"), "idle", "retreat", SubResource("AnimationNodeStateMachineTransition_kcwxh")]
-graph_offset = Vector2(248, -200)
+transitions = ["Start", "idle", SubResource("AnimationNodeStateMachineTransition_2pu3j"), "attack", "idle", SubResource("AnimationNodeStateMachineTransition_dt4mf"), "hit", "idle", SubResource("AnimationNodeStateMachineTransition_xcchn"), "idle", "hit", SubResource("AnimationNodeStateMachineTransition_y17gq"), "idle", "prepare_attack", SubResource("AnimationNodeStateMachineTransition_7pnh5"), "prepare_attack", "idle", SubResource("AnimationNodeStateMachineTransition_waxeq"), "prepare_attack", "run", SubResource("AnimationNodeStateMachineTransition_lwrot"), "run", "attack", SubResource("AnimationNodeStateMachineTransition_acs08"), "idle", "run", SubResource("AnimationNodeStateMachineTransition_vbkv5"), "attack", "retreat", SubResource("AnimationNodeStateMachineTransition_wejc2"), "retreat", "attack", SubResource("AnimationNodeStateMachineTransition_sdqat"), "retreat", "idle", SubResource("AnimationNodeStateMachineTransition_gb1r3"), "idle", "retreat", SubResource("AnimationNodeStateMachineTransition_kcwxh")]
+graph_offset = Vector2(48, -339)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5jnvj"]
 bg_color = Color(0, 0, 0, 1)
@@ -301,14 +301,11 @@ corner_radius_bottom_left = 8
 
 [node name="CombatCharacter" type="Area3D"]
 script = ExtResource("1_uyb1w")
-health = 50.0
+move_speed = 4.0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0510902, 0.889888, -0.140369)
 shape = SubResource("CylinderShape3D_byb5w")
-
-[node name="FSM" type="Node" parent="."]
-script = ExtResource("2_26k2l")
 
 [node name="AnimationTree" type="AnimationTree" parent="."]
 root_node = NodePath("../Model")
@@ -318,6 +315,9 @@ anim_player = NodePath("../Model/AnimationPlayer")
 
 [node name="Model" parent="." instance=ExtResource("2_n31pi")]
 
+[node name="FSM" type="Node" parent="."]
+script = ExtResource("2_26k2l")
+
 [node name="Abilities" type="Node" parent="."]
 
 [node name="Attack" type="Node" parent="Abilities"]
@@ -325,6 +325,7 @@ script = ExtResource("7_lr64r")
 icon = ExtResource("4_j3ua5")
 damage = 20.0
 heal = 100.955
+animation = null
 
 [node name="HealthBar" type="ProgressBar" parent="."]
 offset_left = -50.0

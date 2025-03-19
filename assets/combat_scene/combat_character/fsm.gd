@@ -1,29 +1,34 @@
 extends FSM
-
+class_name FSMCombatCharacter
 
 const _STATES_PATH = "states/%s.gd"
 
+
 var _states: Dictionary = {
-	idle = preload(_STATES_PATH % "idle").new(),
-	approach_character = preload(_STATES_PATH % "approach_character").new(),
+	idle = preload(_STATES_PATH % "idle"),
+	approach_character = preload(_STATES_PATH % "approach_character"),
+	cast_ability = preload(_STATES_PATH % "cast_ability"),
+	retreat_to = preload(_STATES_PATH % "retreat_to"),
 }
 
 
-var _queue: Array[FSMState] = []
+var _queue: Array[FSMState] = []:
+	set(value):
+		_queue = value
+		for s in _queue:
+			if s.has_signal("finished"):
+				s.finished.connect(_on_state_finished)
+		_set_state(_queue.pop_front())
 
 
-func _get_initial_state() -> FSMState: return _states.idle
+func cast_ability(target: CombatCharacter) -> void:
+	var caster: CombatCharacter = _get_context()
+	if caster.selected_ability.requires_target:
+		_queue = [_states.approach_character.new(target), _states.cast_ability.new(target), _states.retreat_to.new(caster.global_position)]
 
 
-func _ready() -> void:
-	super._ready()
-	for k in _states:
-		var s: FSMState = _states[k]
-		if s.has_signal("finished"):
-			s.finished.connect(_on_state_finished)
+func _get_initial_state() -> FSMState: return _states.idle.new()
 
 
 func _on_state_finished() -> void:
-	_queue.pop_front()
-	if _queue.is_empty():
-		_set_state(_get_initial_state())
+	_set_state(_get_initial_state() if _queue.is_empty() else _queue.pop_front())

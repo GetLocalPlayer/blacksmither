@@ -73,8 +73,9 @@ func _on_character_clicked(character: CombatCharacter) -> void:
 		return
 	#var abi: CombatAbility = _ability_bar.pressed_button.ability
 	#abi.apply(_character_queue[0], character)
-	_character_queue[0].selected_ability = null
 	prints("Cast spell", _ability_bar.pressed_button.ability, "on", character)
+	_character_queue[0].cast_ability(character)
+	_ability_bar.pressed_button.button_pressed = false
 
 
 

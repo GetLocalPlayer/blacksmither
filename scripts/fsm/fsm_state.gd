@@ -2,7 +2,7 @@ extends RefCounted
 class_name FSMState
 
 
-func _enter(_context: Node, _args: Dictionary = {}) -> void:
+func _enter(_context: Node) -> void:
 	pass
 
 

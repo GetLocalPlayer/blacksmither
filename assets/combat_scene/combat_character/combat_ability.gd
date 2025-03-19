@@ -48,19 +48,7 @@ enum AllowedTargets {
 }
 @export var allowed_targets: AllowedTargets = AllowedTargets.ENEMY
 
-@export_subgroup("Animations")
-## Animation that is used before cast animation.
-## For abilities with `requires_target` set to
-## true, the animation is played when the ability
-## is awaiting the target.
-@export var prepare_anim: String = "prepare"
-## Cast animation. For CastType.MELEE the animation
-## is played when the character is moving towards
-## the target.
-@export var cast_anim: String = "cast"
-## The animation that is played when the ability
-## applys its effect on the target.
-@export var impact_anim: String = "impact"
+@export var animation: String = "attack"
 
 
 func _validate_property(property: Dictionary) -> void:
@@ -77,9 +65,5 @@ func _validate_property(property: Dictionary) -> void:
 			property.hint = PROPERTY_HINT_FLAGS
 
 
-func apply(caster: CombatCharacter, target: CombatCharacter) -> void:
-	if requires_target:
-		caster.to_target = target.global_position
-		while not target in caster.get_overlapping_areas():
-			await caster.area_entered
-		caster.to_target = null
+func apply(target: CombatCharacter) -> void:
+	pass

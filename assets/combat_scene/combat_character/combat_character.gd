@@ -6,13 +6,14 @@ signal clicked(character: CombatCharacter)
 signal hovered(character: CombatCharacter)
 signal unhovered(character: CombatCharacter)
 
-@onready var playback: AnimationNodeStateMachinePlayback = $AnimationTree.get("parameters/playback")
+@onready var animation_tree: AnimationTree = $AnimationTree
+@onready var playback: AnimationNodeStateMachinePlayback = animation_tree.get("parameters/playback")
 
 @onready var _abilities: Array[CombatAbility] = Array($Abilities.get_children(), TYPE_OBJECT, "Node", CombatAbility)
 @onready var _health_bar: ProgressBar = $HealthBar
 @onready var _selected_mark: Control = $HealthBar/Selected
 
-@export var _move_speed: float = 2.
+@export var move_speed: float = 2.
 
 @export var max_health: float = 100:
 	get:
@@ -36,6 +37,7 @@ signal unhovered(character: CombatCharacter)
 	primary = $HealthBar/TargetMarks/Primary,
 	secondary = $HealthBar/TargetMarks/Secondary,
 }
+@onready var _fsm: FSMCombatCharacter = $FSM
 
 
 var selected: bool = false:
@@ -48,9 +50,14 @@ var selected: bool = false:
 var selected_ability: CombatAbility = null
 
 
-
 @export_group("Animations")
 @export var _death_animation: String = "death"
+
+
+func cast_ability(target: CombatCharacter) -> void:
+	if not selected_ability:
+		return
+	_fsm.cast_ability(target)
 
 
 func get_abilities() -> Array[CombatAbility]:
