@@ -1,11 +1,10 @@
 extends FSMState
 
 
-const _ANIM = "idle"
+const _ANIM_TRAVEL = "idle"
 
 
 func _enter(context: Node) -> void:
 	var c: CombatCharacter = context
-	c.playback.travel(_ANIM)
-	c.get_node("AnimationTree").animation_finished.connect(func(n: String): print(n))
+	c.playback.travel(_ANIM_TRAVEL)
 	

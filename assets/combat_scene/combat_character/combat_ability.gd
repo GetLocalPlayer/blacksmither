@@ -22,25 +22,15 @@ enum EffectType {DAMAGE, HEAL}
 			notify_property_list_changed()
 
 
-@export var damage: float = 100:
-	get:
-		return damage
+@export var effect_value: float = 20:
 	set(value):
-		damage = value if value >= 0. else 0.
-
-
-@export var heal: float = 100:
-	get:
-		return heal
-	set(value):
-		heal = value if value >= 0. else 0.
+		effect_value = value if value >= 0. else 0.
 
 
 enum CastType {MELEE, RANGED}
 ## Defines if the character must approach the target
 @export var cast_type: CastType = CastType.MELEE
 
-@export_subgroup("Allowed Targets")
 enum AllowedTargets {
 	ENEMY = 1,
 	ALLY = 1 << 1,
@@ -48,22 +38,18 @@ enum AllowedTargets {
 }
 @export var allowed_targets: AllowedTargets = AllowedTargets.ENEMY
 
-@export var animation: String = "attack"
+@export var animation_travel: String = "attack"
 
 
 func _validate_property(property: Dictionary) -> void:
-	var validate_effect_type = func validate_effect_type(et: EffectType) -> int:
-		return PROPERTY_USAGE_DEFAULT if effect_type == et else PROPERTY_USAGE_DEFAULT ^ PROPERTY_USAGE_EDITOR
-
 	match property.name:
-		"damage":
-			property.usage = validate_effect_type.call(EffectType.DAMAGE)
-		"heal":
-			property.usage = validate_effect_type.call(EffectType.HEAL)
 		"allowed_targets":
 			property.usage = PROPERTY_USAGE_DEFAULT | PROPERTY_USAGE_CLASS_IS_BITFIELD
 			property.hint = PROPERTY_HINT_FLAGS
 
 
 func apply(target: CombatCharacter) -> void:
-	pass
+	match effect_type:
+		EffectType.DAMAGE:
+			target.take_damage(effect_value)
+			print("damage ability")

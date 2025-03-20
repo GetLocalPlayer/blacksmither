@@ -64,6 +64,11 @@ func get_abilities() -> Array[CombatAbility]:
 	return _abilities
 
 
+func take_damage(value: float) -> void:
+	health -= value
+	_fsm.take_damage()
+
+
 func _ready() -> void:
 	_health_bar.max_value = max_health
 	_health_bar.value = health

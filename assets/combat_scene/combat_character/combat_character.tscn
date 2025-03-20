@@ -1,6 +1,7 @@
-[gd_scene load_steps=58 format=3 uid="uid://0aiqln2jekco"]
+[gd_scene load_steps=65 format=3 uid="uid://0aiqln2jekco"]
 
 [ext_resource type="Script" path="res://assets/combat_scene/combat_character/combat_character.gd" id="1_uyb1w"]
+[ext_resource type="Script" path="res://assets/combat_scene/combat_character/animation_tree.gd" id="2_8pfwx"]
 [ext_resource type="Script" path="res://assets/combat_scene/combat_character/fsm.gd" id="2_26k2l"]
 [ext_resource type="PackedScene" uid="uid://b6f7wde0eg2p3" path="res://models/characters/emma/emma.tscn" id="2_n31pi"]
 [ext_resource type="Texture2D" uid="uid://d1aiyafo1810t" path="res://textures/icon_attack.png" id="4_j3ua5"]
@@ -11,7 +12,15 @@ height = 1.748
 radius = 0.345411
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_bwewy"]
-animation = &"kick_impact"
+animation = &"kick"
+use_custom_timeline = true
+timeline_length = 1.0
+stretch_time_scale = true
+start_offset = 0.0
+loop_mode = 0
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_nqpl0"]
+animation = &"death"
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_7eraw"]
 animation = &"damaged_impact"
@@ -196,6 +205,14 @@ transitions = ["Start", "roll", SubResource("AnimationNodeStateMachineTransition
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_5fb7x"]
 animation = &"run"
 
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_85be4"]
+animation = &"damaged_impact"
+use_custom_timeline = true
+timeline_length = 1.0
+stretch_time_scale = true
+start_offset = 0.0
+loop_mode = 0
+
 [sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_2pu3j"]
 advance_mode = 2
 
@@ -205,6 +222,7 @@ switch_mode = 2
 advance_mode = 2
 
 [sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_xcchn"]
+xfade_time = 0.2
 
 [sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_y17gq"]
 xfade_time = 0.1
@@ -224,7 +242,7 @@ xfade_time = 0.3
 advance_expression = "$Abilities/Attack/"
 
 [sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_acs08"]
-xfade_time = 0.1
+xfade_time = 0.2
 
 [sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_vbkv5"]
 xfade_time = 0.3
@@ -241,15 +259,33 @@ xfade_time = 0.1
 [sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_kcwxh"]
 xfade_time = 0.1
 
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_epk6k"]
+xfade_time = 0.1
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_byls5"]
+xfade_time = 0.1
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_ebe1n"]
+xfade_time = 0.3
+advance_mode = 2
+advance_expression = "health <= 0"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_qjvjh"]
+xfade_time = 0.3
+advance_mode = 2
+advance_expression = "health > 0"
+
 [sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_b075f"]
 states/End/position = Vector2(969, 102)
 states/Start/position = Vector2(177, 88)
 states/attack/node = SubResource("AnimationNodeAnimation_bwewy")
 states/attack/position = Vector2(776, -177)
+states/death/node = SubResource("AnimationNodeAnimation_nqpl0")
+states/death/position = Vector2(177, -24)
 states/hit/node = SubResource("AnimationNodeAnimation_7eraw")
-states/hit/position = Vector2(484, 191)
+states/hit/position = Vector2(640, 160)
 states/idle/node = SubResource("AnimationNodeStateMachine_fcgxo")
-states/idle/position = Vector2(376, 88)
+states/idle/position = Vector2(354, 54)
 states/prepare_attack/node = SubResource("AnimationNodeStateMachine_bdtj5")
 states/prepare_attack/position = Vector2(437, -230)
 states/retreat/node = SubResource("AnimationNodeAnimation_6ff48")
@@ -258,8 +294,10 @@ states/roll/node = SubResource("AnimationNodeStateMachine_re3ep")
 states/roll/position = Vector2(811, 79)
 states/run/node = SubResource("AnimationNodeAnimation_5fb7x")
 states/run/position = Vector2(652, -246)
-transitions = ["Start", "idle", SubResource("AnimationNodeStateMachineTransition_2pu3j"), "attack", "idle", SubResource("AnimationNodeStateMachineTransition_dt4mf"), "hit", "idle", SubResource("AnimationNodeStateMachineTransition_xcchn"), "idle", "hit", SubResource("AnimationNodeStateMachineTransition_y17gq"), "idle", "prepare_attack", SubResource("AnimationNodeStateMachineTransition_7pnh5"), "prepare_attack", "idle", SubResource("AnimationNodeStateMachineTransition_waxeq"), "prepare_attack", "run", SubResource("AnimationNodeStateMachineTransition_lwrot"), "run", "attack", SubResource("AnimationNodeStateMachineTransition_acs08"), "idle", "run", SubResource("AnimationNodeStateMachineTransition_vbkv5"), "attack", "retreat", SubResource("AnimationNodeStateMachineTransition_wejc2"), "retreat", "attack", SubResource("AnimationNodeStateMachineTransition_sdqat"), "retreat", "idle", SubResource("AnimationNodeStateMachineTransition_gb1r3"), "idle", "retreat", SubResource("AnimationNodeStateMachineTransition_kcwxh")]
-graph_offset = Vector2(48, -339)
+states/take_damage/node = SubResource("AnimationNodeAnimation_85be4")
+states/take_damage/position = Vector2(384, 197)
+transitions = ["Start", "idle", SubResource("AnimationNodeStateMachineTransition_2pu3j"), "attack", "idle", SubResource("AnimationNodeStateMachineTransition_dt4mf"), "hit", "idle", SubResource("AnimationNodeStateMachineTransition_xcchn"), "idle", "hit", SubResource("AnimationNodeStateMachineTransition_y17gq"), "idle", "prepare_attack", SubResource("AnimationNodeStateMachineTransition_7pnh5"), "prepare_attack", "idle", SubResource("AnimationNodeStateMachineTransition_waxeq"), "prepare_attack", "run", SubResource("AnimationNodeStateMachineTransition_lwrot"), "run", "attack", SubResource("AnimationNodeStateMachineTransition_acs08"), "idle", "run", SubResource("AnimationNodeStateMachineTransition_vbkv5"), "attack", "retreat", SubResource("AnimationNodeStateMachineTransition_wejc2"), "retreat", "attack", SubResource("AnimationNodeStateMachineTransition_sdqat"), "retreat", "idle", SubResource("AnimationNodeStateMachineTransition_gb1r3"), "idle", "retreat", SubResource("AnimationNodeStateMachineTransition_kcwxh"), "take_damage", "idle", SubResource("AnimationNodeStateMachineTransition_epk6k"), "idle", "take_damage", SubResource("AnimationNodeStateMachineTransition_byls5"), "idle", "death", SubResource("AnimationNodeStateMachineTransition_ebe1n"), "death", "idle", SubResource("AnimationNodeStateMachineTransition_qjvjh")]
+graph_offset = Vector2(-36, -152)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5jnvj"]
 bg_color = Color(0, 0, 0, 1)
@@ -312,6 +350,7 @@ root_node = NodePath("../Model")
 tree_root = SubResource("AnimationNodeStateMachine_b075f")
 advance_expression_base_node = NodePath("..")
 anim_player = NodePath("../Model/AnimationPlayer")
+script = ExtResource("2_8pfwx")
 
 [node name="Model" parent="." instance=ExtResource("2_n31pi")]
 
@@ -323,9 +362,7 @@ script = ExtResource("2_26k2l")
 [node name="Attack" type="Node" parent="Abilities"]
 script = ExtResource("7_lr64r")
 icon = ExtResource("4_j3ua5")
-damage = 20.0
-heal = 100.955
-animation = null
+effect_value = 30.0
 
 [node name="HealthBar" type="ProgressBar" parent="."]
 offset_left = -50.0

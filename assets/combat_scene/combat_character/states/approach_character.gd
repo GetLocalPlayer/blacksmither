@@ -1,9 +1,7 @@
 extends FSMState
 
-signal finished
 
-
-const _ANIM = "run"
+const _ANIM_TRAVEL = "run"
 var _target: CombatCharacter
 
 
@@ -13,7 +11,7 @@ func _init(target: CombatCharacter) -> void:
 	
 func _enter(context: Node) -> void:
 	var c: CombatCharacter = context
-	c.playback.travel(_ANIM)
+	c.playback.travel(_ANIM_TRAVEL)
 
 
 func _update(context: Node, delta: float) -> void:

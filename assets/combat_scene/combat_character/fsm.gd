@@ -9,6 +9,7 @@ var _states: Dictionary = {
 	approach_character = preload(_STATES_PATH % "approach_character"),
 	cast_ability = preload(_STATES_PATH % "cast_ability"),
 	retreat_to = preload(_STATES_PATH % "retreat_to"),
+	take_damage = preload(_STATES_PATH % "take_damage"),
 }
 
 
@@ -19,6 +20,10 @@ var _queue: Array[FSMState] = []:
 			if s.has_signal("finished"):
 				s.finished.connect(_on_state_finished)
 		_set_state(_queue.pop_front())
+
+
+func take_damage() -> void:
+	_queue = [_states.take_damage.new()]
 
 
 func cast_ability(target: CombatCharacter) -> void:
