@@ -4,7 +4,7 @@ extends Node3D
 const BOT_GROUP = "bot"
 const PLAYER_GROUP = "player"
 const ENEMY_GROUP = "enemies"
-@onready var _characters: Array[CombatCharacter] = Array($Characters.get_children(), TYPE_OBJECT, "Area3D", CombatCharacter)
+@onready var _characters: Array[CombatCharacter] = Array($Characters.get_children(), TYPE_OBJECT, "Node3D", CombatCharacter)
 @onready var _ability_bar: CombatAbilityBar = $AbilityBar
 @onready var _void_clicker: Area3D = $VoidClicker
 var _allowed_targets: Array[CombatCharacter] = []
@@ -74,6 +74,7 @@ func _on_character_clicked(character: CombatCharacter) -> void:
 	#var abi: CombatAbility = _ability_bar.pressed_button.ability
 	#abi.apply(_character_queue[0], character)
 	prints("Cast spell", _ability_bar.pressed_button.ability, "on", character)
+	_character_queue[0].target = character
 	_character_queue[0].cast_ability(character)
 	_ability_bar.pressed_button.button_pressed = false
 

@@ -1,4 +1,4 @@
-[gd_scene load_steps=65 format=3 uid="uid://0aiqln2jekco"]
+[gd_scene load_steps=66 format=3 uid="uid://0aiqln2jekco"]
 
 [ext_resource type="Script" path="res://assets/combat_scene/combat_character/combat_character.gd" id="1_uyb1w"]
 [ext_resource type="Script" path="res://assets/combat_scene/combat_character/animation_tree.gd" id="2_8pfwx"]
@@ -6,6 +6,10 @@
 [ext_resource type="PackedScene" uid="uid://b6f7wde0eg2p3" path="res://models/characters/emma/emma.tscn" id="2_n31pi"]
 [ext_resource type="Texture2D" uid="uid://d1aiyafo1810t" path="res://textures/icon_attack.png" id="4_j3ua5"]
 [ext_resource type="Script" path="res://assets/combat_scene/combat_character/combat_ability.gd" id="7_lr64r"]
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_ehpfb"]
+height = 1.748
+radius = 0.777853
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_byb5w"]
 height = 1.748
@@ -260,13 +264,13 @@ xfade_time = 0.1
 xfade_time = 0.1
 
 [sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_epk6k"]
-xfade_time = 0.1
+xfade_time = 0.5
 
 [sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_byls5"]
 xfade_time = 0.1
 
 [sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_ebe1n"]
-xfade_time = 0.3
+xfade_time = 0.1
 advance_mode = 2
 advance_expression = "health <= 0"
 
@@ -337,11 +341,21 @@ corner_radius_top_right = 8
 corner_radius_bottom_right = 8
 corner_radius_bottom_left = 8
 
-[node name="CombatCharacter" type="Area3D"]
+[node name="CombatCharacter" type="Node3D"]
 script = ExtResource("1_uyb1w")
 move_speed = 4.0
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+[node name="CharacterDetector" type="Area3D" parent="."]
+input_ray_pickable = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="CharacterDetector"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0510902, 0.889888, -0.140369)
+shape = SubResource("CylinderShape3D_ehpfb")
+
+[node name="MouseDetector" type="Area3D" parent="."]
+collision_mask = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MouseDetector"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0510902, 0.889888, -0.140369)
 shape = SubResource("CylinderShape3D_byb5w")
 

@@ -1,10 +1,11 @@
-extends Area3D
+extends Node3D
 class_name CombatCharacter
 
 
 signal clicked(character: CombatCharacter)
 signal hovered(character: CombatCharacter)
 signal unhovered(character: CombatCharacter)
+signal character_detected(character: CombatCharacter)
 
 @onready var animation_tree: AnimationTree = $AnimationTree
 @onready var playback: AnimationNodeStateMachinePlayback = animation_tree.get("parameters/playback")
@@ -12,6 +13,8 @@ signal unhovered(character: CombatCharacter)
 @onready var _abilities: Array[CombatAbility] = Array($Abilities.get_children(), TYPE_OBJECT, "Node", CombatAbility)
 @onready var _health_bar: ProgressBar = $HealthBar
 @onready var _selected_mark: Control = $HealthBar/Selected
+@onready var _mouse_detector: Area3D = $MouseDetector
+@onready var _character_detector: Area3D = $CharacterDetector
 
 @export var move_speed: float = 2.
 
@@ -23,6 +26,7 @@ signal unhovered(character: CombatCharacter)
 		if is_node_ready():
 			_health_bar.max_value = max_health
 
+
 @export var health: float = 100:
 	get:
 		return health
@@ -30,7 +34,6 @@ signal unhovered(character: CombatCharacter)
 		health = value if value >= 0. else 0.
 		if is_node_ready():
 			_health_bar.value = health
-			playback.travel(_death_animation)
 
 
 @onready var target_marks: Dictionary = {
@@ -46,18 +49,16 @@ var selected: bool = false:
 		if is_node_ready():
 			_selected_mark.visible = value
 
-
+# What ability is selected, will be cast on use
 var selected_ability: CombatAbility = null
+# What the character targeted on, vector or another character
+var target: CombatCharacter
+@onready var retreat_position: Vector3 = global_position
 
 
-@export_group("Animations")
-@export var _death_animation: String = "death"
-
-
-func cast_ability(target: CombatCharacter) -> void:
-	if not selected_ability:
-		return
-	_fsm.cast_ability(target)
+func cast_ability() -> void:
+	assert(target is CombatCharacter, "Must set `target` to `CombatCharacter` first.")
+	_fsm.cast_ability()
 
 
 func get_abilities() -> Array[CombatAbility]:
@@ -75,9 +76,10 @@ func _ready() -> void:
 	_selected_mark.hide()
 	target_marks.primary.hide()
 	target_marks.secondary.hide()
-	mouse_entered.connect(hovered.emit.bind(self))
-	mouse_exited.connect(unhovered.emit.bind(self))
-	input_event.connect(_on_input_event)
+	_mouse_detector.mouse_entered.connect(hovered.emit.bind(self))
+	_mouse_detector.mouse_exited.connect(unhovered.emit.bind(self))
+	_mouse_detector.input_event.connect(_on_input_event)
+	_character_detector.area_entered.connect(func(area: Area3D) -> void: if area.owner is CombatCharacter: character_detected.emit(area.owner))
 		
 		
 func _on_input_event(_c: Node, e: InputEvent, _ep: Vector3, _n: Vector3, _si: int) -> void:

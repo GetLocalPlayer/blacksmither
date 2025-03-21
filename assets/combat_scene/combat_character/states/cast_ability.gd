@@ -1,9 +1,8 @@
-extends FSMState
+extends CombatCharacterBaseState
 
 
 var _target: CombatCharacter
 var _ability: CombatAbility
-
 
 func _init(target: CombatCharacter) -> void:
 	_target = target

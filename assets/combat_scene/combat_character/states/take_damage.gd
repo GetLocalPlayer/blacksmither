@@ -1,7 +1,7 @@
 extends FSMState
 
 
-const _ANIM_TRAVEL = "take_damage"
+const _ANIM_TRAVEL: = "take_damage"
 
 
 func _enter(context: Node) -> void:
