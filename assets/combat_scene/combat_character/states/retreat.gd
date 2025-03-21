@@ -1,4 +1,4 @@
-extends CombatCharacterBaseState
+extends CombatCharacterState
 
 
 func _update(context: Node, delta: float) -> void:

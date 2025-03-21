@@ -1,12 +1,9 @@
-extends FSMState
-
-
-const _ANIM_TRAVEL: = "take_damage"
+extends CombatCharacterState
 
 
 func _enter(context: Node) -> void:
+	super._enter(context)
 	var character = context as CombatCharacter
-	character.playback.travel(_ANIM_TRAVEL)
 	character.animation_tree.animation_finished.connect(_on_animation_finished)
 
 

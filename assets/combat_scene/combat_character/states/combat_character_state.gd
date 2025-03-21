@@ -1,5 +1,5 @@
 extends FSMState
-class_name CombatCharacterBaseState
+class_name CombatCharacterState
 
 var _travel_anim: String
 

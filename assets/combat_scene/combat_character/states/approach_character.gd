@@ -1,18 +1,14 @@
-extends CombatCharacterBaseState
+extends CombatCharacterState
 
 
-const _ANIM_TRAVEL = "run"
 var _target: CombatCharacter
-
-
-func _init(target: CombatCharacter) -> void:
-	_target = target
 
 	
 func _enter(context: Node) -> void:
+	super._enter(context)
 	var c: CombatCharacter = context
-	c.playback.travel(_ANIM_TRAVEL)
 	c.character_detected.connect(_on_character_detected)
+	_target = c.target
 
 
 func _update(context: Node, delta: float) -> void:

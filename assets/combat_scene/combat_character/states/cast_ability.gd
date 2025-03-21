@@ -1,16 +1,16 @@
-extends CombatCharacterBaseState
+extends CombatCharacterState
 
 
-var _target: CombatCharacter
 var _ability: CombatAbility
-
-func _init(target: CombatCharacter) -> void:
-	_target = target
+var _target: CombatCharacter
 
 
 func _enter(context: Node) -> void:
+	super._enter(context)
 	var caster: CombatCharacter = context
 	_ability = caster.selected_ability
+	_target = caster.target
+	caster.target = null
 	caster.playback.travel(caster.selected_ability.animation_travel)
 	caster.animation_tree.animation_track_triggered.connect(_on_animation_track_triggered)
 	caster.animation_tree.animation_finished.connect(_on_animation_finished)
