@@ -70,6 +70,10 @@ func take_damage(value: float) -> void:
 	_fsm.take_damage()
 
 
+func is_dead() -> bool:
+	return health == 0.
+
+
 func _ready() -> void:
 	_health_bar.max_value = max_health
 	_health_bar.value = health

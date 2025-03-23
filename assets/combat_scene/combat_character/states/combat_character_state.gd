@@ -1,13 +1,20 @@
 extends FSMState
 class_name CombatCharacterState
 
-var _travel_anim: String
+
+const _ANIMATION_TREE_PARAM_PATH = "parameters/conditions/state_%s"
+
+var name: String
 
 
-func _init(travel_anim: String = "") -> void:
-	_travel_anim = travel_anim
+func _init(state_name: String) -> void:
+	name = state_name
 
 
 func _enter(context: Node) -> void:
-	if not _travel_anim.is_empty():
-		(context as CombatCharacter).playback.travel(_travel_anim)
+	(context as CombatCharacter).animation_tree.set(_ANIMATION_TREE_PARAM_PATH % name, true)
+
+
+
+func _exit(context: Node) -> void:
+	(context as CombatCharacter).animation_tree.set(_ANIMATION_TREE_PARAM_PATH % name, false)

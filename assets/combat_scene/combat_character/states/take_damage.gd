@@ -8,8 +8,9 @@ func _enter(context: Node) -> void:
 
 
 func _exit(context: Node) -> void:
+	super._exit(context)
 	(context as CombatCharacter).animation_tree.animation_finished.disconnect(_on_animation_finished)
 
 
 func _on_animation_finished(_anim_name: StringName) -> void:
-	_emit_finished()
+	finished.emit()
