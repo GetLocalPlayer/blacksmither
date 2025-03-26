@@ -39,6 +39,9 @@ func _context_ready() -> void:
 		var s: CombatCharacterState = _states[k]
 		if s.has_signal("finished"):
 			s.finished.connect(_on_state_finished)
+	var character: CombatCharacter = _get_context() as CombatCharacter
+	_states.cast_ability.finished.connect(character.ability_cast.emit)
+	_states.retreat.finished.connect(character.retreated.emit)
 
 func _on_state_finished() -> void:
 	_set_state(_get_initial_state() if _queue.is_empty() else _queue.pop_front())

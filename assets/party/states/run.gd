@@ -1,9 +1,6 @@
 extends FSMState
 
 
-signal finished(context: Node)
-
-
 var _actions = {
 	left = "MoveLeft",
 	right = "MoveRight",

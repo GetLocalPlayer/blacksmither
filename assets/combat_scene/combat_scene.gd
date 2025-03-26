@@ -6,11 +6,20 @@ const PLAYER_GROUP = "player"
 const ENEMY_GROUP = "enemies"
 @onready var _characters: Array[CombatCharacter] = Array($Characters.get_children(), TYPE_OBJECT, "Node3D", CombatCharacter)
 @onready var _ability_bar: CombatAbilityBar = $AbilityBar
+# A node to catch clicks on void which means
+# clear selected ability on ability bar.
 @onready var _void_clicker: Area3D = $VoidClicker
+@onready var _camera: Camera3D = $Camera3D
+# Is set once when the node is ready to
+# reset the camera's transform and fov
+# after its changes on ability cast.
+var _init_camera_settings: Dictionary = {}
+
+# The targets that are allowed to be 
+# hovered and clicked on on ability
+# targeting.
 var _allowed_targets: Array[CombatCharacter] = []
-
-
-
+# The queue of characters to act
 var _character_queue: Array[CombatCharacter] = []
 
 
@@ -21,16 +30,39 @@ func _init_for_testing() -> void:
 func _ready() -> void:
 	_init_for_testing()
 	_void_clicker.input_event.connect(_on_void_clicker_input_event)
-	# Setting action queue for slots
-	
+
 	for c in _characters:
 		c.hovered.connect(_on_character_hovered)
 		c.unhovered.connect(_on_character_unhovered)
 		c.clicked.connect(_on_character_clicked)
 	_ability_bar.button_pressed.connect(_on_ability_button_pressed)
+	_camera.set_view_on_characters(_characters)
+	_init_camera_settings.fov = _camera.fov
+	_init_camera_settings.global_transform = _camera.global_transform
+	for c in _characters:
+		c.ability_cast.connect(_on_ability_cast)
+		c.retreated.connect(_on_character_retreated)
 	_run_next_turn()
 
 
+
+# For now only updating the camera's position
+# and fov.
+func _process(delta: float) -> void:
+	var caster: CombatCharacter = _character_queue[0]
+	if caster.selected_ability and caster.target:
+		var between_point: float = lerp(caster.global_position.x, caster.target.global_position.x, 0.5)
+		_camera.global_position.x = lerp(_camera.global_position.x, between_point, 5 * delta)
+		var t: Transform3D = _camera.global_transform
+		_camera.set_view_on_characters([caster, caster.target] as Array[CombatCharacter])
+		_camera.global_transform = t.interpolate_with(_camera.global_transform, 5 * delta)
+		_camera.fov = lerp(_init_camera_settings.fov, _camera.fov, 5 * delta)
+	else:
+		_camera.global_transform = _camera.global_transform.interpolate_with(_init_camera_settings.global_transform, 5 * delta)
+		_camera.fov = lerp(_camera.fov, _init_camera_settings.fov, 5 * delta)
+
+
+# Choose next character to act in the queue
 func _run_next_turn() -> void:
 	var c: CombatCharacter = _character_queue[0]
 	c.selected = true
@@ -41,6 +73,9 @@ func _run_next_turn() -> void:
 		pass
 
 
+# When an ability is pressed, fills _allowed_targets
+# array with characters that can be victims of that
+# ability.
 func _on_ability_button_pressed(button: AbilityButton) -> void:
 	if not button.button_pressed:
 		_character_queue[0].selected_ability = null
@@ -71,15 +106,18 @@ func _on_character_unhovered(c: CombatCharacter) -> void:
 func _on_character_clicked(character: CombatCharacter) -> void:
 	if not _ability_bar.pressed_button:
 		return
-	#var abi: CombatAbility = _ability_bar.pressed_button.ability
-	#abi.apply(_character_queue[0], character)
+	if not character in _allowed_targets:
+		return
 	prints("Cast spell", _ability_bar.pressed_button.ability, "on", character)
-	_character_queue[0].target = character
-	_character_queue[0].cast_ability()
+	var caster: CombatCharacter = _character_queue[0]
+	caster.target = character
+	_camera.focus_view_on_characters([caster, caster.target] as Array[CombatCharacter])
+	caster.cast_ability()
 	_ability_bar.pressed_button.button_pressed = false
+	_ability_bar.hide()
 
 
-
+# Clearing selection from ability bar if empty space is clicked.
 func _on_void_clicker_input_event(_c: Node, e: InputEvent, _ep: Vector3, _n: Vector3, _si: int) -> void:
 	if not _ability_bar.pressed_button:
 		return
@@ -87,3 +125,26 @@ func _on_void_clicker_input_event(_c: Node, e: InputEvent, _ep: Vector3, _n: Vec
 	if me and me.pressed and (me.button_index == MOUSE_BUTTON_LEFT or me.button_index == MOUSE_BUTTON_MASK_RIGHT):
 		_ability_bar.pressed_button.button_pressed = false
 		_character_queue[0].selected_ability = null
+
+
+# When character used ability and finished
+# cast_ability state
+func _on_ability_cast() -> void:
+	pass
+
+
+# When character returned to its retreat
+# position
+func _on_character_retreated() -> void:
+	_ability_bar.show()
+	var caster: CombatCharacter = _character_queue.pop_front()
+	_character_queue.append(caster)
+	caster.selected_ability = null
+	caster.target = null
+	caster.selected = false
+	_camera.clear_focus()
+	var t: Tween = _camera.create_tween()
+	t.tween_property(_camera, "fov", _init_camera_settings.fov, 0.5)
+	t.parallel().tween_property(_camera, "global_transform", _init_camera_settings.global_transform, 0.5)
+	await t.finished
+	_run_next_turn()

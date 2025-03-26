@@ -1,10 +1,11 @@
-[gd_scene load_steps=17 format=3 uid="uid://bmqgmxpe262tv"]
+[gd_scene load_steps=18 format=3 uid="uid://bmqgmxpe262tv"]
 
 [ext_resource type="Script" path="res://assets/combat_scene/combat_scene.gd" id="1_owgya"]
 [ext_resource type="Script" path="res://assets/combat_scene/combat_ability_bar.gd" id="2_6bf75"]
 [ext_resource type="Texture2D" uid="uid://6q2vbj0tgeey" path="res://textures/uvgrid.png" id="2_ed0o1"]
 [ext_resource type="ButtonGroup" uid="uid://iisami01t8uo" path="res://assets/combat_scene/ability_bar_button_group.tres" id="3_5uq1d"]
 [ext_resource type="Texture2D" uid="uid://lk25wlfgu6y2" path="res://icon.svg" id="3_7ucak"]
+[ext_resource type="Script" path="res://assets/combat_scene/camera_3d.gd" id="3_g587y"]
 [ext_resource type="Texture2D" uid="uid://b5fld1moc8ny6" path="res://textures/spell_frame.png" id="4_xdvca"]
 [ext_resource type="Texture2D" uid="uid://dmhygh0tquv3x" path="res://textures/spell_frame_selected.png" id="5_0m8kr"]
 [ext_resource type="Script" path="res://assets/combat_scene/ability_button.gd" id="6_41vqm"]
@@ -55,7 +56,9 @@ environment = SubResource("Environment_dfx71")
 [node name="Camera3D" type="Camera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0.991965, 0.126511, 0, -0.126511, 0.991965, 0, 1.81842, 9.27444)
 current = true
-fov = 38.0
+fov = 21.7
+size = 0.34
+script = ExtResource("3_g587y")
 
 [node name="AbilityBar" type="HBoxContainer" parent="."]
 anchors_preset = 12

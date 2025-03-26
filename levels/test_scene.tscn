@@ -26,9 +26,6 @@ albedo_texture = ExtResource("2_vr72n")
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_rcq3h")
 
-[node name="Party" parent="." instance=ExtResource("1_uoyaq")]
-speed = 4.0
-
 [node name="Camera3D" type="Camera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0.840567, 0.541708, 0, -0.541708, 0.840567, 0.046, 4.584, 4.802)
 
@@ -39,3 +36,6 @@ light_energy = 2.131
 [node name="Floor" type="MeshInstance3D" parent="."]
 mesh = SubResource("PlaneMesh_e8sij")
 surface_material_override/0 = SubResource("StandardMaterial3D_x5ayk")
+
+[node name="Party" parent="." instance=ExtResource("1_uoyaq")]
+speed = 5.0

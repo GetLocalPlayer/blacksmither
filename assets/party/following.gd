@@ -17,8 +17,8 @@ var _moving_slots: Array[PathFollow3D] = []
 
 func _ready() -> void:
 	top_level = true
+	global_position = _body.global_position
 	curve = Curve3D.new()
-	#curve.bake_interval = 999999 # it must be the max of int, but there's no such constant in godot api yet
 	var head: Vector3 = _body.global_position
 	curve.add_point(head)
 	var tail: Vector3 = _body.global_position + (_body.global_basis.z * (_start_distance * get_child_count())) 

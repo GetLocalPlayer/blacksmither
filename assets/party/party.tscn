@@ -1,10 +1,11 @@
-[gd_scene load_steps=17 format=3 uid="uid://c7gnt27t08y2"]
+[gd_scene load_steps=18 format=3 uid="uid://c7gnt27t08y2"]
 
 [ext_resource type="Script" path="res://assets/party/party.gd" id="1_0aq8s"]
 [ext_resource type="Script" path="res://assets/party/fsm_party.gd" id="1_6iqdg"]
 [ext_resource type="Script" path="res://assets/party/following.gd" id="2_itsy3"]
 [ext_resource type="PackedScene" uid="uid://b6f7wde0eg2p3" path="res://models/characters/emma/emma.tscn" id="4_gryrc"]
 [ext_resource type="Script" path="res://assets/party/party_slot.gd" id="4_kai0v"]
+[ext_resource type="Script" path="res://assets/party/camera_3d.gd" id="6_y8g7l"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_0rs1c"]
 radius = 0.35
@@ -195,3 +196,11 @@ surface_material_override/0 = SubResource("ORMMaterial3D_0sptl")
 transform = Transform3D(0.436528, 0, 0, 0, -1.27471e-08, -0.436528, 0, 0.29162, -1.90812e-08, 0, 0.123446, 0.405885)
 mesh = SubResource("CylinderMesh_dlgu4")
 surface_material_override/0 = SubResource("ORMMaterial3D_74i00")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, -8.94455e-08, 8.94455e-08, 0, 0.707107, 0.707107, -1.26495e-07, -0.707107, 0.707107, 5.36673e-07, 4.24264, 4.24264)
+top_level = true
+current = true
+script = ExtResource("6_y8g7l")
+_follow_offset_ratio = 5.0
+_distance = 6.0

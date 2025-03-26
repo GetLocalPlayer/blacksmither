@@ -7,6 +7,10 @@ signal hovered(character: CombatCharacter)
 signal unhovered(character: CombatCharacter)
 signal character_detected(character: CombatCharacter)
 
+signal ability_cast()
+signal retreated()
+
+
 @onready var animation_tree: AnimationTree = $AnimationTree
 @onready var playback: AnimationNodeStateMachinePlayback = animation_tree.get("parameters/playback")
 
