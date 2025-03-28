@@ -9,5 +9,5 @@ func _update(context: Node, delta: float) -> void:
 		c.global_position = c.retreat_position
 		finished.emit()
 	else:
-		c.global_position += dir * offset
 		c.global_transform = c.global_transform.looking_at(c.retreat_position, Vector3.UP, true)
+		c.global_position += dir * offset

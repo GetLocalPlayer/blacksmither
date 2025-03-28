@@ -36,7 +36,7 @@ func _ready() -> void:
 		c.unhovered.connect(_on_character_unhovered)
 		c.clicked.connect(_on_character_clicked)
 	_ability_bar.button_pressed.connect(_on_ability_button_pressed)
-	_camera.set_view_on_characters(_characters)
+	_camera.set_view_on_characters(_characters, true)
 	_init_camera_settings.fov = _camera.fov
 	_init_camera_settings.global_transform = _camera.global_transform
 	for c in _characters:
@@ -46,26 +46,11 @@ func _ready() -> void:
 
 
 
-# For now only updating the camera's position
-# and fov.
-func _process(delta: float) -> void:
-	var caster: CombatCharacter = _character_queue[0]
-	if caster.selected_ability and caster.target:
-		var between_point: float = lerp(caster.global_position.x, caster.target.global_position.x, 0.5)
-		_camera.global_position.x = lerp(_camera.global_position.x, between_point, 5 * delta)
-		var t: Transform3D = _camera.global_transform
-		_camera.set_view_on_characters([caster, caster.target] as Array[CombatCharacter])
-		_camera.global_transform = t.interpolate_with(_camera.global_transform, 5 * delta)
-		_camera.fov = lerp(_init_camera_settings.fov, _camera.fov, 5 * delta)
-	else:
-		_camera.global_transform = _camera.global_transform.interpolate_with(_init_camera_settings.global_transform, 5 * delta)
-		_camera.fov = lerp(_camera.fov, _init_camera_settings.fov, 5 * delta)
-
-
 # Choose next character to act in the queue
 func _run_next_turn() -> void:
 	var c: CombatCharacter = _character_queue[0]
 	c.selected = true
+	_camera.accent_on = c
 	if c.is_in_group(PLAYER_GROUP):
 		_ability_bar.set_abilities(c.get_abilities())
 	if c.is_in_group(BOT_GROUP):
@@ -109,12 +94,14 @@ func _on_character_clicked(character: CombatCharacter) -> void:
 	if not character in _allowed_targets:
 		return
 	prints("Cast spell", _ability_bar.pressed_button.ability, "on", character)
-	var caster: CombatCharacter = _character_queue[0]
-	caster.target = character
-	_camera.focus_view_on_characters([caster, caster.target] as Array[CombatCharacter])
-	caster.cast_ability()
 	_ability_bar.pressed_button.button_pressed = false
 	_ability_bar.hide()
+	var caster: CombatCharacter = _character_queue[0]
+	caster.target = character
+	_camera.accent_on = null
+	_camera.focus_view_on_characters([caster, caster.target] as Array[CombatCharacter])
+	caster.cast_ability()
+
 
 
 # Clearing selection from ability bar if empty space is clicked.
@@ -143,8 +130,5 @@ func _on_character_retreated() -> void:
 	caster.target = null
 	caster.selected = false
 	_camera.clear_focus()
-	var t: Tween = _camera.create_tween()
-	t.tween_property(_camera, "fov", _init_camera_settings.fov, 0.5)
-	t.parallel().tween_property(_camera, "global_transform", _init_camera_settings.global_transform, 0.5)
-	await t.finished
+	_camera.set_view(_init_camera_settings.fov, _init_camera_settings.global_transform)
 	_run_next_turn()

@@ -338,7 +338,7 @@ corner_radius_bottom_left = 8
 
 [node name="CombatCharacter" type="Node3D"]
 script = ExtResource("1_uyb1w")
-move_speed = 4.0
+move_speed = 8.0
 
 [node name="CharacterDetector" type="Area3D" parent="."]
 input_ray_pickable = false

@@ -1,17 +1,31 @@
 extends Camera3D
 
 
+@export var _lerp_rate: float = 0.5
+@export var _accent_factor: float = 0.2
 var _focused_characters: Array[CombatCharacter] = []
+@onready var _targeted_fov: float = fov
+@onready var _targeted_transform: Transform3D = global_transform
+var accent_on: CombatCharacter = null
 
 
-func set_view_on_characters(characters: Array[CombatCharacter]) -> void:
+func set_view_on_characters(characters: Array[CombatCharacter], instantly: bool = false) -> void:
 	assert(not characters.is_empty(), "Passed array can't be empty")
 	var bounds: AABB = _get_node_aabb(characters[0], false)
 	for i: int in range(1, characters.size()):
 		bounds = bounds.merge(_get_node_aabb(characters[i], false))
 	_fov_to_aabb(bounds)
-	global_position.x = bounds.get_center().x
-	global_transform = global_transform.looking_at(bounds.get_center())
+	_targeted_transform = global_transform
+	_targeted_transform.origin.x = bounds.get_center().x
+	_targeted_transform = _targeted_transform.looking_at(bounds.get_center())
+	if instantly:
+		fov = _targeted_fov
+		global_transform = _targeted_transform
+
+
+func set_view(_fov: float, _transform: Transform3D) -> void:
+	_targeted_fov = _fov
+	_targeted_transform = _transform
 
 
 func focus_view_on_characters(characters: Array[CombatCharacter]) -> void:
@@ -22,9 +36,17 @@ func clear_focus() -> void:
 	_focused_characters.clear()
 
 
-func _process(_delta: float) -> void:
+func _process(delta: float) -> void:
 	if not _focused_characters.is_empty():
 		_update_focused_view()
+	var weight: float = delta * _lerp_rate
+	if weight > 1: weight = 1
+	fov = lerp(fov, _targeted_fov, weight)
+	global_transform = global_transform.interpolate_with(_targeted_transform, weight)
+	if accent_on:
+		var accented_transform: Transform3D = global_transform.looking_at(_get_node_aabb(accent_on, false).get_center())
+		global_transform = global_transform.interpolate_with(accented_transform, _accent_factor)
+	
 
 
 func _update_focused_view() -> void:
@@ -32,12 +54,11 @@ func _update_focused_view() -> void:
 
 
 func _fov_to_aabb(bounds: AABB) -> void:
-	var d: float = bounds.position.distance_to(bounds.end)
-	var p1: Vector3 = bounds.get_center() + global_basis.x * d * 0.5
-	var p2: Vector3 = p1 - global_basis.x * d 
+	var p1: Vector3 = bounds.get_center() - global_basis.x * bounds.size.x * 0.5
+	var p2: Vector3 = p1 - global_basis.x * bounds.size.x 
 	var dir1: Vector3 = p1 - global_position
 	var dir2: Vector3 = p2 - global_position
-	fov = rad_to_deg(dir1.angle_to(dir2))
+	_targeted_fov = rad_to_deg(dir1.angle_to(dir2))
 	
 
 func _get_node_aabb(node: Node, exclude_top_level_transform: bool = true) -> AABB:
