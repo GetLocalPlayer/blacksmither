@@ -76,8 +76,6 @@ script = ExtResource("4_kai0v")
 _rotation_speed = 6.28319
 
 [node name="SomeCharacter" type="Node3D" parent="Following/Slot2"]
-transform = Transform3D(0.9, 0, 0, 0, 0.9, 0, 0, 0, 0.9, 0, 0, 0)
-top_level = true
 
 [node name="Model" type="MeshInstance3D" parent="Following/Slot2/SomeCharacter"]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0.8, 0)

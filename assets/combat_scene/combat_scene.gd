@@ -1,10 +1,15 @@
 extends Node3D
 
 
+@export var _active_character_scale: float = 1.1
+@export var _hovered_character_scale: float = 1.1
+
 const BOT_GROUP = "bot"
 const PLAYER_GROUP = "player"
 const ENEMY_GROUP = "enemies"
 @onready var _characters: Array[CombatCharacter] = Array($Characters.get_children(), TYPE_OBJECT, "Node3D", CombatCharacter)
+@onready var _player_characters: Array[CombatCharacter] = _characters.filter(func(c: CombatCharacter) -> bool: return c.is_in_group(PLAYER_GROUP))
+@onready var _bot_characters: Array[CombatCharacter] = _characters.filter(func(c: CombatCharacter) -> bool: return c.is_in_group(BOT_GROUP))
 @onready var _ability_bar: CombatAbilityBar = $AbilityBar
 # A node to catch clicks on void which means
 # clear selected ability on ability bar.
@@ -36,7 +41,6 @@ func _ready() -> void:
 		c.unhovered.connect(_on_character_unhovered)
 		c.clicked.connect(_on_character_clicked)
 	_ability_bar.button_pressed.connect(_on_ability_button_pressed)
-	_camera.set_view_on_characters(_characters, true)
 	_init_camera_settings.fov = _camera.fov
 	_init_camera_settings.global_transform = _camera.global_transform
 	for c in _characters:
@@ -50,7 +54,9 @@ func _ready() -> void:
 func _run_next_turn() -> void:
 	var c: CombatCharacter = _character_queue[0]
 	c.selected = true
-	_camera.accent_on = c
+	c.global_scale(Vector3.ONE * _active_character_scale)
+	_camera.set_view_on_characters(_player_characters if c.is_in_group(PLAYER_GROUP) else _bot_characters)
+	#_camera.accent_on = c
 	if c.is_in_group(PLAYER_GROUP):
 		_ability_bar.set_abilities(c.get_abilities())
 	if c.is_in_group(BOT_GROUP):
@@ -64,6 +70,7 @@ func _run_next_turn() -> void:
 func _on_ability_button_pressed(button: AbilityButton) -> void:
 	if not button.button_pressed:
 		_character_queue[0].selected_ability = null
+		_camera.set_view_on_characters(_player_characters if _character_queue[0].is_in_group(PLAYER_GROUP) else _bot_characters)
 		return
 	_allowed_targets.clear()
 	for c in _characters:
@@ -76,15 +83,23 @@ func _on_ability_button_pressed(button: AbilityButton) -> void:
 			filter |= CombatAbility.AllowedTargets.SELF
 		if filter & button.ability.allowed_targets:
 			_allowed_targets.append(c)
+	#_camera.accent_on = null
+	_camera.set_view_on_characters(_allowed_targets)
 	_character_queue[0].selected_ability = button.ability
 
 
 func _on_character_hovered(c: CombatCharacter) -> void:
-	c.target_marks.primary.visible = c in _allowed_targets
+	if not c in _allowed_targets:
+		return
+	c.target_marks.primary.show()
+	c.global_scale(Vector3.ONE * _hovered_character_scale)
+	#_camera.accent_on = c
 	
 
 func _on_character_unhovered(c: CombatCharacter) -> void:
 	c.target_marks.primary.hide()
+	if c in _allowed_targets:
+		c.global_scale(Vector3.ONE / _hovered_character_scale)
 	prints("UNhovered:", c)
 
 
@@ -93,13 +108,16 @@ func _on_character_clicked(character: CombatCharacter) -> void:
 		return
 	if not character in _allowed_targets:
 		return
+	_allowed_targets.clear()
 	prints("Cast spell", _ability_bar.pressed_button.ability, "on", character)
 	_ability_bar.pressed_button.button_pressed = false
 	_ability_bar.hide()
 	var caster: CombatCharacter = _character_queue[0]
 	caster.target = character
-	_camera.accent_on = null
+	#_camera.accent_on = null
 	_camera.focus_view_on_characters([caster, caster.target] as Array[CombatCharacter])
+	caster.global_scale(Vector3.ONE / _active_character_scale)
+	caster.target.global_scale(Vector3.ONE / _hovered_character_scale)
 	caster.cast_ability()
 
 
@@ -109,9 +127,13 @@ func _on_void_clicker_input_event(_c: Node, e: InputEvent, _ep: Vector3, _n: Vec
 	if not _ability_bar.pressed_button:
 		return
 	var me: InputEventMouseButton = e as InputEventMouseButton
-	if me and me.pressed and (me.button_index == MOUSE_BUTTON_LEFT or me.button_index == MOUSE_BUTTON_MASK_RIGHT):
+	if me and me.pressed and (me.button_index == MOUSE_BUTTON_LEFT or me.button_index == MOUSE_BUTTON_RIGHT):
 		_ability_bar.pressed_button.button_pressed = false
 		_character_queue[0].selected_ability = null
+		_camera.set_view_on_characters(_player_characters if _character_queue[0].is_in_group(PLAYER_GROUP) else _bot_characters)
+		#_camera.accent_on = _character_queue[0]
+
+
 
 
 # When character used ability and finished
@@ -130,5 +152,4 @@ func _on_character_retreated() -> void:
 	caster.target = null
 	caster.selected = false
 	_camera.clear_focus()
-	_camera.set_view(_init_camera_settings.fov, _init_camera_settings.global_transform)
 	_run_next_turn()

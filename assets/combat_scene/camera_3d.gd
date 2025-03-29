@@ -1,7 +1,7 @@
 extends Camera3D
 
 
-@export var _lerp_rate: float = 0.5
+@export var _lerp_rate: float = 0.75
 @export var _accent_factor: float = 0.2
 var _focused_characters: Array[CombatCharacter] = []
 @onready var _targeted_fov: float = fov
@@ -16,7 +16,7 @@ func set_view_on_characters(characters: Array[CombatCharacter], instantly: bool 
 		bounds = bounds.merge(_get_node_aabb(characters[i], false))
 	_fov_to_aabb(bounds)
 	_targeted_transform = global_transform
-	_targeted_transform.origin.x = bounds.get_center().x
+	#_targeted_transform.origin.x = bounds.get_center().x
 	_targeted_transform = _targeted_transform.looking_at(bounds.get_center())
 	if instantly:
 		fov = _targeted_fov
@@ -38,7 +38,7 @@ func clear_focus() -> void:
 
 func _process(delta: float) -> void:
 	if not _focused_characters.is_empty():
-		_update_focused_view()
+		set_view_on_characters(_focused_characters)
 	var weight: float = delta * _lerp_rate
 	if weight > 1: weight = 1
 	fov = lerp(fov, _targeted_fov, weight)
@@ -47,10 +47,6 @@ func _process(delta: float) -> void:
 		var accented_transform: Transform3D = global_transform.looking_at(_get_node_aabb(accent_on, false).get_center())
 		global_transform = global_transform.interpolate_with(accented_transform, _accent_factor)
 	
-
-
-func _update_focused_view() -> void:
-	set_view_on_characters(_focused_characters)
 
 
 func _fov_to_aabb(bounds: AABB) -> void:

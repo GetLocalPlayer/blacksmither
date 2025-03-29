@@ -13,7 +13,7 @@
 [ext_resource type="Texture2D" uid="uid://b1vo7l5w6p05i" path="res://textures/spell_frame_selected_pendant.png" id="8_qldo4"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_82ahl"]
-size = Vector3(10, 1, 6.245)
+size = Vector3(16.23, 1, 7.54)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_jfdhn"]
 albedo_texture = ExtResource("2_ed0o1")
@@ -22,12 +22,10 @@ uv1_offset = Vector3(0, 0, -0.095)
 uv1_triplanar = true
 uv1_world_triplanar = true
 
-[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_i62ak"]
-sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
-ground_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_360jg"]
 
 [sub_resource type="Sky" id="Sky_58j6e"]
-sky_material = SubResource("ProceduralSkyMaterial_i62ak")
+sky_material = SubResource("ProceduralSkyMaterial_360jg")
 
 [sub_resource type="Environment" id="Environment_dfx71"]
 background_mode = 2
@@ -39,7 +37,6 @@ size = Vector3(47.6211, 24.5176, 1)
 
 [node name="CombatScene" type="Node3D"]
 script = ExtResource("1_owgya")
-metadata/_edit_lock_ = true
 
 [node name="Floor" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
@@ -55,13 +52,13 @@ shadow_enabled = true
 environment = SubResource("Environment_dfx71")
 
 [node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.991965, 0.126511, 0, -0.126511, 0.991965, 0, 3.1226, 22.7962)
+transform = Transform3D(1, 0, 0, 0, 0.999691, -0.0248506, 0, 0.0248506, 0.999691, 0, 0.479172, 21.697)
 current = true
-fov = 13.8
+fov = 20.0
 size = 0.34
 script = ExtResource("3_g587y")
-_lerp_rate = 4.0
-_accent_factor = 0.05
+_lerp_rate = 10.0
+_accent_factor = 0.5
 
 [node name="AbilityBar" type="HBoxContainer" parent="."]
 anchors_preset = 12
@@ -149,25 +146,25 @@ metadata/_edit_lock_ = true
 metadata/_edit_lock_ = true
 
 [node name="Emma1" parent="Characters" groups=["player"] instance=ExtResource("7_y4oos")]
-transform = Transform3D(-0.34202, 0, -0.939693, 0, 1, 0, 0.939693, 0, -0.34202, -1.5, 0, -1.054)
+transform = Transform3D(-0.34202, 0, -0.939693, 0, 1, 0, 0.939693, 0, -0.34202, -2.5, 0, -1.054)
 
 [node name="Emma2" parent="Characters" groups=["player"] instance=ExtResource("7_y4oos")]
-transform = Transform3D(-0.34202, 0, -0.939693, 0, 1, 0, 0.939693, 0, -0.34202, -2.5, 0, -0.18)
+transform = Transform3D(-0.34202, 0, -0.939693, 0, 1, 0, 0.939693, 0, -0.34202, -3.5, 0, -0.18)
 
 [node name="Emma3" parent="Characters" groups=["player"] instance=ExtResource("7_y4oos")]
-transform = Transform3D(-0.34202, 0, -0.939693, 0, 1, 0, 0.939693, 0, -0.34202, -3.5, 0, 0.797)
+transform = Transform3D(-0.34202, 0, -0.939693, 0, 1, 0, 0.939693, 0, -0.34202, -4.5, 0, 0.797)
 
 [node name="Emma4" parent="Characters" groups=["player"] instance=ExtResource("7_y4oos")]
-transform = Transform3D(-0.34202, 0, -0.939693, 0, 1, 0, 0.939693, 0, -0.34202, -4.5, 0, 1.671)
+transform = Transform3D(-0.34202, 0, -0.939693, 0, 1, 0, 0.939693, 0, -0.34202, -5.5, 0, 1.671)
 
 [node name="Emma5" parent="Characters" groups=["bot", "enemies"] instance=ExtResource("7_y4oos")]
-transform = Transform3D(-0.34202, 0, 0.939692, 0, 1, 0, -0.939692, 0, -0.34202, 1.5, 0, -1.054)
+transform = Transform3D(-0.34202, 0, 0.939692, 0, 1, 0, -0.939692, 0, -0.34202, 2.5, 0, -1.054)
 
 [node name="Emma6" parent="Characters" groups=["bot", "enemies"] instance=ExtResource("7_y4oos")]
-transform = Transform3D(-0.34202, 0, 0.939692, 0, 1, 0, -0.939692, 0, -0.34202, 2.5, 0, -0.18)
+transform = Transform3D(-0.34202, 0, 0.939692, 0, 1, 0, -0.939692, 0, -0.34202, 3.5, 0, -0.18)
 
 [node name="Emma7" parent="Characters" groups=["bot", "enemies"] instance=ExtResource("7_y4oos")]
-transform = Transform3D(-0.34202, 0, 0.939692, 0, 1, 0, -0.939692, 0, -0.34202, 3.5, 0, 0.797)
+transform = Transform3D(-0.34202, 0, 0.939692, 0, 1, 0, -0.939692, 0, -0.34202, 4.5, 0, 0.797)
 
 [node name="Emma8" parent="Characters" groups=["bot", "enemies"] instance=ExtResource("7_y4oos")]
-transform = Transform3D(-0.34202, 0, 0.939692, 0, 1, 0, -0.939692, 0, -0.34202, 4.5, 0, 1.671)
+transform = Transform3D(-0.34202, 0, 0.939692, 0, 1, 0, -0.939692, 0, -0.34202, 5.5, 0, 1.671)

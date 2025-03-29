@@ -38,4 +38,10 @@ mesh = SubResource("PlaneMesh_e8sij")
 surface_material_override/0 = SubResource("StandardMaterial3D_x5ayk")
 
 [node name="Party" parent="." instance=ExtResource("1_uoyaq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.76119, 0.432091, -0.685264)
 speed = 5.0
+
+[node name="Camera3D" parent="Party" index="3"]
+transform = Transform3D(1, -8.94455e-08, 8.94455e-08, 0, 0.707107, 0.707107, -1.26495e-07, -0.707107, 0.707107, 6.76119, 4.67473, 3.55738)
+
+[editable path="Party"]
