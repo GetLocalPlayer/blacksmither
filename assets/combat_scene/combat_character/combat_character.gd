@@ -14,7 +14,6 @@ signal retreated()
 @onready var animation_tree: AnimationTree = $AnimationTree
 @onready var playback: AnimationNodeStateMachinePlayback = animation_tree.get("parameters/playback")
 
-@onready var _mode: Node3D = $Model
 @onready var _abilities: Array[CombatAbility] = Array($Abilities.get_children(), TYPE_OBJECT, "Node", CombatAbility)
 @onready var _health_bar: ProgressBar = $HealthBar
 @onready var _selected_mark: Control = $HealthBar/Selected
@@ -31,7 +30,6 @@ signal retreated()
 		if is_node_ready():
 			_health_bar.max_value = max_health
 
-
 @export var health: float = 100:
 	get:
 		return health
@@ -39,6 +37,8 @@ signal retreated()
 		health = value if value >= 0. else 0.
 		if is_node_ready():
 			_health_bar.value = health
+
+@export var attack_damage: int = 3
 
 
 @onready var target_marks: Dictionary = {
