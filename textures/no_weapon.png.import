@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://d1aiyafo1810t"
-path.s3tc="res://.godot/imported/icon_attack.png-0e3abcede2e74237efaa8b64178f69e2.s3tc.ctex"
+uid="uid://c5p6y1pjp65fm"
+path.s3tc="res://.godot/imported/no_weapon.png-4e02ada12701ed33885c3c567ad5f79a.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -11,8 +11,8 @@ metadata={
 
 [deps]
 
-source_file="res://textures/icon_attack.png"
-dest_files=["res://.godot/imported/icon_attack.png-0e3abcede2e74237efaa8b64178f69e2.s3tc.ctex"]
+source_file="res://textures/no_weapon.png"
+dest_files=["res://.godot/imported/no_weapon.png-4e02ada12701ed33885c3c567ad5f79a.s3tc.ctex"]
 
 [params]
 

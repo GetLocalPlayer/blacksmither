@@ -55,8 +55,7 @@ func _run_next_turn() -> void:
 	if c.is_in_group(PLAYER_GROUP):
 		_ability_bar.set_abilities(c.get_abilities())
 	if c.is_in_group(BOT_GROUP):
-		#start bot actions
-		pass
+		_ability_bar.set_abilities(c.get_abilities())
 
 
 # When an ability is pressed, fills _allowed_targets

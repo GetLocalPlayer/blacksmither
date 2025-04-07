@@ -3,7 +3,17 @@ extends Node
 class_name CombatAbility
 
 
-@export var icon: CompressedTexture2D = null
+@export var icon: CompressedTexture2D = null:
+	get = get_icon, set = set_icon
+
+
+func get_icon() -> CompressedTexture2D:
+	return icon
+
+func set_icon(new_icon: CompressedTexture2D) -> void:
+	icon = new_icon
+
+
 @export var title: String = "Empty Name"
 @export var description: String = "Empty Description"
 
@@ -12,20 +22,6 @@ enum EffectType {DAMAGE, HEAL}
 
 @export var requires_target: bool = true
 					
-
-@export var effect_type: EffectType = EffectType.DAMAGE:
-	get:
-		return effect_type
-	set(value):
-		effect_type = value
-		if Engine.is_editor_hint():
-			notify_property_list_changed()
-
-
-@export var effect_value: float = 20:
-	set(value):
-		effect_value = value if value >= 0. else 0.
-
 
 enum CastType {MELEE, RANGED}
 ## Defines if the character must approach the target
@@ -38,6 +34,7 @@ enum AllowedTargets {
 	ALIVE = 1 << 3,
 	DEAD = 1 << 4,
 }
+
 @export var allowed_targets: AllowedTargets = AllowedTargets.ENEMY | AllowedTargets.ALIVE
 
 
@@ -67,8 +64,5 @@ func is_target_valid(caster: CombatCharacter, target: CombatCharacter) -> bool:
 	return false
 
 
-func apply(target: CombatCharacter) -> void:
-	match effect_type:
-		EffectType.DAMAGE:
-			target.take_damage(effect_value)
-			print("damage ability")
+func apply(_target: CombatCharacter) -> void:
+	pass

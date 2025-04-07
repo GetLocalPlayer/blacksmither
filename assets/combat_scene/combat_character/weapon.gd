@@ -1,4 +1,5 @@
 extends Node
+class_name Weapon
 
 
 enum WeaponType {
@@ -78,15 +79,22 @@ var quality_name: Dictionary = {
 @export var type: WeaponType = WeaponType.SWORD
 @export var quality_type: QualityType = QualityType.NORMAL
 @export var material_type: MaterialType = MaterialType.IRON
-@export var max_durability: int = 0
-@export var durability = max_durability
+@export var max_durability: int = 10
+@export var durability: int:
+	set(value):
+		durability = value
+		if is_node_ready():
+			_attachment.visible = durability > 0
+
 @export_subgroup("Stats Given")
-@export var attack_damage: int = 0
+@export var attack_power: int = 0
 @export var ability_power: int = 0
 @export var health: int = 0
 @export var defense: int = 0
 @export var speed: int = 0
 @export var mana: int = 0
+
+@onready var _attachment: BoneAttachment3D = $Attachment
 
 
 func _ready() -> void:
@@ -97,30 +105,30 @@ func _init_stats() -> void:
 	max_durability = int((10 + 5 * (material_type + 1)) * (0.1 * quality_type))
 	match type:
 		WeaponType.DAGGER:
-			attack_damage = int((5 + 3 * (material_type + 1)) * (0.1 * quality_type))
+			attack_power = int((5 + 3 * (material_type + 1)) * (0.1 * quality_type))
 			speed = int((10 + 5 *(material_type + 1)) * (0.1 * quality_type))
 		WeaponType.SWORD:
-			attack_damage = int((10 + 8 * max(material_type, 1)) * (0.1 * quality_type))
+			attack_power = int((10 + 8 * max(material_type, 1)) * (0.1 * quality_type))
 			health = int((5 + 2 * max(material_type, 1)) * (0.1 * quality_type))
 		WeaponType.POLEARM:
-			attack_damage = int((15 + 15*max(material_type, 1)) * (0.1 * quality_type))
+			attack_power = int((15 + 15*max(material_type, 1)) * (0.1 * quality_type))
 			speed = int((2 + 2 * max( material_type - 1, 1)) * (0.1 * quality_type))
 			mana = int((2 + 2 * max(material_type - 1, 1)) * (0.1 * quality_type))
 		WeaponType.HAMMER:
-			attack_damage = int((5 + 4 * max(material_type, 1)) * (0.1 * quality_type))
+			attack_power = int((5 + 4 * max(material_type, 1)) * (0.1 * quality_type))
 			health = int((10 + 10 * max(material_type, 1)) * (0.1 * quality_type))
 			defense = int((6 + 6 * max(material_type, 1)) * (0.1 * quality_type))
 		WeaponType.BOW:
-			attack_damage = int((10 + 8 * max(material_type + 1, 1)) * (0.1 * quality_type))
+			attack_power = int((10 + 8 * max(material_type + 1, 1)) * (0.1 * quality_type))
 			speed = int((5 + 2 * max(material_type,1)) * (0.1 * quality_type))        
 		WeaponType.AXE:
-			attack_damage = int((15 + 5 * max(material_type + 1, 1)) * (0.1 * quality_type))
+			attack_power = int((15 + 5 * max(material_type + 1, 1)) * (0.1 * quality_type))
 			speed = int((5 + 3 * max(material_type - 1, 1)) * (0.1 * quality_type))
 		WeaponType.SCHYTHE:
-			attack_damage = int((10 + 10 * max(material_type + 1, 1)) * (0.1 * quality_type))
+			attack_power = int((10 + 10 * max(material_type + 1, 1)) * (0.1 * quality_type))
 			speed = int((10 + 5 * max(material_type - 1, 1)) * (0.1 * quality_type))
 			mana = int((5 + 3 * max(material_type - 1, 1)) * (0.1 * quality_type))
 		WeaponType.STAFF:
-			attack_damage = int((2 + 2 * max(material_type + 1, 1)) * (0.1 * quality_type))
+			attack_power = int((2 + 2 * max(material_type + 1, 1)) * (0.1 * quality_type))
 			ability_power = int((10 + 10 * max(material_type - 1, 1)) * (0.1 * quality_type))
 			mana = int((10 + 5 * max(material_type - 1, 1)) * (0.1 * quality_type))
