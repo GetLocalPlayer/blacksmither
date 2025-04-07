@@ -14,10 +14,7 @@ const PLAYER_GROUP = "player"
 # clear selected ability on ability bar.
 @onready var _void_clicker: Area3D = $VoidClicker
 @onready var _camera: Camera3D = $Camera3D
-# Is set once when the node is ready to
-# reset the camera's transform and fov
-# after its changes on ability cast.
-var _init_camera_settings: Dictionary = {}
+
 
 # The targets that are allowed to be 
 # hovered and clicked on on ability
@@ -40,8 +37,6 @@ func _ready() -> void:
 		c.unhovered.connect(_on_character_unhovered)
 		c.clicked.connect(_on_character_clicked)
 	_ability_bar.button_pressed.connect(_on_ability_button_pressed)
-	_init_camera_settings.fov = _camera.fov
-	_init_camera_settings.global_transform = _camera.global_transform
 	for c in _characters:
 		c.ability_cast.connect(_on_ability_cast)
 		c.retreated.connect(_on_character_retreated)

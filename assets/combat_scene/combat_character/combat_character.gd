@@ -84,7 +84,10 @@ func take_damage(value: float) -> void:
 
 
 func is_dead() -> bool:
-	return health == 0.
+	return health <= 0.
+
+func is_alive() -> bool:
+	return not is_dead()
 
 
 func _ready() -> void:

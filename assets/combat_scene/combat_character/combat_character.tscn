@@ -396,7 +396,7 @@ skeleton = NodePath("../..")
 [node name="Attack" type="Node" parent="Abilities"]
 script = ExtResource("7_lr64r")
 icon = ExtResource("4_j3ua5")
-effect_value = 30.0
+effect_value = 40.0
 
 [node name="HealthBar" type="ProgressBar" parent="."]
 offset_left = -50.0
