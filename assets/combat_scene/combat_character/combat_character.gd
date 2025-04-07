@@ -20,6 +20,8 @@ signal retreated()
 @onready var _mouse_detector: Area3D = $MouseDetector
 @onready var _character_detector: Area3D = $CharacterDetector
 
+@export var portrait: CompressedTexture2D = null
+@export var character_name: String = "Character Name"
 @export var move_speed: float = 2.
 
 @export var max_health: float = 100:
@@ -37,6 +39,9 @@ signal retreated()
 		health = value if value >= 0. else 0.
 		if is_node_ready():
 			_health_bar.value = health
+
+@export var max_mana: float = 100
+@export var mana = max_mana
 
 @export var attack_damage: int = 3
 ## Defines ally layers. Characters on the same

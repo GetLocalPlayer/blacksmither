@@ -1,8 +1,9 @@
-[gd_scene load_steps=65 format=3 uid="uid://0aiqln2jekco"]
+[gd_scene load_steps=66 format=3 uid="uid://0aiqln2jekco"]
 
 [ext_resource type="Script" path="res://assets/combat_scene/combat_character/combat_character.gd" id="1_uyb1w"]
 [ext_resource type="Script" path="res://assets/combat_scene/combat_character/animation_tree.gd" id="2_8pfwx"]
 [ext_resource type="Script" path="res://assets/combat_scene/combat_character/fsm.gd" id="2_26k2l"]
+[ext_resource type="Texture2D" uid="uid://yovfftc2ovhc" path="res://textures/portrait.png" id="2_f3dql"]
 [ext_resource type="PackedScene" uid="uid://b6f7wde0eg2p3" path="res://models/characters/emma/emma.tscn" id="2_n31pi"]
 [ext_resource type="Texture2D" uid="uid://d1aiyafo1810t" path="res://textures/icon_attack.png" id="4_j3ua5"]
 [ext_resource type="Script" path="res://assets/combat_scene/combat_character/weapon.gd" id="5_mkn6v"]
@@ -343,6 +344,7 @@ corner_radius_bottom_left = 8
 
 [node name="CombatCharacter" type="Node3D"]
 script = ExtResource("1_uyb1w")
+portrait = ExtResource("2_f3dql")
 move_speed = 10.0
 
 [node name="CharacterDetector" type="Area3D" parent="."]

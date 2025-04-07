@@ -9,8 +9,8 @@ const PLAYER_GROUP = "player"
 @onready var _characters: Array[CombatCharacter] = Array($Characters.get_children(), TYPE_OBJECT, "Node3D", CombatCharacter)
 @onready var _player_characters: Array[CombatCharacter] = _characters.filter(func(c: CombatCharacter) -> bool: return c.is_in_group(PLAYER_GROUP))
 @onready var _bot_characters: Array[CombatCharacter] = _characters.filter(func(c: CombatCharacter) -> bool: return c.is_in_group(BOT_GROUP))
-@onready var _ability_bar: CombatAbilityBar = $AbilityBar
-# A node to catch clicks on void which means
+@onready var _ability_bar: CombatAbilityBar = $UI/AbilityBar
+@onready var _character_info: CombatCharacterInfo = $UI/CharacterInfo
 # clear selected ability on ability bar.
 @onready var _void_clicker: Area3D = $VoidClicker
 @onready var _camera: Camera3D = $Camera3D
@@ -50,6 +50,7 @@ func _run_next_turn() -> void:
 	c.selected = true
 	c.global_scale(Vector3.ONE * _active_character_scale)
 	_camera.set_view_on_characters(_player_characters if c.is_in_group(PLAYER_GROUP) else _bot_characters)
+	_character_info.character = c
 	#_camera.accent_on = c
 	if c.is_in_group(PLAYER_GROUP):
 		_ability_bar.set_abilities(c.get_abilities())

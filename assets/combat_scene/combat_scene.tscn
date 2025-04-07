@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://bmqgmxpe262tv"]
+[gd_scene load_steps=26 format=3 uid="uid://bmqgmxpe262tv"]
 
 [ext_resource type="Script" path="res://assets/combat_scene/combat_scene.gd" id="1_owgya"]
 [ext_resource type="Script" path="res://assets/combat_scene/combat_ability_bar.gd" id="2_6bf75"]
@@ -11,6 +11,10 @@
 [ext_resource type="Script" path="res://assets/combat_scene/ability_button.gd" id="6_41vqm"]
 [ext_resource type="PackedScene" uid="uid://0aiqln2jekco" path="res://assets/combat_scene/combat_character/combat_character.tscn" id="7_y4oos"]
 [ext_resource type="Texture2D" uid="uid://b1vo7l5w6p05i" path="res://textures/spell_frame_selected_pendant.png" id="8_qldo4"]
+[ext_resource type="Texture2D" uid="uid://7uwwwjg4gd7j" path="res://textures/bar_fill_health.png" id="12_07km1"]
+[ext_resource type="Texture2D" uid="uid://dmw515qb6wc70" path="res://textures/emptybar.png.png" id="12_iquvy"]
+[ext_resource type="Script" path="res://assets/combat_scene/combat_character_info.gd" id="12_obbjy"]
+[ext_resource type="Texture2D" uid="uid://bu5atwp0m1oaq" path="res://textures/bar_fill_mana.png" id="14_oyp7s"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_82ahl"]
 size = Vector3(16.23, 1, 7.54)
@@ -34,6 +38,36 @@ tonemap_mode = 2
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_t77pn"]
 size = Vector3(47.6211, 24.5176, 1)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_iog24"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_k50ux"]
+texture = ExtResource("12_iquvy")
+texture_margin_left = 16.0
+texture_margin_top = 14.0
+texture_margin_right = 15.0
+texture_margin_bottom = 14.0
+axis_stretch_horizontal = 2
+region_rect = Rect2(0, 0, 149, 50)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_dohwc"]
+texture = ExtResource("12_07km1")
+texture_margin_left = 18.0
+texture_margin_top = 16.0
+texture_margin_right = 18.0
+texture_margin_bottom = 16.0
+axis_stretch_horizontal = 1
+region_rect = Rect2(0, 0, 150, 50)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_oc760"]
+texture = ExtResource("14_oyp7s")
+texture_margin_left = 18.0
+texture_margin_top = 16.0
+texture_margin_right = 18.0
+texture_margin_bottom = 16.0
+axis_stretch_horizontal = 1
+region_rect = Rect2(0, 0, 150, 50)
+modulate_color = Color(0.2, 0.709804, 0.87451, 1)
 
 [node name="CombatScene" type="Node3D"]
 script = ExtResource("1_owgya")
@@ -60,78 +94,6 @@ script = ExtResource("3_g587y")
 _lerp_rate = 10.0
 _accent_factor = 0.5
 
-[node name="AbilityBar" type="HBoxContainer" parent="."]
-anchors_preset = 12
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_top = -118.0
-offset_bottom = -54.0
-grow_horizontal = 2
-grow_vertical = 0
-theme_override_constants/separation = 12
-alignment = 1
-script = ExtResource("2_6bf75")
-
-[node name="BaseButton" type="TextureButton" parent="AbilityBar"]
-editor_description = "This buttons is duplicated and the duplicates are accepting abilities' icons."
-custom_minimum_size = Vector2(64, 64)
-layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 4
-toggle_mode = true
-action_mode = 0
-button_mask = 7
-keep_pressed_outside = true
-button_group = ExtResource("3_5uq1d")
-texture_normal = ExtResource("3_7ucak")
-ignore_texture_size = true
-stretch_mode = 0
-script = ExtResource("6_41vqm")
-
-[node name="BorderSelected" type="NinePatchRect" parent="AbilityBar/BaseButton"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("5_0m8kr")
-region_rect = Rect2(16, 16, 78, 78)
-patch_margin_left = 7
-patch_margin_top = 6
-patch_margin_right = 6
-patch_margin_bottom = 6
-
-[node name="Pendant" type="TextureRect" parent="AbilityBar/BaseButton/BorderSelected"]
-layout_mode = 1
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -45.5
-offset_top = -13.0
-offset_right = 47.5
-offset_bottom = 91.0
-grow_horizontal = 2
-texture = ExtResource("8_qldo4")
-expand_mode = 1
-stretch_mode = 4
-
-[node name="BorderNormal" type="NinePatchRect" parent="AbilityBar/BaseButton"]
-visible = false
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("4_xdvca")
-region_rect = Rect2(16, 16, 78, 78)
-patch_margin_left = 7
-patch_margin_top = 6
-patch_margin_right = 6
-patch_margin_bottom = 6
-
 [node name="VoidClicker" type="Area3D" parent="."]
 editor_description = "A shape to detect non-character clicks
 "
@@ -147,28 +109,256 @@ metadata/_edit_lock_ = true
 
 [node name="Emma1" parent="Characters" groups=["player"] instance=ExtResource("7_y4oos")]
 transform = Transform3D(-0.34202, 0, -0.939693, 0, 1, 0, 0.939693, 0, -0.34202, -2.5, 0, -1.054)
+character_name = "Player Emma 1"
 
 [node name="Emma2" parent="Characters" groups=["player"] instance=ExtResource("7_y4oos")]
 transform = Transform3D(-0.34202, 0, -0.939693, 0, 1, 0, 0.939693, 0, -0.34202, -3.5, 0, -0.18)
+character_name = "Player Emma 2"
 
 [node name="Emma3" parent="Characters" groups=["player"] instance=ExtResource("7_y4oos")]
 transform = Transform3D(-0.34202, 0, -0.939693, 0, 1, 0, 0.939693, 0, -0.34202, -4.5, 0, 0.797)
+character_name = "Player Emma 3"
 
 [node name="Emma4" parent="Characters" groups=["player"] instance=ExtResource("7_y4oos")]
 transform = Transform3D(-0.34202, 0, -0.939693, 0, 1, 0, 0.939693, 0, -0.34202, -5.5, 0, 1.671)
+character_name = "Player Emma 4"
 
 [node name="Emma5" parent="Characters" groups=["bot"] instance=ExtResource("7_y4oos")]
 transform = Transform3D(-0.34202, 0, 0.939692, 0, 1, 0, -0.939692, 0, -0.34202, 2.5, 0, -1.054)
+character_name = "Bot Emma 1"
 ally_layers = 2
 
 [node name="Emma6" parent="Characters" groups=["bot"] instance=ExtResource("7_y4oos")]
 transform = Transform3D(-0.34202, 0, 0.939692, 0, 1, 0, -0.939692, 0, -0.34202, 3.5, 0, -0.18)
+character_name = "Bot Emma 2"
 ally_layers = 2
 
 [node name="Emma7" parent="Characters" groups=["bot"] instance=ExtResource("7_y4oos")]
 transform = Transform3D(-0.34202, 0, 0.939692, 0, 1, 0, -0.939692, 0, -0.34202, 4.5, 0, 0.797)
+character_name = "Bot Emma 3"
 ally_layers = 2
 
 [node name="Emma8" parent="Characters" groups=["bot"] instance=ExtResource("7_y4oos")]
 transform = Transform3D(-0.34202, 0, 0.939692, 0, 1, 0, -0.939692, 0, -0.34202, 5.5, 0, 1.671)
+character_name = "Bot Emma 4"
 ally_layers = 2
+
+[node name="UI" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+metadata/_edit_lock_ = true
+
+[node name="AbilityBar" type="NinePatchRect" parent="UI"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -337.0
+offset_top = -113.0
+offset_bottom = -63.0
+grow_horizontal = 0
+grow_vertical = 0
+texture = ExtResource("12_iquvy")
+region_rect = Rect2(0, -3, 134, 53)
+patch_margin_left = 16
+patch_margin_top = 17
+patch_margin_bottom = 14
+axis_stretch_horizontal = 2
+script = ExtResource("2_6bf75")
+
+[node name="ButtonsContainer" type="HBoxContainer" parent="UI/AbilityBar"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -7.0
+offset_bottom = 7.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 12
+
+[node name="VSeparator" type="VSeparator" parent="UI/AbilityBar/ButtonsContainer"]
+layout_mode = 2
+theme_override_constants/separation = 12
+theme_override_styles/separator = SubResource("StyleBoxEmpty_iog24")
+
+[node name="BaseButton" type="TextureButton" parent="UI/AbilityBar/ButtonsContainer"]
+editor_description = "This button is duplicated and the duplicates are accepting abilities' icons."
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+toggle_mode = true
+action_mode = 0
+button_mask = 7
+keep_pressed_outside = true
+button_group = ExtResource("3_5uq1d")
+texture_normal = ExtResource("3_7ucak")
+ignore_texture_size = true
+stretch_mode = 0
+script = ExtResource("6_41vqm")
+
+[node name="BorderSelected" type="NinePatchRect" parent="UI/AbilityBar/ButtonsContainer/BaseButton"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("5_0m8kr")
+region_rect = Rect2(16, 16, 78, 78)
+patch_margin_left = 7
+patch_margin_top = 6
+patch_margin_right = 6
+patch_margin_bottom = 6
+
+[node name="Pendant" type="TextureRect" parent="UI/AbilityBar/ButtonsContainer/BaseButton/BorderSelected"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -45.5
+offset_top = -13.0
+offset_right = 47.5
+offset_bottom = 91.0
+grow_horizontal = 2
+texture = ExtResource("8_qldo4")
+expand_mode = 1
+stretch_mode = 4
+
+[node name="BorderNormal" type="NinePatchRect" parent="UI/AbilityBar/ButtonsContainer/BaseButton"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("4_xdvca")
+region_rect = Rect2(16, 16, 78, 78)
+patch_margin_left = 7
+patch_margin_top = 6
+patch_margin_right = 6
+patch_margin_bottom = 6
+
+[node name="CharacterInfo" type="GridContainer" parent="UI"]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -181.0
+offset_right = 477.0
+grow_vertical = 0
+columns = 2
+script = ExtResource("12_obbjy")
+
+[node name="Portrait" type="VBoxContainer" parent="UI/CharacterInfo"]
+custom_minimum_size = Vector2(128, 128)
+layout_mode = 2
+theme_override_constants/separation = -3
+
+[node name="Image" type="TextureRect" parent="UI/CharacterInfo/Portrait"]
+custom_minimum_size = Vector2(0, 128)
+layout_mode = 2
+texture = ExtResource("3_7ucak")
+expand_mode = 1
+stretch_mode = 4
+
+[node name="Border" type="NinePatchRect" parent="UI/CharacterInfo/Portrait/Image"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("4_xdvca")
+region_rect = Rect2(17, 17, 76, 75)
+patch_margin_left = 7
+patch_margin_top = 6
+patch_margin_right = 6
+patch_margin_bottom = 4
+
+[node name="Name" type="Label" parent="UI/CharacterInfo/Portrait"]
+custom_minimum_size = Vector2(128, 50)
+layout_mode = 2
+size_flags_vertical = 1
+theme_override_constants/line_spacing = -12
+theme_override_font_sizes/font_size = 24
+text = "Character Name"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Bars" type="VBoxContainer" parent="UI/CharacterInfo"]
+custom_minimum_size = Vector2(0, 70)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 8
+theme_override_constants/separation = -25
+
+[node name="Health" type="ProgressBar" parent="UI/CharacterInfo/Bars"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_font_sizes/font_size = 12
+theme_override_styles/background = SubResource("StyleBoxTexture_k50ux")
+theme_override_styles/fill = SubResource("StyleBoxTexture_dohwc")
+max_value = 114.05
+value = 51.0
+show_percentage = false
+
+[node name="Value" type="Label" parent="UI/CharacterInfo/Bars/Health"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -11.5
+offset_right = 20.0
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/outline_size = 2
+theme_override_font_sizes/font_size = 12
+text = "Value
+"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Mana" type="ProgressBar" parent="UI/CharacterInfo/Bars"]
+z_index = -1
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_font_sizes/font_size = 12
+theme_override_styles/background = SubResource("StyleBoxTexture_k50ux")
+theme_override_styles/fill = SubResource("StyleBoxTexture_oc760")
+max_value = 1.0
+value = 1.0
+show_percentage = false
+
+[node name="Value" type="Label" parent="UI/CharacterInfo/Bars/Mana"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -11.5
+offset_right = 20.0
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/outline_size = 2
+theme_override_font_sizes/font_size = 12
+text = "Value
+"
+horizontal_alignment = 1
+vertical_alignment = 1

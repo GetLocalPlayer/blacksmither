@@ -1,11 +1,14 @@
-extends HBoxContainer
+extends NinePatchRect
 class_name CombatAbilityBar
 
 
 signal button_pressed(button: AbilityButton)
 
-@onready var _base_button: TextureButton = $BaseButton
+@onready var _buttons_container: HBoxContainer = $ButtonsContainer
+@onready var _base_button: TextureButton = $ButtonsContainer/BaseButton
+@onready var _separator: VSeparator = $ButtonsContainer/VSeparator
 @onready var _button_group: ButtonGroup = _base_button.button_group
+
 
 var pressed_button: AbilityButton: 
 	get:
@@ -13,7 +16,9 @@ var pressed_button: AbilityButton:
 
 
 func _ready() -> void:
-	remove_child(_base_button)
+	_buttons_container.remove_child(_base_button)
+	_buttons_container.remove_child(_separator)
+	_buttons_container.add_child(_separator, false, INTERNAL_MODE_FRONT)
 	_base_button.hide()
 	_button_group.pressed.connect(button_pressed.emit)
 
@@ -42,15 +47,15 @@ func _get_button() -> AbilityButton:
 
 func set_abilities(abilities: Array[CombatAbility]) -> void:
 	# Making enough buttons for abilities.
-	while get_child_count() < abilities.size():
-		add_child(_get_button())
-	while get_child_count() > abilities.size():
-		_recycle_button(get_child(-1) as AbilityButton)
+	while _buttons_container.get_child_count() < abilities.size():
+		_buttons_container.add_child(_get_button())
+	while _buttons_container.get_child_count() > abilities.size():
+		_recycle_button(_buttons_container.get_child(-1) as AbilityButton)
 	if pressed_button:
 		pressed_button.button_pressed = false
 	# Set a button for each ability.
 	for i: int in range(abilities.size()):
-		var btn: AbilityButton = get_child(i)
+		var btn: AbilityButton = _buttons_container.get_child(i)
 		var abi: CombatAbility = abilities[i]
 		btn.ability = abi
 		btn.toggle_mode = true
