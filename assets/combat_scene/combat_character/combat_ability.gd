@@ -48,6 +48,16 @@ func _validate_property(property: Dictionary) -> void:
 			property.hint = PROPERTY_HINT_FLAGS
 
 
+func is_target_valid(caster: CombatCharacter, target: CombatCharacter) -> bool:
+	if allowed_targets & AllowedTargets.SELF and target == caster:
+		return true
+	if allowed_targets & AllowedTargets.ALLY and target.ally_layers & caster.ally_layers:
+		return true
+	if allowed_targets & AllowedTargets.ENEMY and not target.ally_layers & caster.ally_layers:
+		return true
+	return false
+
+
 func apply(target: CombatCharacter) -> void:
 	match effect_type:
 		EffectType.DAMAGE:

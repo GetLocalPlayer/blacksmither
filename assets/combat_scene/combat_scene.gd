@@ -6,7 +6,6 @@ extends Node3D
 
 const BOT_GROUP = "bot"
 const PLAYER_GROUP = "player"
-const ENEMY_GROUP = "enemies"
 @onready var _characters: Array[CombatCharacter] = Array($Characters.get_children(), TYPE_OBJECT, "Node3D", CombatCharacter)
 @onready var _player_characters: Array[CombatCharacter] = _characters.filter(func(c: CombatCharacter) -> bool: return c.is_in_group(PLAYER_GROUP))
 @onready var _bot_characters: Array[CombatCharacter] = _characters.filter(func(c: CombatCharacter) -> bool: return c.is_in_group(BOT_GROUP))
@@ -68,24 +67,18 @@ func _run_next_turn() -> void:
 # array with characters that can be victims of that
 # ability.
 func _on_ability_button_pressed(button: AbilityButton) -> void:
+	var caster: CombatCharacter = _character_queue[0]
 	if not button.button_pressed:
-		_character_queue[0].selected_ability = null
-		_camera.set_view_on_characters(_player_characters if _character_queue[0].is_in_group(PLAYER_GROUP) else _bot_characters)
+		caster.selected_ability = null
+		_camera.set_view_on_characters(_player_characters if caster.is_in_group(PLAYER_GROUP) else _bot_characters)
 		return
+	
+	var ability: CombatAbility = button.ability
 	_allowed_targets.clear()
-	for c in _characters:
-		var filter: int = 0
-		if c.is_in_group(ENEMY_GROUP):
-			filter |= CombatAbility.AllowedTargets.ENEMY
-		else:
-			filter |= CombatAbility.AllowedTargets.ALLY
-		if c.selected:
-			filter |= CombatAbility.AllowedTargets.SELF
-		if filter & button.ability.allowed_targets:
-			_allowed_targets.append(c)
+	_allowed_targets = _characters.filter(func(target: CombatCharacter) -> bool: return ability.is_target_valid(caster, target))
 	#_camera.accent_on = null
 	_camera.set_view_on_characters(_allowed_targets)
-	_character_queue[0].selected_ability = button.ability
+	caster.selected_ability = button.ability
 
 
 func _on_character_hovered(c: CombatCharacter) -> void:

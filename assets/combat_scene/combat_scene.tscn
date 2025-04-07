@@ -157,14 +157,18 @@ transform = Transform3D(-0.34202, 0, -0.939693, 0, 1, 0, 0.939693, 0, -0.34202, 
 [node name="Emma4" parent="Characters" groups=["player"] instance=ExtResource("7_y4oos")]
 transform = Transform3D(-0.34202, 0, -0.939693, 0, 1, 0, 0.939693, 0, -0.34202, -5.5, 0, 1.671)
 
-[node name="Emma5" parent="Characters" groups=["bot", "enemies"] instance=ExtResource("7_y4oos")]
+[node name="Emma5" parent="Characters" groups=["bot"] instance=ExtResource("7_y4oos")]
 transform = Transform3D(-0.34202, 0, 0.939692, 0, 1, 0, -0.939692, 0, -0.34202, 2.5, 0, -1.054)
+ally_layers = 2
 
-[node name="Emma6" parent="Characters" groups=["bot", "enemies"] instance=ExtResource("7_y4oos")]
+[node name="Emma6" parent="Characters" groups=["bot"] instance=ExtResource("7_y4oos")]
 transform = Transform3D(-0.34202, 0, 0.939692, 0, 1, 0, -0.939692, 0, -0.34202, 3.5, 0, -0.18)
+ally_layers = 2
 
-[node name="Emma7" parent="Characters" groups=["bot", "enemies"] instance=ExtResource("7_y4oos")]
+[node name="Emma7" parent="Characters" groups=["bot"] instance=ExtResource("7_y4oos")]
 transform = Transform3D(-0.34202, 0, 0.939692, 0, 1, 0, -0.939692, 0, -0.34202, 4.5, 0, 0.797)
+ally_layers = 2
 
-[node name="Emma8" parent="Characters" groups=["bot", "enemies"] instance=ExtResource("7_y4oos")]
+[node name="Emma8" parent="Characters" groups=["bot"] instance=ExtResource("7_y4oos")]
 transform = Transform3D(-0.34202, 0, 0.939692, 0, 1, 0, -0.939692, 0, -0.34202, 5.5, 0, 1.671)
+ally_layers = 2

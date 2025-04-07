@@ -39,7 +39,15 @@ signal retreated()
 			_health_bar.value = health
 
 @export var attack_damage: int = 3
-
+## Defines ally layers. Characters on the same
+## layers are considered allies and can use friendly
+## abilities on each other.
+## If a character has all ally layers enabled it will
+## be considered an ally to everyone except the characters
+## not included in any ally layer.
+## Characters that are not presented in any ally layer
+## are hostile to everyone.
+@export_flags_2d_physics var ally_layers = 1
 
 @onready var target_marks: Dictionary = {
 	primary = $HealthBar/TargetMarks/Primary,
