@@ -403,7 +403,7 @@ script = ExtResource("5_mkn6v")
 durability = 1
 
 [node name="Attachment" type="BoneAttachment3D" parent="Weapon"]
-transform = Transform3D(0.0190248, -0.105647, -0.763326, 0.135147, -0.751268, 0.107346, -0.758659, -0.136479, -1.92389e-05, -0.334612, 0.994063, -0.283786)
+transform = Transform3D(0.209356, 0.571055, -1.49453, 1.72528, -0.736427, 0.181532, -0.993599, -0.994379, -0.586814, 0.0845736, 0.707015, -1.33726)
 bone_name = "kist.L"
 bone_idx = 38
 use_external_skeleton = true
