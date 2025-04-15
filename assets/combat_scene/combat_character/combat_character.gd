@@ -20,6 +20,7 @@ signal retreated()
 @onready var _selected_mark: Control = $HealthBar/Selected
 @onready var _mouse_detector: Area3D = $MouseDetector
 @onready var _character_detector: Area3D = $CharacterDetector
+@onready var _aabb: MeshInstance3D = $AABB
 
 @export var portrait: CompressedTexture2D = null
 @export var character_name: String = "Character Name"
@@ -45,12 +46,9 @@ signal retreated()
 @export var mana = max_mana
 
 @export var attack_damage: int = 3
-## Defines ally layers. Characters on the same
-## layers are considered allies and can use friendly
-## abilities on each other.
-## If a character has all ally layers enabled it will
-## be considered an ally to everyone except the characters
-## not included in any ally layer.
+## Defines ally layers. Characters that have at least
+## one layer in common are considered allies and can
+## use friendly abilities on each other.
 ## Characters that are not presented in any ally layer
 ## are hostile to everyone.
 @export_flags_2d_physics var ally_layers = 1
@@ -82,6 +80,10 @@ func cast_ability() -> void:
 
 func get_abilities() -> Array[CombatAbility]:
 	return _abilities
+
+
+func get_aabb(exclude_transform: bool = true) -> AABB:
+	return _aabb.transform * (Transform3D.IDENTITY if exclude_transform else transform) * _aabb.custom_aabb
 
 
 func take_damage(value: float) -> void:

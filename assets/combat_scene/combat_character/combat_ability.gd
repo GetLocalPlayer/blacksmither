@@ -3,6 +3,9 @@ extends Node
 class_name CombatAbility
 
 
+signal progress_changed
+
+
 @export var icon: CompressedTexture2D = null:
 	get = get_icon, set = set_icon
 
@@ -35,7 +38,17 @@ enum AllowedTargets {
 	DEAD = 1 << 4,
 }
 
-@export var allowed_targets: AllowedTargets = AllowedTargets.ENEMY | AllowedTargets.ALIVE
+@export var allowed_targets: int = AllowedTargets.ENEMY | AllowedTargets.ALIVE
+
+
+## Progress bar that will be shown under the icon in combat scene
+@export var show_progress: bool = false
+
+# Overload in the chilren classes
+var progress: float = 0:
+	set(value):
+		progress = value
+		progress_changed.emit()
 
 
 func _validate_property(property: Dictionary) -> void:
@@ -43,6 +56,7 @@ func _validate_property(property: Dictionary) -> void:
 		"allowed_targets":
 			property.usage = PROPERTY_USAGE_DEFAULT | PROPERTY_USAGE_CLASS_IS_BITFIELD
 			property.hint = PROPERTY_HINT_FLAGS 
+			property.hint_string = ",".join(AllowedTargets.keys())
 
 
 func is_target_valid(caster: CombatCharacter, target: CombatCharacter) -> bool:
@@ -64,5 +78,6 @@ func is_target_valid(caster: CombatCharacter, target: CombatCharacter) -> bool:
 	return false
 
 
+# Abstract
 func apply(_target: CombatCharacter) -> void:
 	pass

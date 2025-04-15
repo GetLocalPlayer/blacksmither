@@ -13,7 +13,7 @@ const PLAYER_GROUP = "player"
 @onready var _character_info: CombatCharacterInfo = $UI/CharacterInfo
 # clear selected ability on ability bar.
 @onready var _void_clicker: Area3D = $VoidClicker
-@onready var _camera: Camera3D = $Camera3D
+@onready var _camera: CombatSceneCamera = $Camera3D
 
 
 # The targets that are allowed to be 
@@ -51,7 +51,6 @@ func _run_next_turn() -> void:
 	c.global_scale(Vector3.ONE * _active_character_scale)
 	_camera.set_view_on_characters(_player_characters if c.is_in_group(PLAYER_GROUP) else _bot_characters)
 	_character_info.character = c
-	#_camera.accent_on = c
 	if c.is_in_group(PLAYER_GROUP):
 		_ability_bar.set_abilities(c.get_abilities())
 	if c.is_in_group(BOT_GROUP):
@@ -71,7 +70,6 @@ func _on_ability_button_pressed(button: AbilityButton) -> void:
 	var ability: CombatAbility = button.ability
 	_allowed_targets.clear()
 	_allowed_targets = _characters.filter(func(target: CombatCharacter) -> bool: return ability.is_target_valid(caster, target))
-	#_camera.accent_on = null
 	_camera.set_view_on_characters(_allowed_targets)
 	caster.selected_ability = button.ability
 
@@ -81,7 +79,6 @@ func _on_character_hovered(c: CombatCharacter) -> void:
 		return
 	c.target_marks.primary.show()
 	c.global_scale(Vector3.ONE * _hovered_character_scale)
-	#_camera.accent_on = c
 	
 
 func _on_character_unhovered(c: CombatCharacter) -> void:
@@ -102,7 +99,6 @@ func _on_character_clicked(character: CombatCharacter) -> void:
 	_ability_bar.hide()
 	var caster: CombatCharacter = _character_queue[0]
 	caster.target = character
-	#_camera.accent_on = null
 	_camera.focus_view_on_characters([caster, caster.target] as Array[CombatCharacter])
 	caster.global_scale(Vector3.ONE / _active_character_scale)
 	caster.target.global_scale(Vector3.ONE / _hovered_character_scale)
@@ -119,7 +115,6 @@ func _on_void_clicker_input_event(_c: Node, e: InputEvent, _ep: Vector3, _n: Vec
 		_ability_bar.pressed_button.button_pressed = false
 		_character_queue[0].selected_ability = null
 		_camera.set_view_on_characters(_player_characters if _character_queue[0].is_in_group(PLAYER_GROUP) else _bot_characters)
-		#_camera.accent_on = _character_queue[0]
 
 
 

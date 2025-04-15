@@ -1,11 +1,11 @@
-[gd_scene load_steps=26 format=3 uid="uid://bmqgmxpe262tv"]
+[gd_scene load_steps=28 format=3 uid="uid://bmqgmxpe262tv"]
 
 [ext_resource type="Script" path="res://assets/combat_scene/combat_scene.gd" id="1_owgya"]
 [ext_resource type="Script" path="res://assets/combat_scene/combat_ability_bar.gd" id="2_6bf75"]
 [ext_resource type="Texture2D" uid="uid://6q2vbj0tgeey" path="res://textures/uvgrid.png" id="2_ed0o1"]
 [ext_resource type="ButtonGroup" uid="uid://iisami01t8uo" path="res://assets/combat_scene/ability_bar_button_group.tres" id="3_5uq1d"]
 [ext_resource type="Texture2D" uid="uid://lk25wlfgu6y2" path="res://icon.svg" id="3_7ucak"]
-[ext_resource type="Script" path="res://assets/combat_scene/camera_3d.gd" id="3_g587y"]
+[ext_resource type="Script" path="res://assets/combat_scene/combat_scene_camera.gd" id="3_g587y"]
 [ext_resource type="Texture2D" uid="uid://b5fld1moc8ny6" path="res://textures/spell_frame.png" id="4_xdvca"]
 [ext_resource type="Texture2D" uid="uid://dmhygh0tquv3x" path="res://textures/spell_frame_selected.png" id="5_0m8kr"]
 [ext_resource type="Script" path="res://assets/combat_scene/ability_button.gd" id="6_41vqm"]
@@ -40,6 +40,12 @@ tonemap_mode = 2
 size = Vector3(47.6211, 24.5176, 1)
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_iog24"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_l5mr7"]
+bg_color = Color(0, 0, 0, 0.219608)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_i1g8v"]
+bg_color = Color(1, 0.239495, 0.668611, 1)
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_k50ux"]
 texture = ExtResource("12_iquvy")
@@ -86,13 +92,11 @@ shadow_enabled = true
 environment = SubResource("Environment_dfx71")
 
 [node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.999691, -0.0248506, 0, 0.0248506, 0.999691, 0, 0.479172, 21.697)
+transform = Transform3D(1, 0, 0, 0, 0.999691, -0.0248506, 0, 0.0248506, 0.999691, 0, 0.479, 8.88659)
 current = true
-fov = 20.0
 size = 0.34
 script = ExtResource("3_g587y")
 _lerp_rate = 10.0
-_accent_factor = 0.5
 
 [node name="VoidClicker" type="Area3D" parent="."]
 editor_description = "A shape to detect non-character clicks
@@ -143,18 +147,10 @@ transform = Transform3D(-0.34202, 0, 0.939692, 0, 1, 0, -0.939692, 0, -0.34202, 
 character_name = "Bot Emma 4"
 ally_layers = 2
 
-[node name="UI" type="Control" parent="."]
-layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 1
+[node name="UI" type="CanvasLayer" parent="."]
 metadata/_edit_lock_ = true
 
 [node name="AbilityBar" type="NinePatchRect" parent="UI"]
-layout_mode = 1
 anchors_preset = 3
 anchor_left = 1.0
 anchor_top = 1.0
@@ -248,8 +244,22 @@ patch_margin_top = 6
 patch_margin_right = 6
 patch_margin_bottom = 6
 
-[node name="CharacterInfo" type="GridContainer" parent="UI"]
+[node name="ProgressBar" type="ProgressBar" parent="UI/AbilityBar/ButtonsContainer/BaseButton"]
 layout_mode = 1
+anchors_preset = -1
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_bottom = 8.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_styles/background = SubResource("StyleBoxFlat_l5mr7")
+theme_override_styles/fill = SubResource("StyleBoxFlat_i1g8v")
+max_value = 1.0
+value = 0.4
+show_percentage = false
+
+[node name="CharacterInfo" type="GridContainer" parent="UI"]
 anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
