@@ -1,0 +1,26 @@
+[gd_scene load_steps=3 format=3 uid="uid://dy675j34jggxj"]
+
+[ext_resource type="Script" path="res://scenes/autoload/item_data/weapon.gd" id="1_c7j32"]
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_okjju"]
+top_radius = 0.1
+bottom_radius = 0.05
+height = 0.75
+
+[node name="Weapon" type="Node"]
+metadata/bone_attachment_path = NodePath("")
+
+[node name="Sword" type="Node" parent="."]
+script = ExtResource("1_c7j32")
+durability = 10
+
+[node name="Attachment" type="BoneAttachment3D" parent="Sword"]
+transform = Transform3D(0.770837, 0, 0, 0, 0.770838, 0, 0, 0, 0.770838, 0, 0, 0)
+bone_name = "kist.L"
+bone_idx = 38
+use_external_skeleton = true
+external_skeleton = NodePath("../../Model/Armature/Skeleton3D")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Sword/Attachment"]
+mesh = SubResource("CylinderMesh_okjju")
+skeleton = NodePath("../..")

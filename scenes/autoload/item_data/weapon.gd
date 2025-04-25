@@ -86,13 +86,12 @@ var quality_name: Dictionary = {
 		if is_node_ready():
 			_attachment.visible = durability > 0
 
-@export_subgroup("Stats Given")
-@export var attack_power: int = 0
-@export var ability_power: int = 0
-@export var health: int = 0
-@export var defense: int = 0
-@export var speed: int = 0
-@export var mana: int = 0
+var attack_power: int = 0
+var ability_power: int = 0
+var health: int = 0
+var defense: int = 0
+var speed: int = 0
+var mana: int = 0
 
 @onready var _attachment: BoneAttachment3D = $Attachment
 

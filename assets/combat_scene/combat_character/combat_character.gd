@@ -1,3 +1,4 @@
+@icon("res://textures/icons/godot_node/node_3D/icon_character.png")
 extends Node3D
 class_name CombatCharacter
 
@@ -18,6 +19,9 @@ signal retreated()
 @onready var _abilities: Array[CombatAbility] = Array($Abilities.get_children(), TYPE_OBJECT, "Node", CombatAbility)
 @onready var _health_bar: ProgressBar = $HealthBar
 @onready var _selected_mark: Control = $HealthBar/Selected
+@onready var _buffs_debuffs_attachment: Marker3D = $BuffsDebuffsAttachment
+@onready var _buffs: TextureRect = %Buffs
+@onready var _debuffs: TextureRect = %Debuffs
 @onready var _mouse_detector: Area3D = $MouseDetector
 @onready var _character_detector: Area3D = $CharacterDetector
 @onready var _aabb: MeshInstance3D = $AABB
@@ -118,5 +122,9 @@ func _on_input_event(_c: Node, e: InputEvent, _ep: Vector3, _n: Vector3, _si: in
 
 func _process(_delta: float) -> void:
 	var camera: Camera3D = get_viewport().get_camera_3d()
-	if camera and _health_bar.visible:
-		_health_bar.position = get_viewport().get_camera_3d().unproject_position(global_position) - _health_bar.pivot_offset
+	if camera:
+		if _health_bar.visible:
+			_health_bar.position = get_viewport().get_camera_3d().unproject_position(global_position) - _health_bar.pivot_offset
+		if _buffs.visible:
+			_buffs.position = get_viewport().get_camera_3d().unproject_position(_buffs_debuffs_attachment.global_position) - _buffs.pivot_offset
+			_debuffs.position = get_viewport().get_camera_3d().unproject_position(_buffs_debuffs_attachment.global_position) - _debuffs.pivot_offset
