@@ -12,9 +12,9 @@ func _init(state_name: String) -> void:
 
 
 func _enter(context: Node) -> void:
-	(context as CombatCharacter).animation_tree.set(_ANIMATION_TREE_PARAM_PATH % name, true)
+	(context as CombatCharacter).model_animation_tree.set(_ANIMATION_TREE_PARAM_PATH % name, true)
 
 
 
 func _exit(context: Node) -> void:
-	(context as CombatCharacter).animation_tree.set(_ANIMATION_TREE_PARAM_PATH % name, false)
+	(context as CombatCharacter).model_animation_tree.set(_ANIMATION_TREE_PARAM_PATH % name, false)

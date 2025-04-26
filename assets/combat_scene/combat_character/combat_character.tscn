@@ -391,19 +391,18 @@ collision_mask = 0
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0510902, 0.889888, -0.140369)
 shape = SubResource("CylinderShape3D_byb5w")
 
-[node name="AnimationTree" type="AnimationTree" parent="."]
-root_node = NodePath("../Model")
+[node name="Model" parent="." instance=ExtResource("2_n31pi")]
+
+[node name="AnimationTree" type="AnimationTree" parent="Model"]
 tree_root = SubResource("AnimationNodeStateMachine_b075f")
-advance_expression_base_node = NodePath("..")
-anim_player = NodePath("../Model/AnimationPlayer")
+advance_expression_base_node = NodePath("../..")
+anim_player = NodePath("../AnimationPlayer")
 parameters/conditions/ability_Attack = false
 parameters/conditions/state_approach_target = false
 parameters/conditions/state_idle = false
 parameters/conditions/state_retreat = false
 parameters/conditions/state_take_damage = false
 script = ExtResource("2_8pfwx")
-
-[node name="Model" parent="." instance=ExtResource("2_n31pi")]
 
 [node name="FSM" type="Node" parent="."]
 script = ExtResource("2_26k2l")

@@ -12,8 +12,8 @@ signal ability_cast()
 signal retreated()
 
 
-@onready var animation_tree: AnimationTree = $AnimationTree
-@onready var playback: AnimationNodeStateMachinePlayback = animation_tree.get("parameters/playback")
+@onready var model_animation_tree: AnimationTree = $Model/AnimationTree
+@onready var playback: AnimationNodeStateMachinePlayback = model_animation_tree.get("parameters/playback")
 @onready var weapon: Weapon = $Weapon
 
 @onready var _abilities: Array[CombatAbility] = Array($Abilities.get_children(), TYPE_OBJECT, "Node", CombatAbility)
