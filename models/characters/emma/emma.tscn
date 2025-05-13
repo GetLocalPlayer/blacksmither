@@ -69,8 +69,8 @@ tracks/1/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_oui3k"]
 _data = {
-"RESET": SubResource("Animation_du2nq"),
-"idle": SubResource("Animation_mkstb")
+&"RESET": SubResource("Animation_du2nq"),
+&"idle": SubResource("Animation_mkstb")
 }
 
 [node name="Emma" instance=ExtResource("1_hxcft")]

@@ -1,4 +1,5 @@
 @icon("res://textures/icons/godot_node/node_3D/icon_character.png")
+@tool
 extends Node3D
 class_name CombatCharacter
 
@@ -14,7 +15,6 @@ signal retreated()
 
 @onready var model_animation_tree: AnimationTree = $Model/AnimationTree
 @onready var playback: AnimationNodeStateMachinePlayback = model_animation_tree.get("parameters/playback")
-@onready var weapon: Weapon = $Weapon
 
 @onready var _abilities: Array[CombatAbility] = Array($Abilities.get_children(), TYPE_OBJECT, "Node", CombatAbility)
 @onready var _health_bar: ProgressBar = $HealthBar
@@ -24,7 +24,9 @@ signal retreated()
 @onready var _debuffs: TextureRect = %Debuffs
 @onready var _mouse_detector: Area3D = $MouseDetector
 @onready var _character_detector: Area3D = $CharacterDetector
+## Is used by camera in combat scene to fit the character in the camera's fov
 @onready var _aabb: MeshInstance3D = $AABB
+@onready var _fsm: FSMCombatCharacter = $FSM
 
 @export var portrait: CompressedTexture2D = null
 @export var character_name: String = "Character Name"
@@ -42,7 +44,7 @@ signal retreated()
 	get:
 		return health
 	set(value):
-		health = value if value >= 0. else 0.
+		health = clamp(value, 0, max_health)
 		if is_node_ready():
 			_health_bar.value = health
 
@@ -50,6 +52,8 @@ signal retreated()
 @export var mana = max_mana
 
 @export var attack_damage: int = 3
+
+
 ## Defines ally layers. Characters that have at least
 ## one layer in common are considered allies and can
 ## use friendly abilities on each other.
@@ -61,8 +65,6 @@ signal retreated()
 	primary = $HealthBar/TargetMarks/Primary,
 	secondary = $HealthBar/TargetMarks/Secondary,
 }
-@onready var _fsm: FSMCombatCharacter = $FSM
-
 
 var selected: bool = false:
 	set(value):
@@ -75,7 +77,6 @@ var selected_ability: CombatAbility = null
 # What the character targeted on, vector or another character
 var target: CombatCharacter
 @onready var retreat_position: Vector3 = global_position
-
 
 func cast_ability() -> void:
 	assert(target is CombatCharacter, "Must set `target` to `CombatCharacter` first.")
@@ -101,6 +102,15 @@ func is_dead() -> bool:
 func is_alive() -> bool:
 	return not is_dead()
 
+
+# The first non-broken weapon in the children list
+# is considered the equipped weapon.
+func get_equipped_weapon() -> Weapon:
+	for child in get_children():
+		var w: Weapon = child as Weapon
+		if w and not w.broken:
+			return w
+	return null
 
 func _ready() -> void:
 	_health_bar.max_value = max_health

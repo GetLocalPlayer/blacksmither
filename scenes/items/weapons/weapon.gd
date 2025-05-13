@@ -1,4 +1,5 @@
-extends Node
+@tool
+extends Item
 class_name Weapon
 
 
@@ -14,7 +15,7 @@ enum WeaponType {
 }
 
 
-var weapon_type_name: Dictionary = {
+var weapon_type_string: Dictionary = {
 	WeaponType.DAGGER: "dagger",
 	WeaponType.SWORD: "sword",
 	WeaponType.POLEARM: "polearm",
@@ -26,74 +27,9 @@ var weapon_type_name: Dictionary = {
 }
 
 
-enum MaterialType {
-	BONE,
-	STONE,
-	IRON,
-	BRONZE,
-	SILVER,
-	ORICHALCUM,
-	MITHRIL,
-}
-
-
-var material_type_name: Dictionary = {
-	MaterialType.BONE: "bone",
-	MaterialType.STONE: "stone",
-	MaterialType.IRON: "iron",
-	MaterialType.BRONZE: "bronze",
-	MaterialType.SILVER: "silver",
-	MaterialType.ORICHALCUM: "orichalcum",
-	MaterialType.MITHRIL: "mithril",
-}
-
-
-enum QualityType {
-	AWFUL,
-	DISAPPOINTING,
-	FRAGILE,
-	UNSUCCESSFUL,
-	POOR,
-	NORMAL,
-	GOOD,
-	FIRM,
-	GREAT,
-	PERFECT,
-}
-
-
-var quality_name: Dictionary = {
-	QualityType.AWFUL: "Awfuly made",
-	QualityType.DISAPPOINTING: "Disappointing",
-	QualityType.FRAGILE: "Fragile",
-	QualityType.UNSUCCESSFUL: "Unsuccessful",
-	QualityType.POOR: "Poor",
-	QualityType.NORMAL: "",
-	QualityType.GOOD: "Good",
-	QualityType.FIRM: "Firm",
-	QualityType.GREAT: "Great",
-	QualityType.PERFECT: "Perfect",
-}
-
-
 @export var type: WeaponType = WeaponType.SWORD
 @export var quality_type: QualityType = QualityType.NORMAL
 @export var material_type: MaterialType = MaterialType.IRON
-@export var max_durability: int = 10
-@export var durability: int:
-	set(value):
-		durability = value
-		if is_node_ready():
-			_attachment.visible = durability > 0
-
-var attack_power: int = 0
-var ability_power: int = 0
-var health: int = 0
-var defense: int = 0
-var speed: int = 0
-var mana: int = 0
-
-@onready var _attachment: BoneAttachment3D = $Attachment
 
 
 func _ready() -> void:

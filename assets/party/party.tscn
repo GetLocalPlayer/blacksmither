@@ -1,11 +1,11 @@
 [gd_scene load_steps=18 format=3 uid="uid://c7gnt27t08y2"]
 
-[ext_resource type="Script" path="res://assets/party/party.gd" id="1_0aq8s"]
-[ext_resource type="Script" path="res://assets/party/fsm_party.gd" id="1_6iqdg"]
-[ext_resource type="Script" path="res://assets/party/following.gd" id="2_itsy3"]
+[ext_resource type="Script" uid="uid://cd0e72wxicioe" path="res://assets/party/party.gd" id="1_0aq8s"]
+[ext_resource type="Script" uid="uid://b6ryawf4bqg3t" path="res://assets/party/fsm_party.gd" id="1_6iqdg"]
+[ext_resource type="Script" uid="uid://btc50ui1jrgal" path="res://assets/party/following.gd" id="2_itsy3"]
 [ext_resource type="PackedScene" uid="uid://b6f7wde0eg2p3" path="res://models/characters/emma/emma.tscn" id="4_gryrc"]
-[ext_resource type="Script" path="res://assets/party/party_slot.gd" id="4_kai0v"]
-[ext_resource type="Script" path="res://assets/party/camera_3d.gd" id="6_y8g7l"]
+[ext_resource type="Script" uid="uid://q1pngy4ywvk3" path="res://assets/party/party_slot.gd" id="4_kai0v"]
+[ext_resource type="Script" uid="uid://pxs8x2f3g808" path="res://assets/party/camera_3d.gd" id="6_y8g7l"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_0rs1c"]
 radius = 0.35

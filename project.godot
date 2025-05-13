@@ -11,8 +11,8 @@ config_version=5
 [application]
 
 config/name="Blacksmither"
-run/main_scene="res://levels/test_scene.tscn"
-config/features=PackedStringArray("4.3", "GL Compatibility")
+run/main_scene="uid://bmqgmxpe262tv"
+config/features=PackedStringArray("4.4", "GL Compatibility")
 config/icon="res://icon.svg"
 
 [global_group]

@@ -1,19 +1,20 @@
-[gd_scene load_steps=28 format=3 uid="uid://bmqgmxpe262tv"]
+[gd_scene load_steps=29 format=3 uid="uid://bmqgmxpe262tv"]
 
-[ext_resource type="Script" path="res://assets/combat_scene/combat_scene.gd" id="1_owgya"]
-[ext_resource type="Script" path="res://assets/combat_scene/combat_ability_bar.gd" id="2_6bf75"]
+[ext_resource type="Script" uid="uid://cvvf70p86lmd3" path="res://assets/combat_scene/combat_scene.gd" id="1_owgya"]
+[ext_resource type="Script" uid="uid://cl447pbml14aw" path="res://assets/combat_scene/combat_ability_bar.gd" id="2_6bf75"]
 [ext_resource type="Texture2D" uid="uid://6q2vbj0tgeey" path="res://textures/uvgrid.png" id="2_ed0o1"]
 [ext_resource type="ButtonGroup" uid="uid://iisami01t8uo" path="res://assets/combat_scene/ability_bar_button_group.tres" id="3_5uq1d"]
 [ext_resource type="Texture2D" uid="uid://lk25wlfgu6y2" path="res://icon.svg" id="3_7ucak"]
-[ext_resource type="Script" path="res://assets/combat_scene/combat_scene_camera.gd" id="3_g587y"]
+[ext_resource type="Script" uid="uid://bwi1tnu04obqi" path="res://assets/combat_scene/combat_scene_camera.gd" id="3_g587y"]
 [ext_resource type="Texture2D" uid="uid://b5fld1moc8ny6" path="res://textures/spell_frame.png" id="4_xdvca"]
 [ext_resource type="Texture2D" uid="uid://dmhygh0tquv3x" path="res://textures/spell_frame_selected.png" id="5_0m8kr"]
-[ext_resource type="Script" path="res://assets/combat_scene/ability_button.gd" id="6_41vqm"]
+[ext_resource type="PackedScene" uid="uid://78xwbxbqunh6" path="res://scenes/items/weapons/TestSword.tscn" id="5_bq806"]
+[ext_resource type="Script" uid="uid://cbkbv0rkltl4n" path="res://assets/combat_scene/ability_button.gd" id="6_41vqm"]
 [ext_resource type="PackedScene" uid="uid://0aiqln2jekco" path="res://assets/combat_scene/combat_character/combat_character.tscn" id="7_y4oos"]
 [ext_resource type="Texture2D" uid="uid://b1vo7l5w6p05i" path="res://textures/spell_frame_selected_pendant.png" id="8_qldo4"]
 [ext_resource type="Texture2D" uid="uid://7uwwwjg4gd7j" path="res://textures/bar_fill_health.png" id="12_07km1"]
 [ext_resource type="Texture2D" uid="uid://dmw515qb6wc70" path="res://textures/emptybar.png.png" id="12_iquvy"]
-[ext_resource type="Script" path="res://assets/combat_scene/combat_character_info.gd" id="12_obbjy"]
+[ext_resource type="Script" uid="uid://guu15eg8joyu" path="res://assets/combat_scene/combat_character_info.gd" id="12_obbjy"]
 [ext_resource type="Texture2D" uid="uid://bu5atwp0m1oaq" path="res://textures/bar_fill_mana.png" id="14_oyp7s"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_82ahl"]
@@ -114,6 +115,10 @@ metadata/_edit_lock_ = true
 [node name="Emma1" parent="Characters" groups=["player"] instance=ExtResource("7_y4oos")]
 transform = Transform3D(-0.34202, 0, -0.939693, 0, 1, 0, 0.939693, 0, -0.34202, -2.5, 0, -1.054)
 character_name = "Player Emma 1"
+
+[node name="TestSword" parent="Characters/Emma1" instance=ExtResource("5_bq806")]
+max_durability = 12
+durability = 1
 
 [node name="Emma2" parent="Characters" groups=["player"] instance=ExtResource("7_y4oos")]
 transform = Transform3D(-0.34202, 0, -0.939693, 0, 1, 0, 0.939693, 0, -0.34202, -3.5, 0, -0.18)
