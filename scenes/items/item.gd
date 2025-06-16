@@ -2,12 +2,15 @@ extends Node
 class_name Item
 
 
+signal broken()
+signal repaired(restored: int)
+
+
 @export var icon: CompressedTexture2D:
 	get = get_icon
 
 
-var broken: bool:
-	get = is_broken
+@export var model: PackedScene
 
 
 enum MaterialType {
@@ -61,9 +64,18 @@ var quality_type_string: Dictionary = {
 
 
 @export var max_durability: int = 10
+
 @export var durability: int:
+	get:
+		return durability
 	set(value):
+		var restored: int = value - durability
 		durability = clamp(value, 0, max_durability)
+		if is_node_ready():
+			if durability == 0:
+				broken.emit()
+			elif restored > 0:
+				repaired.emit(restored)
 
 
 var attack_power: int = 0

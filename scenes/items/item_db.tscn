@@ -1,0 +1,17 @@
+[gd_scene load_steps=4 format=3 uid="uid://bi7tc80ob1lpv"]
+
+[ext_resource type="Script" uid="uid://2s0pse0raoqn" path="res://scenes/items/weapon.gd" id="1_uwo7t"]
+[ext_resource type="Texture2D" uid="uid://d1aiyafo1810t" path="res://textures/icons/attack.png" id="2_77hm3"]
+[ext_resource type="PackedScene" uid="uid://c8o1l6h6thd7u" path="res://models/test_sword.blend" id="3_yeoid"]
+
+[node name="ItemDb" type="Node"]
+
+[node name="Weapons" type="Node" parent="."]
+
+[node name="TestSword" type="Node" parent="Weapons"]
+script = ExtResource("1_uwo7t")
+icon = ExtResource("2_77hm3")
+model = ExtResource("3_yeoid")
+max_durability = 12
+durability = 10
+metadata/_custom_type_script = "uid://2s0pse0raoqn"

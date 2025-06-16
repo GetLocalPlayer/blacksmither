@@ -1,6 +1,6 @@
 [gd_scene load_steps=13 format=3 uid="uid://b6f7wde0eg2p3"]
 
-[ext_resource type="PackedScene" uid="uid://cut3yq3b4xcdw" path="res://models/characters/emma/emma 3.6.blend" id="1_hxcft"]
+[ext_resource type="PackedScene" uid="uid://cemh0116dqhm2" path="res://models/characters/emma/emma 3.6.blend" id="1_hxcft"]
 [ext_resource type="Material" uid="uid://bdatndmtmwck" path="res://models/characters/emma/emma_skin.tres" id="2_4nj7l"]
 [ext_resource type="Material" uid="uid://b6xvd474mmw4" path="res://models/characters/emma/emma_eyes.tres" id="2_40rca"]
 [ext_resource type="Material" uid="uid://ctpa85uqxsya4" path="res://models/characters/emma/emma_ears.tres" id="3_qy64a"]
@@ -239,6 +239,6 @@ visible = false
 
 [node name="FacialPlayer" type="AnimationPlayer" parent="." index="2"]
 libraries = {
-"": SubResource("AnimationLibrary_oui3k")
+&"": SubResource("AnimationLibrary_oui3k")
 }
 autoplay = "idle"

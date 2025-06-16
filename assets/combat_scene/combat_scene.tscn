@@ -1,4 +1,4 @@
-[gd_scene load_steps=29 format=3 uid="uid://bmqgmxpe262tv"]
+[gd_scene load_steps=31 format=3 uid="uid://bmqgmxpe262tv"]
 
 [ext_resource type="Script" uid="uid://cvvf70p86lmd3" path="res://assets/combat_scene/combat_scene.gd" id="1_owgya"]
 [ext_resource type="Script" uid="uid://cl447pbml14aw" path="res://assets/combat_scene/combat_ability_bar.gd" id="2_6bf75"]
@@ -8,9 +8,11 @@
 [ext_resource type="Script" uid="uid://bwi1tnu04obqi" path="res://assets/combat_scene/combat_scene_camera.gd" id="3_g587y"]
 [ext_resource type="Texture2D" uid="uid://b5fld1moc8ny6" path="res://textures/spell_frame.png" id="4_xdvca"]
 [ext_resource type="Texture2D" uid="uid://dmhygh0tquv3x" path="res://textures/spell_frame_selected.png" id="5_0m8kr"]
-[ext_resource type="PackedScene" uid="uid://78xwbxbqunh6" path="res://scenes/items/weapons/TestSword.tscn" id="5_bq806"]
+[ext_resource type="Script" uid="uid://2s0pse0raoqn" path="res://scenes/items/weapon.gd" id="5_ptiyh"]
 [ext_resource type="Script" uid="uid://cbkbv0rkltl4n" path="res://assets/combat_scene/ability_button.gd" id="6_41vqm"]
-[ext_resource type="PackedScene" uid="uid://0aiqln2jekco" path="res://assets/combat_scene/combat_character/combat_character.tscn" id="7_y4oos"]
+[ext_resource type="Texture2D" uid="uid://d1aiyafo1810t" path="res://textures/icons/attack.png" id="6_nntvp"]
+[ext_resource type="PackedScene" uid="uid://c8o1l6h6thd7u" path="res://models/test_sword.blend" id="7_wbwi5"]
+[ext_resource type="PackedScene" uid="uid://0aiqln2jekco" path="res://models/characters/emma/combat_character.tscn" id="7_y4oos"]
 [ext_resource type="Texture2D" uid="uid://b1vo7l5w6p05i" path="res://textures/spell_frame_selected_pendant.png" id="8_qldo4"]
 [ext_resource type="Texture2D" uid="uid://7uwwwjg4gd7j" path="res://textures/bar_fill_health.png" id="12_07km1"]
 [ext_resource type="Texture2D" uid="uid://dmw515qb6wc70" path="res://textures/emptybar.png.png" id="12_iquvy"]
@@ -112,13 +114,25 @@ metadata/_edit_lock_ = true
 [node name="Characters" type="Node3D" parent="."]
 metadata/_edit_lock_ = true
 
-[node name="Emma1" parent="Characters" groups=["player"] instance=ExtResource("7_y4oos")]
+[node name="Emma1" parent="Characters" node_paths=PackedStringArray("equipped_weapon") groups=["player"] instance=ExtResource("7_y4oos")]
 transform = Transform3D(-0.34202, 0, -0.939693, 0, 1, 0, 0.939693, 0, -0.34202, -2.5, 0, -1.054)
 character_name = "Player Emma 1"
+equipped_weapon = NodePath("TestSword")
 
-[node name="TestSword" parent="Characters/Emma1" instance=ExtResource("5_bq806")]
+[node name="TestSword2" type="Node" parent="Characters/Emma1"]
+script = ExtResource("5_ptiyh")
+icon = ExtResource("6_nntvp")
+model = ExtResource("7_wbwi5")
+max_durability = 12
+metadata/_custom_type_script = "uid://2s0pse0raoqn"
+
+[node name="TestSword" type="Node" parent="Characters/Emma1"]
+script = ExtResource("5_ptiyh")
+icon = ExtResource("6_nntvp")
+model = ExtResource("7_wbwi5")
 max_durability = 12
 durability = 1
+metadata/_custom_type_script = "uid://2s0pse0raoqn"
 
 [node name="Emma2" parent="Characters" groups=["player"] instance=ExtResource("7_y4oos")]
 transform = Transform3D(-0.34202, 0, -0.939693, 0, 1, 0, 0.939693, 0, -0.34202, -3.5, 0, -0.18)

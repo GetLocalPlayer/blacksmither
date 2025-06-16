@@ -9,7 +9,7 @@ func _enter(context: Node) -> void:
 	var c: CombatCharacter = context
 	_character_detected_callable = _on_character_detected.bind(c.target)
 	c.character_detected.connect(_character_detected_callable)
-
+	
 
 func _update(context: Node, delta: float) -> void:
 	var c: CombatCharacter = context

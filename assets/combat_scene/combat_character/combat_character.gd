@@ -8,13 +8,15 @@ signal clicked(character: CombatCharacter)
 signal hovered(character: CombatCharacter)
 signal unhovered(character: CombatCharacter)
 signal character_detected(character: CombatCharacter)
+signal weapon_equipped(weapon: Weapon)
+signal weapon_unequipped(weapon: Weapon)
 
 signal ability_cast()
 signal retreated()
 
 
-@onready var model_animation_tree: AnimationTree = $Model/AnimationTree
-@onready var playback: AnimationNodeStateMachinePlayback = model_animation_tree.get("parameters/playback")
+@onready var model_animation_tree: CombatCharacterAnimationTree = $Model/AnimationTree
+@onready var model_playback: AnimationNodeStateMachinePlayback = model_animation_tree.get("parameters/model_playback")
 
 @onready var _abilities: Array[CombatAbility] = Array($Abilities.get_children(), TYPE_OBJECT, "Node", CombatAbility)
 @onready var _health_bar: ProgressBar = $HealthBar
@@ -74,9 +76,29 @@ var selected: bool = false:
 
 # What ability is selected, will be cast on use
 var selected_ability: CombatAbility = null
-# What the character targeted on, vector or another character
+
+# Character's target. Ability will be cast
+# on this target. The character will approach
+# this target to cast ability in melee.
 var target: CombatCharacter
 @onready var retreat_position: Vector3 = global_position
+
+# On node ready will be assigned to the first 
+# non-broken Weapon-child. When the equipped
+# weapon is broken, first non-broken Weapon-
+# child is getting equipped.
+@export var equipped_weapon: Weapon:
+	get:
+		return equipped_weapon
+	set(value):
+		if equipped_weapon:
+			equipped_weapon.broken.disconnect(_on_equipped_weapon_broken)
+			weapon_unequipped.emit(equipped_weapon)
+		equipped_weapon = value
+		if value:
+			weapon_equipped.emit(value)
+			value.broken.connect(_on_equipped_weapon_broken)
+
 
 func cast_ability() -> void:
 	assert(target is CombatCharacter, "Must set `target` to `CombatCharacter` first.")
@@ -103,14 +125,15 @@ func is_alive() -> bool:
 	return not is_dead()
 
 
-# The first non-broken weapon in the children list
-# is considered the equipped weapon.
-func get_equipped_weapon() -> Weapon:
-	for child in get_children():
-		var w: Weapon = child as Weapon
-		if w and not w.broken:
-			return w
-	return null
+func get_children_weapon() -> Array[Weapon]:
+	var result: Array[Weapon]
+	for child: Node in get_children():
+		var weapon: Weapon = child as Weapon
+		if weapon:
+			result.append(weapon)
+	return result
+
+	
 
 func _ready() -> void:
 	_health_bar.max_value = max_health
@@ -122,6 +145,9 @@ func _ready() -> void:
 	_mouse_detector.mouse_exited.connect(unhovered.emit.bind(self))
 	_mouse_detector.input_event.connect(_on_input_event)
 	_character_detector.area_entered.connect(func(area: Area3D) -> void: if area.owner is CombatCharacter: character_detected.emit(area.owner))
+	for child: Node in get_children():
+		_on_child_entered_tree(child)
+	child_entered_tree.connect(_on_child_entered_tree)
 		
 		
 func _on_input_event(_c: Node, e: InputEvent, _ep: Vector3, _n: Vector3, _si: int) -> void:
@@ -138,3 +164,34 @@ func _process(_delta: float) -> void:
 		if _buffs.visible:
 			_buffs.position = get_viewport().get_camera_3d().unproject_position(_buffs_debuffs_attachment.global_position) - _buffs.pivot_offset
 			_debuffs.position = get_viewport().get_camera_3d().unproject_position(_buffs_debuffs_attachment.global_position) - _debuffs.pivot_offset
+
+
+func _on_child_entered_tree(child: Node) -> void:
+	var weapon: Weapon = child as Weapon
+	if weapon:
+		var on_repaired: Callable = _on_weapon_repaired.bind(weapon)
+		weapon.repaired.connect(on_repaired)
+		weapon.tree_exited.connect(func() -> void:
+			if equipped_weapon == weapon:
+				equipped_weapon = null
+				for w: Weapon in get_children_weapon():
+					if not w.is_broken():
+						equipped_weapon = w
+						break
+			weapon.repaired.disconnect(on_repaired)
+		, CONNECT_ONE_SHOT)
+		if not equipped_weapon and not weapon.is_broken():
+			equipped_weapon = weapon
+
+
+func _on_weapon_repaired(restored: int, weapon: Weapon) -> void:
+	if not equipped_weapon and restored == weapon.durability:
+		equipped_weapon = weapon
+
+
+func _on_equipped_weapon_broken() -> void:
+	equipped_weapon = null
+	for weapon: Weapon in get_children_weapon():
+		if weapon and not weapon.is_broken():
+			equipped_weapon = weapon
+
