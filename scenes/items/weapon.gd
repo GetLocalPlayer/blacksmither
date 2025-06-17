@@ -32,38 +32,69 @@ var weapon_type_string: Dictionary = {
 @export var material_type: MaterialType = MaterialType.IRON
 
 
-func _ready() -> void:
-	_init_stats()
+func get_max_durability() -> int:
+	return int((10 + 5 * (material_type + 1)) * (0.1 * quality_type))
 
 
-func _init_stats() -> void:
-	max_durability = int((10 + 5 * (material_type + 1)) * (0.1 * quality_type))
+func get_attack_power() -> int:
 	match type:
 		WeaponType.DAGGER:
-			attack_power = int((5 + 3 * (material_type + 1)) * (0.1 * quality_type))
-			speed = int((10 + 5 *(material_type + 1)) * (0.1 * quality_type))
+			return int((5 + 3 * (material_type + 1)) * (0.1 * quality_type))
 		WeaponType.SWORD:
-			attack_power = int((10 + 8 * max(material_type, 1)) * (0.1 * quality_type))
-			health = int((5 + 2 * max(material_type, 1)) * (0.1 * quality_type))
+			return int((10 + 8 * max(material_type, 1)) * (0.1 * quality_type))
 		WeaponType.POLEARM:
-			attack_power = int((15 + 15*max(material_type, 1)) * (0.1 * quality_type))
-			speed = int((2 + 2 * max( material_type - 1, 1)) * (0.1 * quality_type))
-			mana = int((2 + 2 * max(material_type - 1, 1)) * (0.1 * quality_type))
+			return int((15 + 15 * max(material_type, 1)) * (0.1 * quality_type))
 		WeaponType.HAMMER:
-			attack_power = int((5 + 4 * max(material_type, 1)) * (0.1 * quality_type))
-			health = int((10 + 10 * max(material_type, 1)) * (0.1 * quality_type))
-			defense = int((6 + 6 * max(material_type, 1)) * (0.1 * quality_type))
+			return int((5 + 4 * max(material_type, 1)) * (0.1 * quality_type))
 		WeaponType.BOW:
-			attack_power = int((10 + 8 * max(material_type + 1, 1)) * (0.1 * quality_type))
-			speed = int((5 + 2 * max(material_type,1)) * (0.1 * quality_type))        
+			return int((10 + 8 * max(material_type + 1, 1)) * (0.1 * quality_type))
 		WeaponType.AXE:
-			attack_power = int((15 + 5 * max(material_type + 1, 1)) * (0.1 * quality_type))
-			speed = int((5 + 3 * max(material_type - 1, 1)) * (0.1 * quality_type))
+			return int((15 + 5 * max(material_type + 1, 1)) * (0.1 * quality_type))
 		WeaponType.SCHYTHE:
-			attack_power = int((10 + 10 * max(material_type + 1, 1)) * (0.1 * quality_type))
-			speed = int((10 + 5 * max(material_type - 1, 1)) * (0.1 * quality_type))
-			mana = int((5 + 3 * max(material_type - 1, 1)) * (0.1 * quality_type))
+			return int((10 + 10 * max(material_type + 1, 1)) * (0.1 * quality_type))
 		WeaponType.STAFF:
-			attack_power = int((2 + 2 * max(material_type + 1, 1)) * (0.1 * quality_type))
-			ability_power = int((10 + 10 * max(material_type - 1, 1)) * (0.1 * quality_type))
-			mana = int((10 + 5 * max(material_type - 1, 1)) * (0.1 * quality_type))
+			return int((2 + 2 * max(material_type + 1, 1)) * (0.1 * quality_type))
+	return attack_power
+
+
+func get_speed() -> int:
+	match type:
+		WeaponType.DAGGER:
+			return int((10 + 5 *(material_type + 1)) * (0.1 * quality_type))
+		WeaponType.POLEARM:
+			return int((2 + 2 * max( material_type - 1, 1)) * (0.1 * quality_type))
+		WeaponType.BOW:
+			return int((5 + 2 * max(material_type,1)) * (0.1 * quality_type))        
+		WeaponType.AXE:
+			return int((5 + 3 * max(material_type - 1, 1)) * (0.1 * quality_type))
+		WeaponType.SCHYTHE:
+			return int((10 + 5 * max(material_type - 1, 1)) * (0.1 * quality_type))
+	return speed
+
+
+
+func get_defense() -> int:
+	match type:
+		WeaponType.HAMMER:
+			return int((6 + 6 * max(material_type, 1)) * (0.1 * quality_type))
+	return defense
+
+
+func get_health() -> int:
+	match type:
+		WeaponType.SWORD:
+			return int((5 + 2 * max(material_type, 1)) * (0.1 * quality_type))
+		WeaponType.HAMMER:
+			return int((10 + 10 * max(material_type, 1)) * (0.1 * quality_type))
+	return health
+
+
+func get_mana() -> int:
+	match type:
+		WeaponType.POLEARM:
+			return int((2 + 2 * max(material_type - 1, 1)) * (0.1 * quality_type))
+		WeaponType.SCHYTHE:
+			return int((5 + 3 * max(material_type - 1, 1)) * (0.1 * quality_type))
+		WeaponType.STAFF:
+			return int((10 + 5 * max(material_type - 1, 1)) * (0.1 * quality_type))
+	return mana

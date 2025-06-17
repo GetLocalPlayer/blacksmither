@@ -13,5 +13,14 @@ script = ExtResource("1_uwo7t")
 icon = ExtResource("2_77hm3")
 model = ExtResource("3_yeoid")
 max_durability = 12
-durability = 10
+durability = 12
+metadata/_custom_type_script = "uid://2s0pse0raoqn"
+
+[node name="Weapon" type="Node" parent="Weapons"]
+script = ExtResource("1_uwo7t")
+type = 4
+quality_type = 1
+material_type = 4
+max_durability = 3
+durability = 3
 metadata/_custom_type_script = "uid://2s0pse0raoqn"

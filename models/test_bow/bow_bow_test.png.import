@@ -2,17 +2,20 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://ou54f7gfm1t8"
-path.s3tc="res://.godot/imported/test.png-8218970b553a9a5522afed091ba939c6.s3tc.ctex"
+uid="uid://bvlna3fanthrd"
+path.s3tc="res://.godot/imported/bow_bow_test.png-cf9d8e264db86e55f9f13b8fb126e7ed.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
 }
+generator_parameters={
+"md5": "1a83e17958f12497dad39f3cbd6dbdf0"
+}
 
 [deps]
 
-source_file="res://models/textures/test.png"
-dest_files=["res://.godot/imported/test.png-8218970b553a9a5522afed091ba939c6.s3tc.ctex"]
+source_file="res://models/test_bow/bow_bow_test.png"
+dest_files=["res://.godot/imported/bow_bow_test.png-cf9d8e264db86e55f9f13b8fb126e7ed.s3tc.ctex"]
 
 [params]
 
@@ -20,12 +23,12 @@ compress/mode=2
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/hdr_compression=1
-compress/normal_map=1
+compress/normal_map=0
 compress/channel_pack=0
 mipmaps/generate=true
 mipmaps/limit=-1
-roughness/mode=1
-roughness/src_normal="res://models/textures/test.png"
+roughness/mode=0
+roughness/src_normal=""
 process/fix_alpha_border=true
 process/premult_alpha=false
 process/normal_map_invert_y=false

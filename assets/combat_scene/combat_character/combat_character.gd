@@ -83,14 +83,29 @@ var selected_ability: CombatAbility = null
 var target: CombatCharacter
 @onready var retreat_position: Vector3 = global_position
 
-# On node ready will be assigned to the first 
-# non-broken Weapon-child. When the equipped
-# weapon is broken, first non-broken Weapon-
-# child is getting equipped.
-@export var equipped_weapon: Weapon:
+## On `_ready`, will be assigned to the first 
+## non-broken Weapon that is a direct child.
+## When the equipped weapon is getting broken,
+## first non-broken Weapon from the children
+## list is getting equipped.
+## If currently `null`, first repaired weapon 
+## in the children list will be equipped.
+## Assining `null`, first Weapon added as a
+## direct child will be equipped.
+## Assigned weapon must be a direct child of
+## the character of nothing happens.
+## Broken weapon cannot be assigned.
+@export() var equipped_weapon: Weapon:
 	get:
 		return equipped_weapon
 	set(value):
+		if value:
+			if value.is_broken():	
+				push_warning("Can't assing a broken weapon.")
+				return
+			if not value in get_children():
+				push_warning("Weapon must be a direct children to be equipped.")
+				return
 		if equipped_weapon:
 			equipped_weapon.broken.disconnect(_on_equipped_weapon_broken)
 			weapon_unequipped.emit(equipped_weapon)
@@ -171,15 +186,15 @@ func _on_child_entered_tree(child: Node) -> void:
 	if weapon:
 		var on_repaired: Callable = _on_weapon_repaired.bind(weapon)
 		weapon.repaired.connect(on_repaired)
-		weapon.tree_exited.connect(func() -> void:
+		var on_exited: Callable = func() -> void:
+			weapon.repaired.disconnect(on_repaired)
 			if equipped_weapon == weapon:
 				equipped_weapon = null
 				for w: Weapon in get_children_weapon():
 					if not w.is_broken():
 						equipped_weapon = w
 						break
-			weapon.repaired.disconnect(on_repaired)
-		, CONNECT_ONE_SHOT)
+		weapon.tree_exited.connect(on_exited, CONNECT_ONE_SHOT)
 		if not equipped_weapon and not weapon.is_broken():
 			equipped_weapon = weapon
 
