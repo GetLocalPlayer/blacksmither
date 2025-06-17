@@ -114,24 +114,24 @@ metadata/_edit_lock_ = true
 [node name="Characters" type="Node3D" parent="."]
 metadata/_edit_lock_ = true
 
-[node name="Emma1" parent="Characters" node_paths=PackedStringArray("equipped_weapon") groups=["player"] instance=ExtResource("7_y4oos")]
+[node name="Emma1" parent="Characters" groups=["player"] instance=ExtResource("7_y4oos")]
 transform = Transform3D(-0.34202, 0, -0.939693, 0, 1, 0, 0.939693, 0, -0.34202, -2.5, 0, -1.054)
 character_name = "Player Emma 1"
-equipped_weapon = NodePath("TestSword")
 
 [node name="TestSword" type="Node" parent="Characters/Emma1"]
 script = ExtResource("5_ptiyh")
+ranged = null
 icon = ExtResource("6_nntvp")
 model = ExtResource("7_wbwi5")
-max_durability = 12
-durability = 5
+max_durability = 17
 metadata/_custom_type_script = "uid://2s0pse0raoqn"
 
 [node name="TestSword2" type="Node" parent="Characters/Emma1"]
 script = ExtResource("5_ptiyh")
+ranged = null
 icon = ExtResource("6_nntvp")
 model = ExtResource("7_wbwi5")
-max_durability = 12
+max_durability = 17
 metadata/_custom_type_script = "uid://2s0pse0raoqn"
 
 [node name="Emma2" parent="Characters" groups=["player"] instance=ExtResource("7_y4oos")]

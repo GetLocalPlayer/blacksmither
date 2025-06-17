@@ -14,6 +14,11 @@ enum WeaponType {
 	STAFF,
 }
 
+enum AttackType {
+	MELEE,
+	RANGED,
+}
+
 
 var weapon_type_string: Dictionary = {
 	WeaponType.DAGGER: "dagger",
@@ -30,10 +35,12 @@ var weapon_type_string: Dictionary = {
 @export var type: WeaponType = WeaponType.SWORD
 @export var quality_type: QualityType = QualityType.NORMAL
 @export var material_type: MaterialType = MaterialType.IRON
+@export var ranged: AttackType = AttackType.MELEE
 
 
 func get_max_durability() -> int:
-	return int((10 + 5 * (material_type + 1)) * (0.1 * quality_type))
+	var result: int = int((10 + 5 * (material_type + 1) * (0.1 * quality_type)))
+	return clamp(result, 1, result)
 
 
 func get_attack_power() -> int:

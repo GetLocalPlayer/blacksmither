@@ -73,7 +73,7 @@ func set_max_durability(value: int) -> void: max_durability = value
 	get = get_durability, set = set_durability
 func get_durability() -> int: return durability
 func set_durability(value: int) -> void:
-	var restored: int = value - durability
+	var restored: int = clamp(value - durability, 0, max_durability)
 	durability = clamp(value, 0, max_durability)
 	if durability == 0:
 		broken.emit()
