@@ -7,32 +7,43 @@ class_name CombatCharacter
 signal clicked(character: CombatCharacter)
 signal hovered(character: CombatCharacter)
 signal unhovered(character: CombatCharacter)
-signal character_detected(character: CombatCharacter)
 signal weapon_equipped(weapon: Weapon)
 signal weapon_unequipped(weapon: Weapon)
 
-signal ability_cast()
-signal retreated()
+signal ability_cast
+signal retreated
 
 
-@onready var model_animation_tree: CombatCharacterAnimationTree = $Model/AnimationTree
-@onready var model_playback: AnimationNodeStateMachinePlayback = model_animation_tree.get("parameters/model_playback")
-
+@onready var animation_tree: AnimationTree = $Model/AnimationTree
 @onready var _abilities: Array[CombatAbility] = Array($Abilities.get_children(), TYPE_OBJECT, "Node", CombatAbility)
-@onready var _health_bar: ProgressBar = $HealthBar
-@onready var _selected_mark: Control = $HealthBar/Selected
-@onready var _buffs_debuffs_attachment: Marker3D = $BuffsDebuffsAttachment
-@onready var _buffs: TextureRect = %Buffs
-@onready var _debuffs: TextureRect = %Debuffs
-@onready var _mouse_detector: Area3D = $MouseDetector
-@onready var _character_detector: Area3D = $CharacterDetector
-## Is used by camera in combat scene to fit the character in the camera's fov
-@onready var _aabb: MeshInstance3D = $AABB
+@onready var _ui: Dictionary[String, Control] = {
+	buffs = $UI/Buffs,
+	debuffs = $UI/Debuffs,
+	health_bar = $UI/HealthBar,
+}
+# Тело персонажа, которое используется для взаимодействия как с курсором
+# так и для проверки дистанции до других персонажей. Функция get_radius
+# возвращает радиус физического цилиндра (CollisionShape) этого тела.
+# Это же тело используется для обозначения габаритов персонажа как aabb.
+@onready var _body: Area3D = $Body
+# Shape должен быть цилиндром CylinderShape3D
+@onready var _body_shape: CollisionShape3D = _body.get_node("CollisionShape3D")
 @onready var _fsm: FSMCombatCharacter = $FSM
+
+@onready var _ui_attachments: Dictionary[String, Marker3D] = {
+	buffs = $UIAttachments/Buffs,
+	debuffs = $UIAttachments/Debuffs,
+	health_bar = $UIAttachments/HealthBar,
+}
+
+enum UITypes {BUFFS, DEBUFFS, HEALTH_BAR}
 
 @export var portrait: CompressedTexture2D = null
 @export var character_name: String = "Character Name"
-@export var move_speed: float = 2.
+## Speed - скорость передвижения по карте
+@export var speed: float = 2.
+## Haste - скорость перемещения в очереди сражения
+@export var haste: int = 50
 
 @export var max_health: float = 100:
 	get:
@@ -40,7 +51,7 @@ signal retreated()
 	set(value):
 		max_health = value if value >= 0. else 0.
 		if is_node_ready():
-			_health_bar.max_value = max_health
+			_ui.health_bar.max_value = max_health
 
 @export var health: float = 100:
 	get:
@@ -48,7 +59,7 @@ signal retreated()
 	set(value):
 		health = clamp(value, 0, max_health)
 		if is_node_ready():
-			_health_bar.value = health
+			_ui.health_bar.value = health
 
 @export var max_mana: float = 100
 @export var mana = max_mana
@@ -56,45 +67,30 @@ signal retreated()
 @export var attack_damage: int = 3
 
 
-## Defines ally layers. Characters that have at least
-## one layer in common are considered allies and can
-## use friendly abilities on each other.
-## Characters that are not presented in any ally layer
-## are hostile to everyone.
+## Задает слои союзников. Если текущий и целевой персонажи
+## имеют хотя бы один общий слой, текущий может применить
+## на целевого способности с положительным эффектом.
 @export_flags_2d_physics var ally_layers = 1
 
-@onready var target_marks: Dictionary = {
-	primary = $HealthBar/TargetMarks/Primary,
-	secondary = $HealthBar/TargetMarks/Secondary,
-}
-
-var selected: bool = false:
-	set(value):
-		selected = value
-		if is_node_ready():
-			_selected_mark.visible = value
-
-# What ability is selected, will be cast on use
+# Этой переменной присваивается выбранная в бою
+# способность, она и будет применена на цель.
 var selected_ability: CombatAbility = null
 
-# Character's target. Ability will be cast
-# on this target. The character will approach
-# this target to cast ability in melee.
+# Персонаж (CombatCharacter) на которого будет
+# пременена выбранная способность (selected_ability)
 var target: CombatCharacter
+# Место, куда возвращается персонаж после применения
+# способности, если тот сошел с места в процессе
+# ее применения.
 @onready var retreat_position: Vector3 = global_position
 
-## On `_ready`, will be assigned to the first 
-## non-broken Weapon that is a direct child.
-## When the equipped weapon is getting broken,
-## first non-broken Weapon from the children
-## list is getting equipped.
-## If currently `null`, first repaired weapon 
-## in the children list will be equipped.
-## Assining `null`, first Weapon added as a
-## direct child will be equipped.
-## Assigned weapon must be a direct child of
-## the character of nothing happens.
-## Broken weapon cannot be assigned.
+## Экипированное оружие.
+## Оружие должно быть дочерним нодом персонажа.
+## В момент инициализации (_ready) присваивает первое
+## не сломанное из дочерних нодов типа Weapon.
+## Если текущее значение `null`, будет экипировано
+## первое отремонтированное оружие среди дочерних
+## нодов типа Weapon.
 @export() var equipped_weapon: Weapon:
 	get:
 		return equipped_weapon
@@ -115,6 +111,10 @@ var target: CombatCharacter
 			value.broken.connect(_on_equipped_weapon_broken)
 
 
+func get_equipped_weapon() -> Weapon:
+	return equipped_weapon
+
+	
 func cast_ability() -> void:
 	assert(target is CombatCharacter, "Must set `target` to `CombatCharacter` first.")
 	_fsm.cast_ability()
@@ -124,8 +124,11 @@ func get_abilities() -> Array[CombatAbility]:
 	return _abilities
 
 
-func get_aabb(exclude_transform: bool = true) -> AABB:
-	return _aabb.transform * (Transform3D.IDENTITY if exclude_transform else transform) * _aabb.custom_aabb
+func get_aabb(exclude_top_level_transform: bool = true) -> AABB:
+	var top_transform = Transform3D.IDENTITY if exclude_top_level_transform else transform
+	var shape = _body_shape.shape
+	var half_size = Vector3(shape.radius, shape.height * 0.5, shape.radius)
+	return _body_shape.transform * _body.transform * top_transform * AABB(_body.position - half_size, half_size * 2)
 
 
 func take_damage(value: float) -> void:
@@ -133,11 +136,16 @@ func take_damage(value: float) -> void:
 	_fsm.take_damage()
 
 
-func is_dead() -> bool:
-	return health <= 0.
-
 func is_alive() -> bool:
 	return not is_dead()
+
+
+func is_injured() -> bool:
+	return is_alive() and health/max_health < 0.5
+
+
+func is_dead() -> bool:
+	return health <= 0
 
 
 func get_children_weapon() -> Array[Weapon]:
@@ -149,17 +157,29 @@ func get_children_weapon() -> Array[Weapon]:
 	return result
 
 	
+func get_ui_position(type: UITypes) -> Vector2:
+	var camera: Camera3D = get_viewport().get_camera_3d()
+	if not camera: return Vector2.ZERO
+	match type:
+		UITypes.HEALTH_BAR:
+			return camera.unproject_position(_ui_attachments.health_bar.global_position)
+		UITypes.BUFFS:
+			return camera.unproject_position(_ui_attachments.buffs.global_position)
+		UITypes.DEBUFFS:
+			return camera.unproject_position(_ui_attachments.debuffs.global_position)
+	return Vector2.ZERO
+
+
+func get_radius() -> float:
+	return _body_shape.shape.radius
+
 
 func _ready() -> void:
-	_health_bar.max_value = max_health
-	_health_bar.value = health
-	_selected_mark.hide()
-	target_marks.primary.hide()
-	target_marks.secondary.hide()
-	_mouse_detector.mouse_entered.connect(hovered.emit.bind(self))
-	_mouse_detector.mouse_exited.connect(unhovered.emit.bind(self))
-	_mouse_detector.input_event.connect(_on_input_event)
-	_character_detector.area_entered.connect(func(area: Area3D) -> void: if area.owner is CombatCharacter: character_detected.emit(area.owner))
+	_ui.health_bar.max_value = max_health
+	_ui.health_bar.value = health
+	_body.mouse_entered.connect(hovered.emit.bind(self))
+	_body.mouse_exited.connect(unhovered.emit.bind(self))
+	_body.input_event.connect(_on_input_event)
 	for child: Node in get_children():
 		_on_child_entered_tree(child)
 	child_entered_tree.connect(_on_child_entered_tree)
@@ -172,13 +192,11 @@ func _on_input_event(_c: Node, e: InputEvent, _ep: Vector3, _n: Vector3, _si: in
 
 
 func _process(_delta: float) -> void:
-	var camera: Camera3D = get_viewport().get_camera_3d()
-	if camera:
-		if _health_bar.visible:
-			_health_bar.position = get_viewport().get_camera_3d().unproject_position(global_position) - _health_bar.pivot_offset
-		if _buffs.visible:
-			_buffs.position = get_viewport().get_camera_3d().unproject_position(_buffs_debuffs_attachment.global_position) - _buffs.pivot_offset
-			_debuffs.position = get_viewport().get_camera_3d().unproject_position(_buffs_debuffs_attachment.global_position) - _debuffs.pivot_offset
+	if _ui.health_bar.visible:
+		_ui.health_bar.position = get_ui_position(UITypes.HEALTH_BAR) - _ui.health_bar.pivot_offset
+	if _ui.buffs.visible:
+		_ui.buffs.position = get_ui_position(UITypes.BUFFS) - _ui.buffs.pivot_offset
+		_ui.debuffs.position = get_ui_position(UITypes.DEBUFFS) - _ui.debuffs.pivot_offset
 
 
 func _on_child_entered_tree(child: Node) -> void:
@@ -209,4 +227,3 @@ func _on_equipped_weapon_broken() -> void:
 	for weapon: Weapon in get_children_weapon():
 		if weapon and not weapon.is_broken():
 			equipped_weapon = weapon
-

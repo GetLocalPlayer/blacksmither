@@ -1,13 +1,15 @@
 extends CombatCharacterState
 
 
-func _update(context: Node, delta: float) -> void:
+# Сколько времени нужно чтобы персонаж достиг цели.
+# В идеале заменить на рутмоушн внутри анимации.
+@export var approach_time: float = 0.5
+
+
+func _enter(context: Node) -> void:
+	super._enter(context)
 	var c: CombatCharacter = context
-	var dir: Vector3 = (c.retreat_position - c.global_position).normalized()
-	var offset: float = c.move_speed * delta
-	if c.global_position.distance_squared_to(c.retreat_position) <= offset**2:
-		c.global_position = c.retreat_position
-		finished.emit()
-	else:
-		c.global_transform = c.global_transform.looking_at(c.retreat_position, Vector3.UP, true)
-		c.global_position += dir * offset
+	var tween = create_tween()
+	tween.tween_property(c, "global_position", c.retreat_position, approach_time)
+	tween.tween_callback(c.retreated.emit)
+	tween.tween_callback(_emit_finished)

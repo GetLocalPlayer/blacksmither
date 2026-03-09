@@ -31,6 +31,3 @@ func _input(event: InputEvent) -> void:
 			_set_state(_states.run)
 	super._input(event)
 
-
-func _update_current_state(delta: float):
-	super._update_current_state(delta)

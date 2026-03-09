@@ -1,54 +1,29 @@
-[gd_scene load_steps=31 format=3 uid="uid://bmqgmxpe262tv"]
+[gd_scene format=3 uid="uid://bmqgmxpe262tv"]
 
-[ext_resource type="Script" uid="uid://cvvf70p86lmd3" path="res://assets/combat_scene/combat_scene.gd" id="1_owgya"]
-[ext_resource type="Script" uid="uid://cl447pbml14aw" path="res://assets/combat_scene/combat_ability_bar.gd" id="2_6bf75"]
+[ext_resource type="Script" uid="uid://cvvf70p86lmd3" path="res://assets/combat_scene/scripts/combat_scene.gd" id="1_owgya"]
+[ext_resource type="Script" uid="uid://codrnqmmmifaq" path="res://assets/combat_scene/scripts/combat_scene_player.gd" id="2_3p2a3"]
+[ext_resource type="Script" uid="uid://cl447pbml14aw" path="res://assets/combat_scene/combat_character/combat_ability_bar.gd" id="2_6bf75"]
 [ext_resource type="Texture2D" uid="uid://6q2vbj0tgeey" path="res://textures/uvgrid.png" id="2_ed0o1"]
 [ext_resource type="ButtonGroup" uid="uid://iisami01t8uo" path="res://assets/combat_scene/ability_bar_button_group.tres" id="3_5uq1d"]
 [ext_resource type="Texture2D" uid="uid://lk25wlfgu6y2" path="res://icon.svg" id="3_7ucak"]
-[ext_resource type="Script" uid="uid://bwi1tnu04obqi" path="res://assets/combat_scene/combat_scene_camera.gd" id="3_g587y"]
+[ext_resource type="Script" uid="uid://bwi1tnu04obqi" path="res://assets/combat_scene/scripts/combat_scene_camera.gd" id="3_g587y"]
 [ext_resource type="Texture2D" uid="uid://b5fld1moc8ny6" path="res://textures/spell_frame.png" id="4_xdvca"]
 [ext_resource type="Texture2D" uid="uid://dmhygh0tquv3x" path="res://textures/spell_frame_selected.png" id="5_0m8kr"]
 [ext_resource type="Script" uid="uid://2s0pse0raoqn" path="res://scenes/items/weapon.gd" id="5_ptiyh"]
-[ext_resource type="Script" uid="uid://cbkbv0rkltl4n" path="res://assets/combat_scene/ability_button.gd" id="6_41vqm"]
+[ext_resource type="Script" uid="uid://cbkbv0rkltl4n" path="res://assets/combat_scene/combat_character/ability_button.gd" id="6_41vqm"]
 [ext_resource type="Texture2D" uid="uid://d1aiyafo1810t" path="res://textures/icons/attack.png" id="6_nntvp"]
 [ext_resource type="PackedScene" uid="uid://c8o1l6h6thd7u" path="res://models/test_sword.blend" id="7_wbwi5"]
 [ext_resource type="PackedScene" uid="uid://0aiqln2jekco" path="res://models/characters/emma/combat_character.tscn" id="7_y4oos"]
 [ext_resource type="Texture2D" uid="uid://b1vo7l5w6p05i" path="res://textures/spell_frame_selected_pendant.png" id="8_qldo4"]
 [ext_resource type="Texture2D" uid="uid://7uwwwjg4gd7j" path="res://textures/bar_fill_health.png" id="12_07km1"]
 [ext_resource type="Texture2D" uid="uid://dmw515qb6wc70" path="res://textures/emptybar.png.png" id="12_iquvy"]
-[ext_resource type="Script" uid="uid://guu15eg8joyu" path="res://assets/combat_scene/combat_character_info.gd" id="12_obbjy"]
+[ext_resource type="Script" uid="uid://guu15eg8joyu" path="res://assets/combat_scene/combat_character/combat_character_info.gd" id="12_obbjy"]
 [ext_resource type="Texture2D" uid="uid://bu5atwp0m1oaq" path="res://textures/bar_fill_mana.png" id="14_oyp7s"]
-
-[sub_resource type="BoxMesh" id="BoxMesh_82ahl"]
-size = Vector3(16.23, 1, 7.54)
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_jfdhn"]
-albedo_texture = ExtResource("2_ed0o1")
-uv1_scale = Vector3(0.06, 0.06, -0.02)
-uv1_offset = Vector3(0, 0, -0.095)
-uv1_triplanar = true
-uv1_world_triplanar = true
-
-[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_360jg"]
-
-[sub_resource type="Sky" id="Sky_58j6e"]
-sky_material = SubResource("ProceduralSkyMaterial_360jg")
-
-[sub_resource type="Environment" id="Environment_dfx71"]
-background_mode = 2
-sky = SubResource("Sky_58j6e")
-tonemap_mode = 2
+[ext_resource type="Script" uid="uid://inp5kukti02h" path="res://assets/combat_scene/scripts/combat_queue.gd" id="16_nntvp"]
+[ext_resource type="Script" uid="uid://djvmm182c5iva" path="res://assets/combat_scene/scripts/combat_queue_entry.gd" id="17_wbwi5"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_t77pn"]
 size = Vector3(47.6211, 24.5176, 1)
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_iog24"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_l5mr7"]
-bg_color = Color(0, 0, 0, 0.219608)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_i1g8v"]
-bg_color = Color(1, 0.239495, 0.668611, 1)
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_k50ux"]
 texture = ExtResource("12_iquvy")
@@ -78,98 +53,187 @@ axis_stretch_horizontal = 1
 region_rect = Rect2(0, 0, 150, 50)
 modulate_color = Color(0.2, 0.709804, 0.87451, 1)
 
-[node name="CombatScene" type="Node3D"]
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_iog24"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_l5mr7"]
+bg_color = Color(0, 0, 0, 0.219608)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_i1g8v"]
+bg_color = Color(1, 0.239495, 0.668611, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3p2a3"]
+bg_color = Color(1, 0.6, 0.6, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+corner_detail = 1
+
+[sub_resource type="BoxMesh" id="BoxMesh_82ahl"]
+size = Vector3(16.23, 1, 7.54)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_jfdhn"]
+albedo_texture = ExtResource("2_ed0o1")
+uv1_scale = Vector3(0.06, 0.06, -0.02)
+uv1_offset = Vector3(0, 0, -0.095)
+uv1_triplanar = true
+uv1_world_triplanar = true
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_360jg"]
+
+[sub_resource type="Sky" id="Sky_58j6e"]
+sky_material = SubResource("ProceduralSkyMaterial_360jg")
+
+[sub_resource type="Environment" id="Environment_dfx71"]
+background_mode = 2
+sky = SubResource("Sky_58j6e")
+tonemap_mode = 2
+
+[node name="CombatScene" type="Node3D" unique_id=1285058606]
 script = ExtResource("1_owgya")
 
-[node name="Floor" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
-mesh = SubResource("BoxMesh_82ahl")
-surface_material_override/0 = SubResource("StandardMaterial3D_jfdhn")
+[node name="Player" type="Node" parent="." unique_id=55929696]
+script = ExtResource("2_3p2a3")
 
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
-transform = Transform3D(0.866025, 0.433013, -0.25, 0, 0.5, 0.866026, 0.5, -0.75, 0.433013, 0, 0, 0)
-light_color = Color(0.585062, 0.585062, 0.585062, 1)
-shadow_enabled = true
+[node name="RemoteTransform3D" type="RemoteTransform3D" parent="Player" unique_id=193590306]
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
-environment = SubResource("Environment_dfx71")
-
-[node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.999691, -0.0248506, 0, 0.0248506, 0.999691, 0, 0.479, 8.88659)
-current = true
-size = 0.34
-script = ExtResource("3_g587y")
-_lerp_rate = 10.0
-
-[node name="VoidClicker" type="Area3D" parent="."]
+[node name="VoidClicker" type="Area3D" parent="Player" unique_id=466964913]
 editor_description = "A shape to detect non-character clicks
 "
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -11.3853)
 metadata/_edit_lock_ = true
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="VoidClicker"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Player/VoidClicker" unique_id=337583773]
 shape = SubResource("BoxShape3D_t77pn")
 metadata/_edit_lock_ = true
 
-[node name="Characters" type="Node3D" parent="."]
+[node name="UI" type="Control" parent="Player" unique_id=1347260227]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
 metadata/_edit_lock_ = true
 
-[node name="Emma1" parent="Characters" groups=["player"] instance=ExtResource("7_y4oos")]
-transform = Transform3D(-0.34202, 0, -0.939693, 0, 1, 0, 0.939693, 0, -0.34202, -2.5, 0, -1.054)
-character_name = "Player Emma 1"
+[node name="CharacterInfo" type="GridContainer" parent="Player/UI" unique_id=611029299]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -181.0
+offset_right = 477.0
+grow_vertical = 0
+columns = 2
+script = ExtResource("12_obbjy")
 
-[node name="TestSword" type="Node" parent="Characters/Emma1"]
-script = ExtResource("5_ptiyh")
-ranged = null
-icon = ExtResource("6_nntvp")
-model = ExtResource("7_wbwi5")
-max_durability = 17
-metadata/_custom_type_script = "uid://2s0pse0raoqn"
+[node name="Portrait" type="VBoxContainer" parent="Player/UI/CharacterInfo" unique_id=727653444]
+custom_minimum_size = Vector2(128, 128)
+layout_mode = 2
+theme_override_constants/separation = -3
 
-[node name="TestSword2" type="Node" parent="Characters/Emma1"]
-script = ExtResource("5_ptiyh")
-ranged = null
-icon = ExtResource("6_nntvp")
-model = ExtResource("7_wbwi5")
-max_durability = 17
-metadata/_custom_type_script = "uid://2s0pse0raoqn"
+[node name="Image" type="TextureRect" parent="Player/UI/CharacterInfo/Portrait" unique_id=1698912777]
+custom_minimum_size = Vector2(0, 128)
+layout_mode = 2
+texture = ExtResource("3_7ucak")
+expand_mode = 1
+stretch_mode = 4
 
-[node name="Emma2" parent="Characters" groups=["player"] instance=ExtResource("7_y4oos")]
-transform = Transform3D(-0.34202, 0, -0.939693, 0, 1, 0, 0.939693, 0, -0.34202, -3.5, 0, -0.18)
-character_name = "Player Emma 2"
+[node name="Border" type="NinePatchRect" parent="Player/UI/CharacterInfo/Portrait/Image" unique_id=594637336]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("4_xdvca")
+region_rect = Rect2(17, 17, 76, 75)
+patch_margin_left = 7
+patch_margin_top = 6
+patch_margin_right = 6
+patch_margin_bottom = 4
 
-[node name="Emma3" parent="Characters" groups=["player"] instance=ExtResource("7_y4oos")]
-transform = Transform3D(-0.34202, 0, -0.939693, 0, 1, 0, 0.939693, 0, -0.34202, -4.5, 0, 0.797)
-character_name = "Player Emma 3"
+[node name="Name" type="Label" parent="Player/UI/CharacterInfo/Portrait" unique_id=72789129]
+custom_minimum_size = Vector2(128, 50)
+layout_mode = 2
+size_flags_vertical = 1
+theme_override_constants/line_spacing = -12
+theme_override_font_sizes/font_size = 24
+text = "Character Name"
+horizontal_alignment = 1
+autowrap_mode = 3
 
-[node name="Emma4" parent="Characters" groups=["player"] instance=ExtResource("7_y4oos")]
-transform = Transform3D(-0.34202, 0, -0.939693, 0, 1, 0, 0.939693, 0, -0.34202, -5.5, 0, 1.671)
-character_name = "Player Emma 4"
+[node name="Bars" type="VBoxContainer" parent="Player/UI/CharacterInfo" unique_id=1087069505]
+custom_minimum_size = Vector2(0, 70)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 8
+theme_override_constants/separation = -25
 
-[node name="Emma5" parent="Characters" groups=["bot"] instance=ExtResource("7_y4oos")]
-transform = Transform3D(-0.34202, 0, 0.939692, 0, 1, 0, -0.939692, 0, -0.34202, 2.5, 0, -1.054)
-character_name = "Bot Emma 1"
-ally_layers = 2
+[node name="Health" type="ProgressBar" parent="Player/UI/CharacterInfo/Bars" unique_id=1845321968]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_font_sizes/font_size = 12
+theme_override_styles/background = SubResource("StyleBoxTexture_k50ux")
+theme_override_styles/fill = SubResource("StyleBoxTexture_dohwc")
+max_value = 114.05
+value = 51.0
+show_percentage = false
 
-[node name="Emma6" parent="Characters" groups=["bot"] instance=ExtResource("7_y4oos")]
-transform = Transform3D(-0.34202, 0, 0.939692, 0, 1, 0, -0.939692, 0, -0.34202, 3.5, 0, -0.18)
-character_name = "Bot Emma 2"
-ally_layers = 2
+[node name="Value" type="Label" parent="Player/UI/CharacterInfo/Bars/Health" unique_id=618892732]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -11.5
+offset_right = 20.0
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/outline_size = 2
+theme_override_font_sizes/font_size = 12
+text = "Value
+"
+horizontal_alignment = 1
+vertical_alignment = 1
 
-[node name="Emma7" parent="Characters" groups=["bot"] instance=ExtResource("7_y4oos")]
-transform = Transform3D(-0.34202, 0, 0.939692, 0, 1, 0, -0.939692, 0, -0.34202, 4.5, 0, 0.797)
-character_name = "Bot Emma 3"
-ally_layers = 2
+[node name="Mana" type="ProgressBar" parent="Player/UI/CharacterInfo/Bars" unique_id=1698224020]
+z_index = -1
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_font_sizes/font_size = 12
+theme_override_styles/background = SubResource("StyleBoxTexture_k50ux")
+theme_override_styles/fill = SubResource("StyleBoxTexture_oc760")
+max_value = 1.0
+value = 1.0
+show_percentage = false
 
-[node name="Emma8" parent="Characters" groups=["bot"] instance=ExtResource("7_y4oos")]
-transform = Transform3D(-0.34202, 0, 0.939692, 0, 1, 0, -0.939692, 0, -0.34202, 5.5, 0, 1.671)
-character_name = "Bot Emma 4"
-ally_layers = 2
+[node name="Value" type="Label" parent="Player/UI/CharacterInfo/Bars/Mana" unique_id=1249518178]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -11.5
+offset_right = 20.0
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/outline_size = 2
+theme_override_font_sizes/font_size = 12
+text = "Value
+"
+horizontal_alignment = 1
+vertical_alignment = 1
 
-[node name="UI" type="CanvasLayer" parent="."]
-metadata/_edit_lock_ = true
-
-[node name="AbilityBar" type="NinePatchRect" parent="UI"]
+[node name="AbilityBar" type="NinePatchRect" parent="Player/UI" unique_id=718616064]
+layout_mode = 1
 anchors_preset = 3
 anchor_left = 1.0
 anchor_top = 1.0
@@ -180,6 +244,7 @@ offset_top = -113.0
 offset_bottom = -63.0
 grow_horizontal = 0
 grow_vertical = 0
+mouse_filter = 1
 texture = ExtResource("12_iquvy")
 region_rect = Rect2(0, -3, 134, 53)
 patch_margin_left = 16
@@ -188,7 +253,7 @@ patch_margin_bottom = 14
 axis_stretch_horizontal = 2
 script = ExtResource("2_6bf75")
 
-[node name="ButtonsContainer" type="HBoxContainer" parent="UI/AbilityBar"]
+[node name="ButtonsContainer" type="HBoxContainer" parent="Player/UI/AbilityBar" unique_id=165465324]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -199,12 +264,12 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/separation = 12
 
-[node name="VSeparator" type="VSeparator" parent="UI/AbilityBar/ButtonsContainer"]
+[node name="VSeparator" type="VSeparator" parent="Player/UI/AbilityBar/ButtonsContainer" unique_id=71911295]
 layout_mode = 2
 theme_override_constants/separation = 12
 theme_override_styles/separator = SubResource("StyleBoxEmpty_iog24")
 
-[node name="BaseButton" type="TextureButton" parent="UI/AbilityBar/ButtonsContainer"]
+[node name="BaseButton" type="TextureButton" parent="Player/UI/AbilityBar/ButtonsContainer" unique_id=631962469]
 editor_description = "This button is duplicated and the duplicates are accepting abilities' icons."
 custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
@@ -220,13 +285,14 @@ ignore_texture_size = true
 stretch_mode = 0
 script = ExtResource("6_41vqm")
 
-[node name="BorderSelected" type="NinePatchRect" parent="UI/AbilityBar/ButtonsContainer/BaseButton"]
+[node name="BorderSelected" type="NinePatchRect" parent="Player/UI/AbilityBar/ButtonsContainer/BaseButton" unique_id=1616042882]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 1
 texture = ExtResource("5_0m8kr")
 region_rect = Rect2(16, 16, 78, 78)
 patch_margin_left = 7
@@ -234,7 +300,7 @@ patch_margin_top = 6
 patch_margin_right = 6
 patch_margin_bottom = 6
 
-[node name="Pendant" type="TextureRect" parent="UI/AbilityBar/ButtonsContainer/BaseButton/BorderSelected"]
+[node name="Pendant" type="TextureRect" parent="Player/UI/AbilityBar/ButtonsContainer/BaseButton/BorderSelected" unique_id=1145568978]
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
@@ -248,7 +314,7 @@ texture = ExtResource("8_qldo4")
 expand_mode = 1
 stretch_mode = 4
 
-[node name="BorderNormal" type="NinePatchRect" parent="UI/AbilityBar/ButtonsContainer/BaseButton"]
+[node name="BorderNormal" type="NinePatchRect" parent="Player/UI/AbilityBar/ButtonsContainer/BaseButton" unique_id=765569592]
 visible = false
 layout_mode = 1
 anchors_preset = 15
@@ -256,6 +322,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 1
 texture = ExtResource("4_xdvca")
 region_rect = Rect2(16, 16, 78, 78)
 patch_margin_left = 7
@@ -263,7 +330,7 @@ patch_margin_top = 6
 patch_margin_right = 6
 patch_margin_bottom = 6
 
-[node name="ProgressBar" type="ProgressBar" parent="UI/AbilityBar/ButtonsContainer/BaseButton"]
+[node name="ProgressBar" type="ProgressBar" parent="Player/UI/AbilityBar/ButtonsContainer/BaseButton" unique_id=350449395]
 layout_mode = 1
 anchors_preset = -1
 anchor_top = 1.0
@@ -278,116 +345,182 @@ max_value = 1.0
 value = 0.4
 show_percentage = false
 
-[node name="CharacterInfo" type="GridContainer" parent="UI"]
-anchors_preset = 2
-anchor_top = 1.0
-anchor_bottom = 1.0
-offset_top = -181.0
-offset_right = 477.0
-grow_vertical = 0
-columns = 2
-script = ExtResource("12_obbjy")
+[node name="TargetMarks" type="Control" parent="Player/UI" unique_id=786867602]
+anchors_preset = 0
+metadata/_edit_lock_ = true
 
-[node name="Portrait" type="VBoxContainer" parent="UI/CharacterInfo"]
-custom_minimum_size = Vector2(128, 128)
-layout_mode = 2
-theme_override_constants/separation = -3
+[node name="Primary" type="Panel" parent="Player/UI/TargetMarks" unique_id=1854340866]
+custom_minimum_size = Vector2(14, 29)
+layout_mode = 0
+offset_left = -7.0
+offset_top = 31.0
+offset_right = 7.0
+offset_bottom = 60.0
+pivot_offset = Vector2(7, -35)
+theme_override_styles/panel = SubResource("StyleBoxFlat_3p2a3")
+metadata/_edit_use_anchors_ = true
 
-[node name="Image" type="TextureRect" parent="UI/CharacterInfo/Portrait"]
-custom_minimum_size = Vector2(0, 128)
-layout_mode = 2
-texture = ExtResource("3_7ucak")
-expand_mode = 1
-stretch_mode = 4
-
-[node name="Border" type="NinePatchRect" parent="UI/CharacterInfo/Portrait/Image"]
+[node name="Secondary" type="Panel" parent="Player/UI/TargetMarks" unique_id=870413197]
 layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -7.0
+offset_top = 32.0
+offset_right = 7.0
+offset_bottom = 45.0
+grow_horizontal = 2
+pivot_offset = Vector2(7, -31)
+theme_override_styles/panel = SubResource("StyleBoxFlat_3p2a3")
+
+[node name="Queue" type="Node3D" parent="." unique_id=646176840]
+script = ExtResource("16_nntvp")
+metadata/_edit_lock_ = true
+
+[node name="Emma1" parent="Queue" unique_id=2119513741 node_paths=PackedStringArray("equipped_weapon") groups=["player"] instance=ExtResource("7_y4oos")]
+transform = Transform3D(-0.34202, 0, -0.939693, 0, 1, 0, 0.939693, 0, -0.34202, -2.5, 0, -1.054)
+character_name = "Player Emma 1"
+equipped_weapon = NodePath("TestSword")
+
+[node name="TestSword" type="Node" parent="Queue/Emma1" unique_id=1639669591]
+script = ExtResource("5_ptiyh")
+icon = ExtResource("6_nntvp")
+model = ExtResource("7_wbwi5")
+max_durability = 17
+durability = 15
+metadata/_custom_type_script = "uid://2s0pse0raoqn"
+
+[node name="TestSword2" type="Node" parent="Queue/Emma1" unique_id=1357941683]
+script = ExtResource("5_ptiyh")
+icon = ExtResource("6_nntvp")
+model = ExtResource("7_wbwi5")
+max_durability = 17
+metadata/_custom_type_script = "uid://2s0pse0raoqn"
+
+[node name="Emma2" parent="Queue" unique_id=1942841916 groups=["player"] instance=ExtResource("7_y4oos")]
+transform = Transform3D(-0.34202, 0, -0.939693, 0, 1, 0, 0.939693, 0, -0.34202, -3.5, 0, -0.18)
+character_name = "Player Emma 2"
+
+[node name="Emma3" parent="Queue" unique_id=1972831694 groups=["player"] instance=ExtResource("7_y4oos")]
+transform = Transform3D(-0.34202, 0, -0.939693, 0, 1, 0, 0.939693, 0, -0.34202, -4.5, 0, 0.797)
+character_name = "Player Emma 3"
+
+[node name="Emma4" parent="Queue" unique_id=364675630 groups=["player"] instance=ExtResource("7_y4oos")]
+transform = Transform3D(-0.34202, 0, -0.939693, 0, 1, 0, 0.939693, 0, -0.34202, -5.5, 0, 1.671)
+character_name = "Player Emma 4"
+
+[node name="Emma5" parent="Queue" unique_id=171390678 groups=["bot"] instance=ExtResource("7_y4oos")]
+transform = Transform3D(-0.34202, 0, 0.939692, 0, 1, 0, -0.939692, 0, -0.34202, 2.5, 0, -1.054)
+character_name = "Bot Emma 1"
+ally_layers = 2
+
+[node name="Emma6" parent="Queue" unique_id=722817295 groups=["bot"] instance=ExtResource("7_y4oos")]
+transform = Transform3D(-0.34202, 0, 0.939692, 0, 1, 0, -0.939692, 0, -0.34202, 3.5, 0, -0.18)
+character_name = "Bot Emma 2"
+ally_layers = 2
+
+[node name="Emma7" parent="Queue" unique_id=1257494004 groups=["bot"] instance=ExtResource("7_y4oos")]
+transform = Transform3D(-0.34202, 0, 0.939692, 0, 1, 0, -0.939692, 0, -0.34202, 4.5, 0, 0.797)
+character_name = "Bot Emma 3"
+ally_layers = 2
+
+[node name="Emma8" parent="Queue" unique_id=931602271 groups=["bot"] instance=ExtResource("7_y4oos")]
+transform = Transform3D(-0.34202, 0, 0.939692, 0, 1, 0, -0.939692, 0, -0.34202, 5.5, 0, 1.671)
+character_name = "Bot Emma 4"
+ally_layers = 2
+
+[node name="Floor" type="MeshInstance3D" parent="." unique_id=1919576359]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+mesh = SubResource("BoxMesh_82ahl")
+surface_material_override/0 = SubResource("StandardMaterial3D_jfdhn")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1583652764]
+transform = Transform3D(0.866025, 0.433013, -0.25, 0, 0.5, 0.866026, 0.5, -0.75, 0.433013, 0, 0, 0)
+light_color = Color(0.585062, 0.585062, 0.585062, 1)
+shadow_enabled = true
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=2049585497]
+environment = SubResource("Environment_dfx71")
+
+[node name="Camera3D" type="Camera3D" parent="." unique_id=1366917104]
+transform = Transform3D(1, 0, 0, 0, 0.9996912, -0.024850603, 0, 0.024850603, 0.9996912, 0, 0.479, 14.770124)
+current = true
+script = ExtResource("3_g587y")
+_lerp_rate = 10.0
+
+[node name="UI" type="Control" parent="." unique_id=585561016]
+layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("4_xdvca")
-region_rect = Rect2(17, 17, 76, 75)
+mouse_filter = 2
+metadata/_edit_lock_ = true
+
+[node name="CombatQueue" type="Control" parent="UI" unique_id=1404358070]
+layout_mode = 1
+anchor_left = 0.2
+anchor_top = 0.054
+anchor_right = 0.8
+anchor_bottom = 0.054
+grow_horizontal = 2
+grow_vertical = 2
+metadata/_edit_use_anchors_ = true
+
+[node name="Background" type="NinePatchRect" parent="UI/CombatQueue" unique_id=943892288]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 0
+texture = ExtResource("12_iquvy")
+region_rect = Rect2(0, -3, 150, 53)
+patch_margin_left = 16
+patch_margin_top = 17
+patch_margin_right = 16
+patch_margin_bottom = 14
+axis_stretch_horizontal = 2
+
+[node name="CombatQueueEntry" type="PanelContainer" parent="UI/CombatQueue" unique_id=571381770]
+layout_mode = 0
+offset_right = 48.0
+offset_bottom = 48.0
+pivot_offset = Vector2(24, -6.505)
+script = ExtResource("17_wbwi5")
+
+[node name="Image" type="TextureRect" parent="UI/CombatQueue/CombatQueueEntry" unique_id=1413101152]
+layout_mode = 2
+texture = ExtResource("3_7ucak")
+expand_mode = 1
+stretch_mode = 4
+
+[node name="BorderSelected" type="NinePatchRect" parent="UI/CombatQueue/CombatQueueEntry" unique_id=932522739]
+layout_mode = 2
+texture = ExtResource("5_0m8kr")
+region_rect = Rect2(16, 16, 78, 78)
 patch_margin_left = 7
 patch_margin_top = 6
 patch_margin_right = 6
-patch_margin_bottom = 4
+patch_margin_bottom = 6
 
-[node name="Name" type="Label" parent="UI/CharacterInfo/Portrait"]
-custom_minimum_size = Vector2(128, 50)
-layout_mode = 2
-size_flags_vertical = 1
-theme_override_constants/line_spacing = -12
-theme_override_font_sizes/font_size = 24
-text = "Character Name"
-horizontal_alignment = 1
-autowrap_mode = 3
-
-[node name="Bars" type="VBoxContainer" parent="UI/CharacterInfo"]
-custom_minimum_size = Vector2(0, 70)
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 8
-theme_override_constants/separation = -25
-
-[node name="Health" type="ProgressBar" parent="UI/CharacterInfo/Bars"]
-layout_mode = 2
-size_flags_vertical = 3
-theme_override_font_sizes/font_size = 12
-theme_override_styles/background = SubResource("StyleBoxTexture_k50ux")
-theme_override_styles/fill = SubResource("StyleBoxTexture_dohwc")
-max_value = 114.05
-value = 51.0
-show_percentage = false
-
-[node name="Value" type="Label" parent="UI/CharacterInfo/Bars/Health"]
+[node name="Pendant" type="TextureRect" parent="UI/CombatQueue/CombatQueueEntry/BorderSelected" unique_id=571609865]
 layout_mode = 1
-anchors_preset = 8
+anchors_preset = 5
 anchor_left = 0.5
-anchor_top = 0.5
 anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -20.0
-offset_top = -11.5
-offset_right = 20.0
-offset_bottom = 11.5
+offset_left = -45.5
+offset_top = -13.0
+offset_right = 47.5
+offset_bottom = 91.0
 grow_horizontal = 2
-grow_vertical = 2
-theme_override_constants/outline_size = 2
-theme_override_font_sizes/font_size = 12
-text = "Value
-"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="Mana" type="ProgressBar" parent="UI/CharacterInfo/Bars"]
-z_index = -1
-layout_mode = 2
-size_flags_vertical = 3
-theme_override_font_sizes/font_size = 12
-theme_override_styles/background = SubResource("StyleBoxTexture_k50ux")
-theme_override_styles/fill = SubResource("StyleBoxTexture_oc760")
-max_value = 1.0
-value = 1.0
-show_percentage = false
-
-[node name="Value" type="Label" parent="UI/CharacterInfo/Bars/Mana"]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -20.0
-offset_top = -11.5
-offset_right = 20.0
-offset_bottom = 11.5
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_constants/outline_size = 2
-theme_override_font_sizes/font_size = 12
-text = "Value
-"
-horizontal_alignment = 1
-vertical_alignment = 1
+texture = ExtResource("8_qldo4")
+expand_mode = 1
+stretch_mode = 4

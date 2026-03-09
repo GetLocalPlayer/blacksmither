@@ -27,7 +27,8 @@ enum EffectType {DAMAGE, HEAL}
 					
 
 enum CastType {MELEE, RANGED}
-## Defines if the character must approach the target
+## Ближний или дальний. Если ближний, то персонаж
+## сначала подойдет к цели.
 @export var cast_type: CastType = CastType.MELEE
 
 enum AllowedTargets {
@@ -41,10 +42,12 @@ enum AllowedTargets {
 @export var allowed_targets: int = AllowedTargets.ENEMY | AllowedTargets.ALIVE
 
 
-## Progress bar that will be shown under the icon in combat scene
+## Прогресс бар который отображается под иконкой.
+## Может отражать оставшуюся прочность оружия, заряд
+## или что-то еще.
 @export var show_progress: bool = false
 
-# Overload in the chilren classes
+# Переопределяется в потомках
 var progress: float = 0:
 	set(value):
 		progress = value
@@ -63,10 +66,10 @@ func is_target_valid(caster: CombatCharacter, target: CombatCharacter) -> bool:
 	# Can't use the ability if it can be used on neither alive nor dead
 	if not (allowed_targets & (AllowedTargets.ALIVE | AllowedTargets.DEAD)):
 		return false
-	# Only alive targets
+	# Только живые цели
 	if not (allowed_targets & AllowedTargets.DEAD) and (allowed_targets & AllowedTargets.ALIVE) and target.is_dead():
 		return false
-	# Only dead targets
+	# Только мертвые цели 
 	if not (allowed_targets & AllowedTargets.ALIVE) and (allowed_targets & AllowedTargets.DEAD) and target.is_alive():
 		return false
 	if allowed_targets & AllowedTargets.SELF and target == caster:
@@ -78,6 +81,6 @@ func is_target_valid(caster: CombatCharacter, target: CombatCharacter) -> bool:
 	return false
 
 
-# Abstract
+# Переопределяется в потомках
 func apply(_target: CombatCharacter) -> void:
 	pass

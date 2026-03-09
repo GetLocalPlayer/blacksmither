@@ -27,6 +27,10 @@ func _get_initial_state() -> FSMState:
 	return null
 
 
+func _get_curret_state() -> FSMState:
+	return _current_state
+	
+
 func _set_state(new_state: FSMState) -> void:
 	if _current_state:
 		_current_state._exit(_get_context())
@@ -38,15 +42,16 @@ func _set_state(new_state: FSMState) -> void:
 
 
 func _queue_state(new_state: FSMState) -> void:
-	assert(new_state != null, "Can't queue `null` as a state")
+	assert(new_state != null, "Can't queue a `null` value as a state!")
 	if not _current_state:
 		_set_state(_get_initial_state() if _queue.is_empty() else _queue.pop_front())
 	else:
 		_queue.append(new_state)
 
 
-func _queue_states(states: Array[FSMState]) -> void:
-	for s: FSMState in states:
+func _queue_states(...states) -> void:
+	for s in states:
+		assert(s is FSMState, "Can queue only a FSMState instance!")
 		_queue_state(s)
 
 
@@ -55,10 +60,6 @@ func _on_state_finished() -> void:
 		_set_state(_get_initial_state())
 	else:
 		_set_state(_queue.pop_front())
-
-
-func _update_current_state(delta: float) -> void:
-	_current_state._update(_get_context(), delta)
 
 
 func _ready() -> void:
@@ -76,4 +77,5 @@ func _input(event) -> void:
 
 func _physics_process(delta) -> void:
 	if _current_state:
-		_update_current_state(delta)
+		_current_state._update(_get_context(), delta)
+		

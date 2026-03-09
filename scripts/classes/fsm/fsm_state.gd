@@ -1,4 +1,4 @@
-extends RefCounted
+extends Node
 class_name FSMState
 
 
@@ -19,3 +19,7 @@ func _update(_context: Node, _delta: float) -> void:
 
 func _exit(_context: Node) -> void:
 	pass
+	
+
+func _emit_finished() -> void:
+	finished.emit()
