@@ -3,18 +3,11 @@ class_name CombatQueue
 
 
 # Система очереди во время сражения.
-# 
-# Система помещает всех персонажей на воображаемую
-# прямую в точке начала с координатой 0. В системе
-# задается интервал через свойство _interval.
-# Можно представить, что через каждые _interval
-# едениц, на прямой линии задается воображаемый
-# чекпойн. В конце хода, к координатам каждого
-# персонажа прибавляется значение его скорости Haste.
-# Как только первый персонаж пересекает чекпойнт, 
-# ему дозволяется совершить действие.
-# Система игнорирует факт смерти персонажа и продолжает
-# рассчитывать его очередь даже при нулевом ХП.
+# Ассинхронно вызывается метод update возвращающий
+# первого юнита который достигнет установленного 
+# интервала исходя из его скорости реакции в параметре
+# `haste` класса CombatCharacter и перемещает его 
+# в начало очереди.
 
 @export var _interval: float = 100
 @onready var _ui: CombatQueueUI = $UI
@@ -47,18 +40,25 @@ func clear() -> void:
 func update() -> CombatCharacter:
 	var chars = get_characters()
 	# Сортировкщик в порядке первого достигшего интервала
-	# исходя из скорости реакции.
+	# исходя из скорости реакции haste.
 	var sorter = func(a: CombatCharacter, b: CombatCharacter) -> bool:
 		var dist_a = _interval - _character_position[a]
 		var dist_b = _interval - _character_position[b]
 		return dist_a / a.haste < dist_b / b.haste
 	chars.sort_custom(sorter)
-	var factor = (_interval - _character_position[chars[0]]) / chars[0].haste
+	# Какую долю пути пройдет первый персонаж, который
+	# первым достигнет интервала.
+	var fraction = (_interval - _character_position[chars[0]]) / chars[0].haste
 	var normalized: Dictionary[CombatCharacter, float] = {} # для интерфейса
-	for c: CombatCharacter in chars:
-		_character_position[c] += c.haste * factor
-		normalized[c] = get_position_normalized(c)
-	_character_position[chars[0]] = 0
+	# Если путь равен 0, значит он уже должен совершить ход
+	if is_zero_approx(fraction):
+		_character_position[chars[0]] = 0
+		normalized[chars[0]] = _get_position_normalized(chars[0])
+	else:
+		for c: CombatCharacter in chars:
+			_character_position[c] += c.haste * fraction
+			normalized[c] = _get_position_normalized(c)
+		_character_position[chars[0]] = 0
 	await _ui.update(normalized)
 	return chars[0]
 	
@@ -67,7 +67,7 @@ func update() -> CombatCharacter:
 # Возвращает нормализованное (то есть отмасштабированное
 # к интервалу между 0 и 1) положение персонажа в очереди
 # между последней и следующей границей интервала.
-func get_position_normalized(c: CombatCharacter) -> float:
+func _get_position_normalized(c: CombatCharacter) -> float:
 	assert(c in _character_position, "Given CombatCharacter is not in the queue!")
 	return _character_position[c] / _interval
 

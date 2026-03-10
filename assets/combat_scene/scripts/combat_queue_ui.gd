@@ -1,7 +1,7 @@
 extends CenterContainer
 class_name CombatQueueUI
 
-@export var _update_time: float = 0.5
+@export var _update_time: float = 1.5
 ## Сдвиг вниз по вертикали каждого нового портрета
 ## для предотвращения полного перекрытия.
 @export var _entry_vertical_offset: int = 5
@@ -46,15 +46,19 @@ func update(character_position: Dictionary[CombatCharacter, float]) -> void:
 	var tween: Tween
 	for c in character_position:
 		var pos = character_position[c]
-		var entry: TextureRect = _entries[c] if c in _entries else _add_entry(c, pos)
-		var final_pos = Vector2(_interval.size.x * pos - entry.pivot_offset.x, entry.position.y)
-		tween = entry.create_tween()
-		var tween_time = _update_time
-		if final_pos.x < entry.position.x:
-			tween_time /= 2
-			tween.tween_property(entry, "position",  Vector2(_interval.size.x - entry.pivot_offset.x,  entry.position.y), tween_time)
-			tween.tween_property(entry, "position",  Vector2(-entry.pivot_offset.x, entry.position.y), 0)
-		tween.tween_property(entry, "position", final_pos, tween_time)
+		var entry: TextureRect
+		if c in _entries:
+			entry = _entries[c]
+			var final_pos = Vector2(_interval.size.x * pos - entry.pivot_offset.x, entry.position.y)
+			tween = entry.create_tween()
+			var tween_time = _update_time
+			if final_pos.x <= entry.position.x:
+				tween_time /= 2
+				tween.tween_property(entry, "position",  Vector2(_interval.size.x - entry.pivot_offset.x,  entry.position.y), tween_time)
+				tween.tween_property(entry, "position",  Vector2(-entry.pivot_offset.x, entry.position.y), 0)
+			tween.tween_property(entry, "position", final_pos, tween_time)
+		else:
+			entry = _add_entry(c, character_position[c])
 	tween = create_tween()
 	tween.tween_interval(_update_time)
 	await tween.finished
