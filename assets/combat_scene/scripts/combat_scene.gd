@@ -1,10 +1,10 @@
 extends Node3D
 
 # Название групп которыми управляет игрок либо бот
-const BOT_GROUP = "bot"
-const PLAYER_GROUP = "player"
+const _BOT_GROUP = "bot"
+const _PLAYER_GROUP = "player"
 
-## Задержка перед началом для красоты.
+## Задержка перед началом хода каждого персонажа для красоты.
 @export var _start_delay: float = 1
 
 
@@ -14,20 +14,22 @@ const PLAYER_GROUP = "player"
 
 
 func _ready() -> void:
-	var characters = _get_characters()
-	for c: CombatCharacter in _get_characters():
-		c.retreated.connect(_on_character_retreated)
-	_camera.set_view_on_characters(characters, true)
+	_queue.init()
+	_camera.set_view_on_characters(_queue.get_characters(), true)
+	#for c: CombatCharacter in _queue.get_characters():
+	#	c.retreated.connect(_on_character_retreated)
 	var tween = create_tween()
 	tween.tween_interval(_start_delay)
-	tween.tween_callback(_player.run.bind(characters, 0, _camera))
+	tween.tween_callback(_run_next_turn)
+	
 
-
-func _get_characters() -> Array[CombatCharacter]:
-	var result: Array[CombatCharacter] = []
-	result.append_array(_queue.get_children().filter(func(c: Node) -> bool: return c is CombatCharacter))
-	return result
-
-
-func _on_character_retreated():
-	_camera.focus_view_on_characters(_get_characters())
+func _run_next_turn() -> void:
+	var current_character = await _queue.update()
+	var player_group = _PLAYER_GROUP if current_character.is_in_group(_PLAYER_GROUP) else _BOT_GROUP
+	_player.run(_queue.get_characters(), _queue.get_characters().find(current_character), _camera, player_group)
+	await current_character.retreated
+	var tween = create_tween()
+	tween.tween_interval(_start_delay)
+	tween.tween_callback(_camera.focus_view_on_characters.bind(_queue.get_characters()))
+	await  tween.finished
+	_run_next_turn()

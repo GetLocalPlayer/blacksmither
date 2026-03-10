@@ -17,30 +17,23 @@ class_name CombatQueue
 # рассчитывать его очередь даже при нулевом ХП.
 
 @export var _interval: float = 100
-
+@onready var _ui: CombatQueueUI = $UI
 var _character_position: Dictionary[CombatCharacter, float] = {}
 	
 
 # Очищает очередь и добавляет в очередь всех
 # CombatCharacters которые являются прямыми
 # потомками этой ноды в сцене.
-func init_from_children() -> void:
+func init() -> void:
 	clear()
-	for node in get_children():
-		if node is CombatCharacter:
-			add(node)
-
-
-# Добавляет персонажа в очередь
-func add(...characters: Array) -> void:
-	for c in characters:
-		assert(c is CombatCharacter, "Combat queue supports only CombatCharacter!")
+	for c: CombatCharacter in get_characters():
 		_character_position[c] = 0
-
+	_ui.update(_character_position)
+		
 
 # Обнуляет положение всех персонажей в очереди
 func reset() -> void:
-	for c in _character_position:
+	for c in get_characters():
 		_character_position[c] = 0
 
 
@@ -49,26 +42,26 @@ func clear() -> void:
 	_character_position.clear()
 
 
-# Обновляет положение всех персонажей в очереди.
-# Возвращает список персонажей в порядке очереди.
-# Один персонаж может оказаться в списке несколько
-# раз, если его скорость позволяет ему пересечь
-# несколько интервалов с текущего положенияза
-# один ход.
-# Возвращает пустой список, если ни один персонаж
-# не пересек ни одной границы за одно обновление.
-func update() -> Array[CombatCharacter]:
-	var result: Array[CombatCharacter] = []
-	for c in _character_position:
-		var pos = _character_position[c]
-		var relative_pos = fmod(pos, _interval)
-		var new_relative_pos = relative_pos + c.haste
-		while new_relative_pos > _interval:
-			new_relative_pos -= _interval
-			result.append(c)
-		_character_position[c] += c.haste
-	result.sort_custom(func(a, b) -> bool: return _character_position[a] > _character_position[b])
-	return result
+# Передвигает в очереди вперед, возвращая первого
+# достигшего интервала.
+func update() -> CombatCharacter:
+	var chars = get_characters()
+	# Сортировкщик в порядке первого достигшего интервала
+	# исходя из скорости реакции.
+	var sorter = func(a: CombatCharacter, b: CombatCharacter) -> bool:
+		var dist_a = _interval - _character_position[a]
+		var dist_b = _interval - _character_position[b]
+		return dist_a / a.haste < dist_b / b.haste
+	chars.sort_custom(sorter)
+	var factor = (_interval - _character_position[chars[0]]) / chars[0].haste
+	var normalized: Dictionary[CombatCharacter, float] = {} # для интерфейса
+	for c: CombatCharacter in chars:
+		_character_position[c] += c.haste * factor
+		normalized[c] = get_position_normalized(c)
+	_character_position[chars[0]] = 0
+	await _ui.update(normalized)
+	return chars[0]
+	
 
 
 # Возвращает нормализованное (то есть отмасштабированное
@@ -76,5 +69,11 @@ func update() -> Array[CombatCharacter]:
 # между последней и следующей границей интервала.
 func get_position_normalized(c: CombatCharacter) -> float:
 	assert(c in _character_position, "Given CombatCharacter is not in the queue!")
-	return fmod(_character_position[c], _interval)/_interval
+	return _character_position[c] / _interval
+
+
+func get_characters() -> Array[CombatCharacter]:
+	var result: Array[CombatCharacter] = []
+	result.append_array(get_children().filter(func(c: Node) -> bool: return c is CombatCharacter))
+	return result
 		

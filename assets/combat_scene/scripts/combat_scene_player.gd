@@ -2,16 +2,12 @@ extends Node
 class_name CombatScenePlayer
 
 
-const _BOT_GROUP = "bot"
-const _PLAYER_GROUP = "player"
-
 ## Коэффициент масштабирования текущего персонажа
 @export var _active_character_scale: float = 1.15
 ## Коэффициент масштабирования персонажа под курсором
 ## при выборе цели для способности
 @export var _hovered_character_scale: float = 1.15
 @export var _hovered_scaling_time: float = 0.15
-var _last_hovered_base_scale: Vector3
 
 
 # Элементы интерфейса для игрока.
@@ -27,10 +23,11 @@ var _last_hovered_base_scale: Vector3
 var _controlled_character: CombatCharacter
 var _characters: Array[CombatCharacter]
 var _camera: CombatSceneCamera
+var _player_group: String
 
 
 # Даем игроку персонажа под контроль.
-func run(characters: Array[CombatCharacter], current: int, camera: CombatSceneCamera) -> void:
+func run(characters: Array[CombatCharacter], current: int, camera: CombatSceneCamera, player_group: String) -> void:
 	_clear()
 	_controlled_character = characters[current]
 	_controlled_character.global_scale(Vector3.ONE * _active_character_scale)
@@ -40,13 +37,13 @@ func run(characters: Array[CombatCharacter], current: int, camera: CombatSceneCa
 	_character_info.show()
 	# Обновляем палку способностей под персонажа
 	_ability_bar.set_abilities(_controlled_character.get_abilities())
-	_ability_bar.button_pressed.connect(_on_ability_button_pressed)
 	_ability_bar.show()
 	for c: CombatCharacter in characters:
 		c.hovered.connect(_on_character_hovered)
 		c.unhovered.connect(_on_character_unhovered)
 		c.clicked.connect(_on_character_clicked)	
 	_camera = camera
+	_player_group = player_group
 	_camera.focus_view_on_characters(_get_player_characters())
 
 
@@ -60,7 +57,7 @@ func _clear() -> void:
 	_controlled_character = null
 	_character_info.hide()
 	if _ability_bar.pressed_button: _ability_bar.pressed_button.button_pressed = false
-	_ability_bar.hide()
+	_ability_bar.hide()	
 	for c: CombatCharacter in _characters:
 		c.hovered.disconnect(_on_character_hovered)
 		c.unhovered.disconnect(_on_character_unhovered)
@@ -71,6 +68,7 @@ func _clear() -> void:
 
 func _ready() -> void:
 	_clear()
+	_ability_bar.button_pressed.connect(_on_ability_button_pressed)
 	_void_clicker.input_event.connect(_on_void_clicked)
 	
 
@@ -82,7 +80,7 @@ func _process(_delta: float) -> void:
 
 
 func _get_player_characters() -> Array[CombatCharacter]:
-	var result: Array[CombatCharacter] = _characters.filter(func(c: CombatCharacter) -> bool: return c.is_in_group(_PLAYER_GROUP))
+	var result: Array[CombatCharacter] = _characters.filter(func(c: CombatCharacter) -> bool: return c.is_in_group(_player_group))
 	return result
 	
 
@@ -129,6 +127,8 @@ func _on_character_unhovered(c: CombatCharacter) -> void:
 func _on_character_clicked(c: CombatCharacter) -> void:
 	var tar: CombatCharacter = _controlled_character.target
 	if tar and tar == c:
+		_controlled_character.create_tween().tween_property(c, "scale", Vector3.ONE, _hovered_scaling_time)
+		c.create_tween().tween_property(c, "scale", Vector3.ONE, _hovered_scaling_time)
 		_controlled_character.cast_ability()
 		_camera.focus_view_on_characters([_controlled_character, c])
 		_clear()
